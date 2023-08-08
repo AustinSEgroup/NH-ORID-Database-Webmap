@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no" />
+
+    <title>Recreation Providers</title>
+
+    <style>
+    html,
+body {
+  padding: 0;
+  margin: 0;
+  height: 100%;
+  width: 100%;
+  background: rgba(50, 50, 50);
+}
+
+.top-bar {
+  background-color: #207380; /* Change the background color as desired */
+  display: flex;
+  justify-content:center;
+  align-items: center;
+}
+
+.toggle-btn {
+  /* Button Default State */
+  padding: 10px 20px;
+  font-size: 14px;
+  border: none;
+  color: white;
+  background-color: #207380 ;
+  cursor: pointer;
+  text-align: center;
+  transition-duration: 0.4s;
+
+}
+
+.toggle-btn:hover {
+  /* Button Hover State */
+  background-color: #6bacad;
+}
+
+#mapContainer {
+  position: relative;
+  height: calc(100% - 10px); /* Adjust the height to make room for the top bar */
+}
+
+#infoDiv {
+  width: 120%;
+}
+
+#viewDiv {
+  position: absolute;
+  top: 1%; /* Set the top position to match the height of the top bar */
+  bottom: 0;
+  width: 100%;
+}
+
+    </style>
+
+    <link rel="stylesheet" href="https://js.arcgis.com/4.27/esri/themes/dark/main.css" />
+    <script src="https://js.arcgis.com/4.27/"></script>
+
+    <script src="js/main3.js"></script>
+  </head>
+
+  <body>
+    <div id="selectedFieldDiv"></div>
+
+    <div class="top-bar">
+      <button id="toggleCounties" class="toggle-btn">Show Counties</button>
+      <button id="toggleTourismRegions" class="toggle-btn">Show Tourism Regions</button>
+      <!-- <button id="toggleHeatmap" class="toggle-btn">Disable Heatmap</button> -->
+      
+      <!-- Add other buttons you want to include in the top bar -->
+    </div>
+
+    <div id="mapContainer">
+    <div id="viewDiv">
+
+      
+
+    </div>
+    <div id="infoDivRetailBusiness" class="esri-widget">
+      <div id="filterDivRetailBusiness">
+        <button id="toggleClustering" class="toggle-btn">Toggle Clustering</button>
+        <br>
+        <input type="checkbox" id="filterNationalChain" />
+        <label for="filterNationalChain">National Chain</label>
+        <br>
+        <input type="checkbox" id="filterRegionalChain" />
+        <label for="filterRegionalChain">Regional Chain</label>
+        <br>
+        <input type="checkbox" id="filterLocalBusiness" />
+        <label for="filterLocalBusiness">Local Business</label>
+        <br>
+        <input type="checkbox" id="filterGuidingTraining" />
+        <label for="filterGuidingTraining">Guiding/Training</label>
+        <br>
+        <input type="checkbox" id="filterSocialEvents" />
+        <label for="filterSocialEvents">Social Events</label>
+        <br>
+        <input type="checkbox" id="filterUsedGear" />
+        <label for="filterUsedGear">Used Gear</label>
+        <br>
+        <input type="checkbox" id="filterHiking" />
+        <label for="filterHiking">Hiking</label>
+        <br>
+        <input type="checkbox" id="filterSnowshoeing" />
+        <label for="filterSnowshoeing">Snowshoeing</label>
+        <br>
+        <input type="checkbox" id="filterRunningTrailRunning" />
+        <label for="filterRunningTrailRunning">Running/Trail Running</label>
+        <br>
+        <input type="checkbox" id="filterMotorizedBoatingWaterSports" />
+        <label for="filterMotorizedBoatingWaterSports">Motorized Boating & Water sports</label>
+        <br>
+        <input type="checkbox" id="filterWhitewaterSports" />
+        <label for="filterWhitewaterSports">Whitewater sports</label>
+        <br>
+        <input type="checkbox" id="filterPaddleSports" />
+        <label for="filterPaddleSports">Paddle sports</label>
+        <br>
+        <input type="checkbox" id="filterMountainBiking" />
+        <label for="filterMountainBiking">Mountain Biking</label>
+        <br>
+        <input type="checkbox" id="filterRoadGravelBiking" />
+        <label for="filterRoadGravelBiking">Road/Gravel Biking</label>
+        <br>
+        <input type="checkbox" id="filterBMX" />
+        <label for="filterBMX">BMX</label>
+        <br>
+        <input type="checkbox" id="filterSkateboardingRollerskating" />
+        <label for="filterSkateboardingRollerskating">Skateboarding/Rollerskating</label>
+        <br>
+        <input type="checkbox" id="filterOHRV" />
+        <label for="filterOHRV">OHRV</label>
+        <br>
+        <input type="checkbox" id="filterHunting" />
+        <label for="filterHunting">Hunting</label>
+        <br>
+        <input type="checkbox" id="filterFishing" />
+        <label for="filterFishing">Fishing</label>
+        <br>
+        <input type="checkbox" id="filterCamping" />
+        <label for="filterCamping">Camping</label>
+        <br>
+        <input type="checkbox" id="filterWildlifeViewing" />
+        <label for="filterWildlifeViewing">Wildlife Viewing</label>
+        <br>
+        <input type="checkbox" id="filterSurfing" />
+        <label for="filterSurfing">Surfing</label>
+        <br>
+        <input type="checkbox" id="filterSwimmingDiving" />
+        <label for="filterSwimmingDiving">Swimming/Diving</label>
+        <br>
+        <input type="checkbox" id="filterSnowmobiling" />
+        <label for="filterSnowmobiling">Snowmobiling</label>
+        <br>
+        <input type="checkbox" id="filterDownhillSkiingSnowboarding" />
+        <label for="filterDownhillSkiingSnowboarding">Downhill Skiing & Snowboarding</label>
+        <br>
+        <input type="checkbox" id="filterBackcountryAlpineSkiing" />
+        <label for="filterBackcountryAlpineSkiing">Backcountry Alpine Skiing</label>
+        <br>
+        <input type="checkbox" id="filterNordicSkiing" />
+        <label for="filterNordicSkiing">Nordic Skiing</label>
+        <br>
+        <input type="checkbox" id="filterRockClimbing" />
+        <label for="filterRockClimbing">Rock Climbing</label>
+        <br>
+        <input type="checkbox" id="filterIceClimbing" />
+        <label for="filterIceClimbing">Ice Climbing</label>
+        <br>
+        <input type="checkbox" id="filterMountaineering" />
+        <label for="filterMountaineering">Mountaineering</label>
+        <br>
+        <input type="checkbox" id="filterHorseback" />
+        <label for="filterHorseback">Horseback</label>
+        <br>
+        <input type="checkbox" id="filterOther" />
+        <label for="filterOther">Other</label>
+      </div>
+    </div>
+    <div id="infoDivRecreationProvider" class="esri-widget">
+      <div id="filterDivRecreationProvider">
+        <button id="toggleClustering" class="toggle-btn">Toggle Clustering</button>
+        <br>
+        <input type="checkbox" id="filterLessonsGuiding" />
+        <label for="filterLessonsGuiding">Lessons/Guiding</label>
+        <br>
+        <input type="checkbox" id="filterDownhillSki" />
+        <label for="filterDownhillSki">Downhill Ski</label>
+        <br>
+        <input type="checkbox" id="filterNordicSkiSnowshoe" />
+        <label for="filterNordicSkiSnowshoe">Nordic Ski/Snowshoe</label>
+        <br>
+        <input type="checkbox" id="filterBiking" />
+        <label for="filterBiking">Biking</label>
+        <br>
+        <input type="checkbox" id="filterWhitewater" />
+        <label for="filterWhitewater">Whitewater/Paddle</label>
+        <br>
+        <input type="checkbox" id="filterOHRV" />
+        <label for="filterOHRV">OHRV</label>
+        <br>
+        <input type="checkbox" id="filterCampground" />
+        <label for="filterCampground">Campground</label>
+        <br>
+        <input type="checkbox" id="filterClimbingMountaineeringHiking" />
+        <label for="filterClimbingMountaineeringHiking">Climbing/Mountaineering/Hiking</label>
+        <br>
+        <input type="checkbox" id="filterMotorizedBoatingWaterSports" />
+        <label for="filterMotorizedBoatingWaterSports">Motorized Boating/Water Sports</label>
+        <br>
+        <input type="checkbox" id="filterSnowmobile" />
+        <label for="filterSnowmobile">Snowmobile</label>
+        <br>
+        <input type="checkbox" id="filterFishing" />
+        <label for="filterFishing">Fishing</label>
+        <br>
+        <input type="checkbox" id="filterArcheryShootingHunting" />
+        <label for="filterArcheryShootingHunting">Archery/Shooting/Hunting</label>
+        <br>
+        <input type="checkbox" id="filterSurfing" />
+        <label for="filterSurfing">Surfing</label>
+        <br>
+        <input type="checkbox" id="filterHorsebackRiding" />
+        <label for="filterHorsebackRiding">Horseback Riding</label>
+        <br>
+        <input type="checkbox" id="filterWildlifeViewing" />
+        <label for="filterWildlifeViewing">Wildlife Viewing</label>
+        <br>
+        <input type="checkbox" id="filterSleepawaySummerCamps" />
+        <label for="filterSleepawaySummerCamps">Sleepaway Summer Camps</label>
+      </div>
+      <div id="infoDivB2B" class="esri-widget">
+        <div id="filterDivB2B">
+          <!-- Replace the following lines with your desired checkboxes and labels for filterFieldsB2B -->
+          <input type="checkbox" id="filterB2BSalesDistribution" />
+          <label for="filterB2BSalesDistribution">B2B Sales/Distribution</label>
+          <br>
+          <input type="checkbox" id="filterManufacturing" />
+          <label for="filterManufacturing">Manufacturing</label>
+          <br>
+          <input type="checkbox" id="filterDesignConstruction" />
+          <label for="filterDesignConstruction">Design/Construction</label>
+          <br>
+          <input type="checkbox" id="filterConsultingServices" />
+          <label for="filterConsultingServices">Consulting Services</label>
+          <br>
+          <input type="checkbox" id="filterOtherB2B" />
+          <label for="filterOtherB2B">Other</label>
+        </div>
+      </div>
+      <div id="infoDivNonProfits" class="esri-widget">
+        <div id="filterDivNonProfits">
+          <!-- Replace the following lines with your desired checkboxes and labels for filterFieldsNonProfits -->
+          <input type="checkbox" id="filterIndustryAssociationAdvocate" />
+          <label for="filterIndustryAssociationAdvocate">Industry Association/Advocate</label>
+          <br>
+          <input type="checkbox" id="filterOutdoorRecOutings" />
+          <label for="filterOutdoorRecOutings">Outdoor Rec. Outings</label>
+          <br>
+          <input type="checkbox" id="filterEnvEd" />
+          <label for="filterEnvEd">Env. Ed.</label>
+          <br>
+          <input type="checkbox" id="filterTrailDevelopmentMaintenance" />
+          <label for="filterTrailDevelopmentMaintenance">Trail Development & Maintenance</label>
+          <br>
+          <input type="checkbox" id="filterLandConservationStewardship" />
+          <label for="filterLandConservationStewardship">Land Conservation/Stewardship</label>
+          <br>
+          <!-- Add more checkboxes and labels for other fields in filterFieldsNonProfits as needed -->
+        </div>
+      </div>
+      
+      
+      
+    </div>
+  </div>
+    
+  </body>
+</html>
