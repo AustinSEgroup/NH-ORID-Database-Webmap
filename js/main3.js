@@ -146,8 +146,8 @@ const countyLabels = {  // autocasts as new LabelClass(){  // autocasts as new L
     url: "https://services8.arcgis.com/YKIZLV97YLZN6bol/arcgis/rest/services/RetailServiceBusinesses_with1s/FeatureServer",
     featureReduction: clusterConfig,
     popupTemplate: {
-      title: "{Name}",
-      content: "Town or City: {Town or City}<br>Website: <a href='{Website}' target='_blank'>{Website}</a>",
+      title: "{Business_Name}",
+      content: "Town or City: {Township}<br>Website: <a href='{Website}' target='_blank'>{Website}</a>",
       fieldInfos: [
         // Add additional fieldInfos for other properties you want to display in the popup
       ]
