@@ -34,17 +34,21 @@ body {
 .toggle-clust {
   /* Button Default State */
   position: absolute;
-  left: 6%;
+  left: 44px;
   padding: 10px 20px;
   font-size: 14px;
-  border: none;
+  font-weight: 700;
+  border:#5c9d86;
   color: white;
   background-color: #207380 ;
   cursor: pointer;
   text-align: center;
   transition-duration: 0.4s;
+}
 
-
+#cluster-icon {
+  position: absolute;
+  left: 2%;
 }
 
 .toggle-clust.active {
@@ -87,14 +91,22 @@ body {
   height: calc(100% - 50px); /* Assuming your top-bar has a height of 50px, adjust as needed */
   width: 100%;
 }
-
+#infoDiv2 {
+  width: 280%;
+}
 #infoDiv {
+  margin-top: -13px;
   width: 140%;
-  height: auto;
+  padding: 5px;
+}
+#filterDiv {
+  margin-left: 10px;
+
 
 }
 #legendDiv {
   background-color:  #13444b
+  
 }
 #viewDiv {
   position: relative;
@@ -104,33 +116,37 @@ body {
   z-index: 1;
 }
 
-#filterNationalChain + label {
-    font-weight: bold /* Light red for National Chain */
-}
-
-#filterRegionalChain + label {
-    font-weight: bold /* Light green for Regional Chain */
-}
-
-#filterLocalBusiness + label {
-    font-weight: bold; /* Light blue for Local Business */
+#statisticsWindow2 {
+  position: absolute;
+  top: 0px; /* Adjust this value as needed */
+  left: 50%; /* Adjust this value as needed */
+  transform: translateX(-50%);
+  z-index: 4;
+  background-color:#207380;
+  color: white;
+  padding-left: 25px;
+  padding-right: 25px; 
+  display: flex;
+  justify-content: center;
+  font-size: 10pt;
 }
 
 #statisticsWindow {
   position: absolute;
-  top: 0; /* Adjust this value as needed */
+  top: 0px; /* Adjust this value as needed */
   left: 50%; /* Adjust this value as needed */
   transform: translateX(-50%);
   z-index: 4;
-  background-color: #13444b;
+  background-color:#207380;
   color: white;
-  padding: 5px;
-  border-radius: 8px; /* Optional: for rounded corners */
+  padding-left: 25px;
+  padding-right: 25px; 
   display: flex;
   justify-content: center;
+  font-size: 10pt;
 }
 
-.statistics-container {
+#statistics-container {
   /* Button Default State */
   padding: 10px 20px;
   font-size: 14px;
@@ -141,38 +157,64 @@ body {
   text-align: center;
   transition-duration: 0.4s;
 }
+p {
+  color: white;
+  font-size: 12pt;
+}
+
+#selArea {
+
+  position: absolute;
+  left: 17%;
+  font-size: 14px;
+}
     </style>
 
     <link rel="stylesheet" href="https://js.arcgis.com/4.27/esri/themes/dark/main.css" />
     <link rel="stylesheet" href="css/style.css" />
     <script src="https://js.arcgis.com/4.27/"></script>
-
+    <script src="recLayerToggle.js"></script>
+    <script src="drawSimpleCluster.js"></script>
     <script src="js/main.js"></script>
   </head>
-
+  >
   <body>
 
     <div class="top-bar">
+      <div id="cluster-icon" class="esri-widget"></div>
+      <div id="statistics-container"> <p> Business Count Within Selection: <span id="statisticsValue"></span></p></div>
       <button id="toggleClustering" class="toggle-clust">Enable Point Clustering</button>
       <button id="toggleCEDRregions" class="toggle-button">CEDR Regions</button>
       <button id="toggleTourismRegions" class="toggle-button">Tourism Regions</button>
       <button id="toggleCounties" class="toggle-button">Counties</button>
       <button id="toggleTownships" class="toggle-button">Townships</button>
+    
     </div>
     
     <div id="mapContainer">
     
-      <div id="statisticsWindow">
-        <p>Region: <span id="selectedFieldName"></span></p>
-        <br>
-        <p>Count: <span id="statisticsValue"></span></p>
-      </div>
       
     <div id="viewDiv">
 
       <div id="legendDiv"></div>
     </div>
-    
+    <div id="infoDiv2" class="esri-widget">
+      <div id="layerToggleContainer">
+        <label><input type="checkbox" id="NHconsvLandToggle"> New Hampshire Conservation Public Lands</label>
+        <br>
+        <label><input type="checkbox" id="NHrecAreasToggle"> NH Recreation Inventory (Areas)</label>
+        <br>
+        <label><input type="checkbox" id="NHtrailsLinesToggle"> NH Recreational Trails (Polylines)</label>
+        <br>
+        <label><input type="checkbox" id="NHtrailsPointsToggle"> NH Recreational Trails (Points)</label>
+        <br>
+        <label><input type="checkbox" id="NHwaterAccessToggle"> NH Access Sites To Public Waters</label>
+        <br>
+        <label><input type="checkbox" id="NHstateLandsToggle"> State Lands View</label>
+        <br>
+        <label><input type="checkbox" id="NHdncrstateLandsToggle"> NH DCNRStateLands</label>
+    </div>
+    </div>
     <div id="infoDiv" class="esri-widget">
       <div id="filterDiv">
         <p> Business Category</p>

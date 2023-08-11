@@ -13,7 +13,8 @@ require([
   "esri/layers/GraphicsLayer",
   "esri/Graphic",
   "esri/symbols/SimpleFillSymbol",
-], (Map, FeatureLayer, GeoJSONLayer, WebTileLayer, MapView, Legend, Expand, Home, Print, SimpleLineSymbol, Collection, GraphicsLayer, Graphic, SimpleFillSymbol) => {
+  "esri/widgets/LayerList",
+], (Map, FeatureLayer, GeoJSONLayer, WebTileLayer, MapView, Legend, Expand, Home, Print, SimpleLineSymbol, Collection, GraphicsLayer, Graphic, SimpleFillSymbol, LayerList) => {
   let selectedField;
   let clusterConfig;
   let isAnyFieldSelected = false;
@@ -23,8 +24,8 @@ require([
 
   /******************** LAYER LINKS  *********************/
 
-  let baseLayerLink = "https://api.mapbox.com/styles/v1/anovak/clkvo8z6e001j01q0b8ln9s7j/tiles/256/{level}/{col}/{row}?access_token=pk.eyJ1IjoiYW5vdmFrIiwiYSI6ImNsa2Zyd2ZvdjFjbHAzaW8zNnd4ODkwaHcifQ.V-0D14XZBY5lfMfw8Qg7vg";
-  
+  let baseLayerLink = "https://api.mapbox.com/styles/v1/anovak/cll6duwmo00at01pw0c28g05a/tiles/256/{level}/{col}/{row}@2x?access_token=pk.eyJ1IjoiYW5vdmFrIiwiYSI6ImNsa2Zyd2ZvdjFjbHAzaW8zNnd4ODkwaHcifQ.V-0D14XZBY5lfMfw8Qg7vg";
+  let baseLayerLabelsLink = "https://api.mapbox.com/styles/v1/anovak/clkvo8z6e001j01q0b8ln9s7j/tiles/256/{level}/{col}/{row}@2x?access_token=pk.eyJ1IjoiYW5vdmFrIiwiYSI6ImNsa2Zyd2ZvdjFjbHAzaW8zNnd4ODkwaHcifQ.V-0D14XZBY5lfMfw8Qg7vg";
   // boundaries
   let tourismRegionsLink = "https://services8.arcgis.com/YKIZLV97YLZN6bol/arcgis/rest/services/Tourism_Regions/FeatureServer";
   let cedrRegionsLink = "https://services8.arcgis.com/YKIZLV97YLZN6bol/arcgis/rest/services/NH_CEDR/FeatureServer";
@@ -40,10 +41,17 @@ require([
   let currentLayerLink = "https://services8.arcgis.com/YKIZLV97YLZN6bol/arcgis/rest/services/RetailServiceBusinesses_with1s/FeatureServer";
 
   // NH rec layers
+  let NHwildlifeCorridorsLink = "https://services8.arcgis.com/YKIZLV97YLZN6bol/arcgis/rest/services/NH_WildlifeCorridors/FeatureServer";
+  let NHwaterAccessLink = "https://services8.arcgis.com/YKIZLV97YLZN6bol/arcgis/rest/services/NH_Access_Sites_To_Public_Waters/FeatureServer";
+  let NHtrailsPointsLink = "https://services8.arcgis.com/YKIZLV97YLZN6bol/arcgis/rest/services/NH_Recreational_Trails_(Points)/FeatureServer";
+  let NHtrailsLinesLink = "https://services8.arcgis.com/YKIZLV97YLZN6bol/arcgis/rest/services/NH_Recreational_Trails_(Polylines)/FeatureServer";
+  let NHrecAreasLink = "https://services8.arcgis.com/YKIZLV97YLZN6bol/arcgis/rest/services/NH_Recreation_Inventory_(Areas)/FeatureServer";
   let NHrecPointsLink = "https://services8.arcgis.com/YKIZLV97YLZN6bol/arcgis/rest/services/NH_Recreation_Inventory_(Points)/FeatureServer";
   let NHstateLandsLink = "https://services8.arcgis.com/hg1B9Egwk1I5p300/ArcGIS/rest/services/State_Lands_View/FeatureServer&source=sd";
-  let NHconsPublicLandsLink = "https://services8.arcgis.com/YKIZLV97YLZN6bol/arcgis/rest/services/New_Hampshire_Conservation_Public_Lands/FeatureServer";
+  let NHconsvLandLink = "https://services8.arcgis.com/YKIZLV97YLZN6bol/arcgis/rest/services/New_Hampshire_Conservation_Public_Lands/FeatureServer";
   let NHdncrStateLandsLink = "https://services8.arcgis.com/YKIZLV97YLZN6bol/arcgis/rest/services/NH_DCNRStateLands/FeatureServer";
+
+  var allowedLayers = ["NHconsvLand", "NHrecAreas", "NHrecPoints", "NHtrailsLines", "NHtrailsPoints", "NHwaterAccess", "NHstateLands", "NHdncrstateLands"];
 
   /******************* DRAW CLUSTER FUNCTION  *******************/
 
@@ -192,6 +200,21 @@ function drawSimpleCluster() {
 
 
 /************************ LABEL CLASSES***************************/
+const trailsLabelClass = {
+  // autocasts as new LabelClass()
+  symbol: {
+      type: "text",  // autocasts as new TextSymbol()
+      color: "black",
+      haloSize: 1,
+      haloColor: "white"
+  },
+  labelPlacement: "center-along",  // This will make the label follow the path of the line
+  labelExpressionInfo: {
+      expression: "$feature.TRAILNAME"
+  },
+  minScale: 50000,  // Example scale value; adjust this for the desired zoom level
+  maxScale: 0
+};
 
 const stateLandsLabels = { 
   symbol: {
@@ -318,7 +341,7 @@ renderer: {
     }
   });
 
-  const simplebaseLayer = new FeatureLayer({
+  const abaseLayer = new FeatureLayer({
     portalItem: {
       id: "2b93b06dc0dc4e809d3c8db5cb96ba69"
     },
@@ -342,12 +365,130 @@ renderer: {
 
   const baseLayer = new WebTileLayer({
     urlTemplate: baseLayerLink,
-    id: "custom-basemap",
-    title: "Custom Basemap",
   });
 
+  const baseLayerLabels = new WebTileLayer({
+    urlTemplate: baseLayerLabelsLink,
+  });
+ /********************** SUPPLEMENTAL RECREATION LAYERS ****************/
 
- 
+ const NHrecAreas = new FeatureLayer({
+  url: NHrecAreasLink,
+  visible: false,
+//  labelingInfo: [stateLandsLabels],
+  renderer: {
+    type: "simple",
+    symbol: {
+      type: "simple-fill",
+      color: "rgba(174, 228, 187, .25)",
+      outline: {
+        color: "rgba(105, 141, 114 , .5)",
+        width: 1
+      }
+    }
+  },
+
+});
+
+ const NHrecPoints = new FeatureLayer({
+  url: NHrecPointsLink,
+  visible: false,
+//  labelingInfo: [stateLandsLabels],
+  
+});
+
+
+ const NHtrailsLines = new FeatureLayer({
+  url: NHtrailsLinesLink,
+  visible: false,
+  labelingInfo: [trailsLabelClass],
+renderer: {
+  type: "simple",
+  symbol: {
+    type: "simple-line", // Change from "simple-fill" to "simple-line"
+    color: "rgba(105, 141, 114 , .5)",
+    width: 1,
+    style: "dash",  // Add this line for a dashed style
+    cap: "round",   // Optional: This makes the ends of the dash round.
+    join: "round"   // Optional: This makes the junctions between dashes round.
+  }
+  },
+
+});
+
+ const NHtrailsPoints = new FeatureLayer({
+  url: NHtrailsPointsLink,
+  visible: false,
+//  labelingInfo: [stateLandsLabels],
+  renderer: {
+    type: "simple",
+    symbol: {
+      type: "simple-fill",
+      color: "rgba(174, 228, 187, .25)",
+      outline: {
+        color: "rgba(105, 141, 114 , .5)",
+        width: 1
+      }
+    }
+  },
+
+});
+
+const NHwaterAccess = new FeatureLayer({
+  url: NHwaterAccessLink,
+  visible: false,
+//  labelingInfo: [stateLandsLabels],
+  renderer: {
+    type: "simple",
+    symbol: {
+      type: "simple-fill",
+      color: "rgba(174, 228, 187, .25)",
+      outline: {
+        color: "rgba(105, 141, 114 , .5)",
+        width: 1
+      }
+    }
+  },
+
+});
+
+const NHconsvLand = new FeatureLayer({
+  url: NHconsvLandLink,
+  visible: false,
+//  labelingInfo: [stateLandsLabels],
+  renderer: {
+    type: "simple",
+    symbol: {
+      type: "simple-fill",
+      color: "rgba(255, 220, 156, .25)",
+      outline: {
+        color: "rgba(105, 141, 114 , .5)",
+        width: 1
+      }
+    }
+  },
+
+});
+
+
+const NHwildlifeCorridors = new FeatureLayer({
+  url: NHwildlifeCorridorsLink,
+  visible: false,
+//  labelingInfo: [stateLandsLabels],
+  renderer: {
+    type: "simple",
+    symbol: {
+      type: "simple-fill",
+      color: "rgba(174, 228, 187, .25)",
+      outline: {
+        color: "rgba(105, 141, 114 , .5)",
+        width: 1
+      }
+    }
+  },
+
+});
+
   const NHstateLands = new FeatureLayer({
     url: NHstateLandsLink,
   //  labelingInfo: [stateLandsLabels],
@@ -367,6 +508,7 @@ renderer: {
 
   const NHdncrstateLands = new FeatureLayer({
     url: NHdncrStateLandsLink,
+    visible: false,
    // labelingInfo: [stateLandsLabels],
     renderer: {
       type: "simple",
@@ -393,7 +535,7 @@ renderer: {
         type: "simple-fill",
         color: "rgba(168, 0, 0, 0.00)",
         outline: {
-          color: "rgba(201, 255, 238, .25)",
+          color: "rgba(201, 255, 238, .5)",
           width: 1.5
         }
       }
@@ -411,7 +553,7 @@ renderer: {
         type: "simple-fill",
         color: "rgba(168, 0, 0, 0.00)",
         outline: {
-          color: "rgba(201, 255, 238, .25)",
+          color: "rgba(201, 255, 238, .5)",
           width: 1.5
         }
       }
@@ -428,7 +570,7 @@ renderer: {
         type: "simple-fill",
         color: "rgba(168, 0, 0, 0.00)",
         outline: {
-          color: "rgba(201, 255, 238, .25)",
+          color: "rgba(201, 255, 238, .5)",
           width: 1.5
         }
       }
@@ -469,9 +611,9 @@ renderer: {
    
   });
 
+/********************** REC LAYER TOGGLES **************************** */
 
-
-/********************** LAYER TOGGLES *****************************/
+/********************** MAIN LAYER TOGGLES *****************************/
 let selectedBoundaryLayer = null;
 
 cedrRegions.visible = false;
@@ -576,9 +718,9 @@ document.getElementById('toggleTownships').addEventListener('click', function() 
 
 /************************* MAP INITIALIZATION *************************/
   const map = new Map({
-    layers: [baseLayer,  NHstateLands, NHdncrstateLands, newHampshire, newHampshireTownships, newHampshireCounties, cedrRegions, tourismRegions, layer]
+    layers: [baseLayer, NHconsvLand, NHrecAreas, NHrecPoints, NHtrailsLines, NHtrailsPoints, NHwaterAccess, NHstateLands, NHdncrstateLands, newHampshire, newHampshireTownships, newHampshireCounties, cedrRegions, tourismRegions, layer]
   });
-
+  map.layers.add(baseLayerLabels);
   const view = new MapView({
     container: "viewDiv",
     center: [-71.5, 43.9],
@@ -762,6 +904,7 @@ function applyFilter() {
           view.graphics.add(highlightGraphic);
   
           const currentNameField = nameFieldMap[selectedBoundaryLayer.id];
+          console.log(selectedBoundaryLayer.id);
           selectedFieldNameElement.textContent = selectedPolygon.attributes[currentNameField];
   
           queryPointData(selectedPolygon);
@@ -795,7 +938,6 @@ function applyFilter() {
         console.log(currentNameField);
         console.log(regionName);
   
-        // Update the elements with the region name and statistics value
         selectedFieldNameElement.textContent = regionName;
         statisticsValueElement.textContent = statistics;
       }
@@ -808,7 +950,6 @@ function applyFilter() {
 
  const print = new Print({
   view: view,
-  // specify your own print service
   printServiceUrl:
      "https://utility.arcgisonline.com/arcgis/rest/services/Utilities/PrintingTools/GPServer/Export%20Web%20Map%20Task"
 });
@@ -841,14 +982,11 @@ function limitMapView(view) {
 /************************ VIEW FUNCTIONS ******************************/
   view.ui.remove("zoom")
 
-  view.whenLayerView(layer).then(function (layerView) {
-    view.goTo(layerView.fullExtent.expand(1.2));
-  });
   const infoDiv = document.getElementById("infoDiv");
   view.ui.add(new Expand({
     view: view,
     content: infoDiv,
-    expandIcon: "filter",
+    expandIcon: "selection-filter",
     expanded: true
   }), "top-left");
 
@@ -870,5 +1008,26 @@ function limitMapView(view) {
   });
 
 
-  
+  const layerMap = {
+    'NHconsvLandToggle': NHconsvLand,
+    'NHrecAreasToggle': NHrecAreas,
+    'NHtrailsLinesToggle': NHtrailsLines,
+    'NHtrailsPointsToggle': NHtrailsPoints,
+    'NHwaterAccessToggle': NHwaterAccess,
+    'NHstateLandsToggle': NHstateLands,
+    'NHdncrstateLandsToggle': NHdncrstateLands
+};
+
+Object.keys(layerMap).forEach((toggleId) => {
+    document.getElementById(toggleId).addEventListener('change', function() {
+        layerMap[toggleId].visible = this.checked;
+    });
 });
+const infoDiv2 = document.getElementById("infoDiv2");
+view.ui.add(new Expand({
+  view: view,
+  content: infoDiv2,
+  expandIcon: "collection",
+  expanded: false
+}), "top-left");
+  });
