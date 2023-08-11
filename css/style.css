@@ -1,0 +1,70 @@
+html,
+body {
+  padding: 0;
+  margin: 0;
+  height: 100%;
+  width: 100%;
+  background: #13444b;
+}
+
+.top-bar {
+  background-color: #207380; /* Change the background color as desired */
+  display: flex;
+  justify-content:center;
+  align-items: center;
+}
+
+.center-top-btn {
+  position: absolute;
+  top: 2%; 
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 1000; 
+}
+
+.toggle-btn {
+  /* Button Default State */
+  padding: 10px 20px;
+  font-size: 14px;
+  border: none;
+  color: white;
+  background-color: #207380 ;
+  cursor: pointer;
+  text-align: center;
+  transition-duration: 0.4s;
+
+}
+
+.toggle-btn:hover {
+  /* Button Hover State */
+  background-color: #6bacad;
+}
+
+#mapContainer {
+  position: relative;
+  height: calc(100% - 10px); /* Adjust the height to make room for the top bar */
+}
+
+#infoDiv {
+  width: 140%;
+  background-color: #13444b;
+}
+
+#viewDiv {
+  position: absolute;
+  top: 1%; /* Set the top position to match the height of the top bar */
+  bottom: 0;
+  width: 100%;
+}
+
+#filterNationalChain + label {
+    font-weight: bold /* Light red for National Chain */
+}
+
+#filterRegionalChain + label {
+    font-weight: bold /* Light green for Regional Chain */
+}
+
+#filterLocalBusiness + label {
+    font-weight: bold; /* Light blue for Local Business */
+}

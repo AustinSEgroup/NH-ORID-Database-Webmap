@@ -7,7 +7,8 @@ require([
     "esri/widgets/Legend",
     "esri/widgets/Expand",
     "esri/widgets/Home",
-  ], (Map, FeatureLayer, GeoJSONLayer, WebTileLayer, MapView, Legend, Expand, Home) => {
+    "esri/widgets/Print",
+  ], (Map, FeatureLayer, GeoJSONLayer, WebTileLayer, MapView, Legend, Expand, Home, Print) => {
     let selectedFieldRecProv;
     let isClusteringEnabled = true;
     let clusterConfig1;
@@ -328,7 +329,29 @@ require([
       }
     });
     // background layer for geographic context
-    const baseLayer = new WebTileLayer({
+    const baseLayer = new FeatureLayer({
+      portalItem: {
+        id: "2b93b06dc0dc4e809d3c8db5cb96ba69"
+      },
+      legendEnabled: false,
+      popupEnabled: false,
+      renderer: {
+        type: "simple",
+        symbol: {
+          type: "simple-fill",
+          color: [23, 65, 65, .2],
+          outline: {
+            color: [50, 50, 50, 0.75],
+            width: 0.5
+          }
+        }
+      },
+      spatialReference: {
+        wkid: 102113
+      }
+    });
+
+    const webbaseLayer = new WebTileLayer({
       urlTemplate: "https://api.mapbox.com/styles/v1/anovak/clkvo8z6e001j01q0b8ln9s7j/tiles/256/{level}/{col}/{row}?access_token=pk.eyJ1IjoiYW5vdmFrIiwiYSI6ImNsa2Zyd2ZvdjFjbHAzaW8zNnd4ODkwaHcifQ.V-0D14XZBY5lfMfw8Qg7vg",
       id: "custom-basemap",
       title: "Custom Basemap",
@@ -602,6 +625,18 @@ require([
         }
     });
      
+ /*********************** PRINT FUNCTION *************************/
+
+ const print = new Print({
+  view: view,
+  // specify your own print service
+  printServiceUrl:
+     "https://utility.arcgisonline.com/arcgis/rest/services/Utilities/PrintingTools/GPServer/Export%20Web%20Map%20Task"
+});
+
+
+/************************* VIEWS  **********************************/
+
     view.whenLayerView(recProv).then(function (layerView) {
       view.goTo(layerView.fullExtent.expand(1.2));
     });
@@ -613,6 +648,15 @@ require([
       expandIcon: "filter",
       expanded: true
     }), "top-left");
+  
+    view.ui.add(new Expand({
+      view: view,
+      content: print,
+      expandIcon: "print",
+      expanded: false,
+  
+    }), "top-left");
+  
   
     const infoDivRecreationProvider = document.getElementById("infoDivRecreationProvider");
     view.ui.add(new Expand({

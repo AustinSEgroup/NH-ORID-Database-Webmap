@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no">
+  <title>Intro to MapView - Create a 2D map - 4.10</title>
+  <style>
+  html,
+  body,
+  #viewDiv {
+    padding: 0;
+    margin: 0;
+    height: 100%;
+    width: 100%;
+  }
+  </style>
+
+  <link rel="stylesheet" href="https://js.arcgis.com/4.10/esri/css/main.css">
+  <script src="https://js.arcgis.com/4.10/"></script>
+
+  <script>
+    require([
+      "esri/Map",
+      "esri/views/MapView"
+    ], function(Map, MapView) {
+
+      var map = new Map({
+        basemap: "streets"
+      });
+
+      var view = new MapView({
+        container: "viewDiv",
+        map: map,
+        zoom: 8,
+        center: [15, 65] // longitude, latitude
+      });
+
+      view.when(function() {
+        limitMapExtent(view);
+      });
+
+
+      function limitMapExtent(view) {
+        var initialExtent = view.extent;
+        view.watch('stationary', function(event) {
+          if (!event) {
+            return;
+          }
+          //If the map has moved to the point where it's center is
+          //outside the initial boundaries, then move it back to the
+          //edge where it moved out
+          var currentCenter = view.extent.center;
+          if (!initialExtent.contains(currentCenter)) {
+
+            var newCenter = view.extent.center;
+
+            //check each side of the initial extent and if the
+            //current center is outside that extent,
+            //set the new center to be on the edge that it went out on
+            if (currentCenter.x < initialExtent.xmin) {
+              newCenter.x = initialExtent.xmin;
+            }
+            if (currentCenter.x > initialExtent.xmax) {
+              newCenter.x = initialExtent.xmax;
+            }
+            if (currentCenter.y < initialExtent.ymin) {
+              newCenter.y = initialExtent.ymin;
+            }
+            if (currentCenter.y > initialExtent.ymax) {
+              newCenter.y = initialExtent.ymax;
+            }
+            view.goTo(newCenter);
+          }
+        });
+      }
+
+    });
+  </script>
+</head>
+
+<body>
+  <div id="viewDiv"></div>
+</body>
+
+</html>
