@@ -1,0 +1,36 @@
+//custom.scss
+
+$grid-breakpoints: (
+  xs: 0,
+  sm: 600px,
+  md: 800px,
+  lg: 1375px,
+  xl: 1375px
+);
+
+$surface-bg: #13444b;
+
+$primary: #13444b;
+$dark:#134b1e;
+$secondary: rgb(107, 224, 152);
+$navbar-dark-bg-color: #13444b;
+$navbar-light-color: #13444b;
+$bodycolor: #13444b;
+$dropdown-bg: #207380;
+$dropdown-link-color: #fff;
+$dropdown-link-hover-bg: #5c9d86;
+$dropdown-link-active-bg: #6fac96;
+$text: #ffffff;
+
+@import "../node_modules/bootstrap/scss/functions";
+@import "../node_modules/bootstrap/scss/variables";
+
+$custom-theme-colors: (
+    "altlight": #f2fdff,
+    "altdark": #13444b,
+    "altdark2": #207380
+);
+
+$theme-colors: map-merge($custom-theme-colors, $theme-colors);
+
+@import "../node_modules/bootstrap/scss/bootstrap";

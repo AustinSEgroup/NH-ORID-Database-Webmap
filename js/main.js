@@ -13,8 +13,12 @@ require([
   "esri/layers/GraphicsLayer",
   "esri/Graphic",
   "esri/symbols/SimpleFillSymbol",
+  "esri/symbols/SimpleMarkerSymbol",
+  "esri/symbols/PictureMarkerSymbol",
   "esri/widgets/LayerList",
-], (Map, FeatureLayer, GeoJSONLayer, WebTileLayer, MapView, Legend, Expand, Home, Print, SimpleLineSymbol, Collection, GraphicsLayer, Graphic, SimpleFillSymbol, LayerList) => {
+  "esri/rest/support/Query",
+  
+], (Map, FeatureLayer, GeoJSONLayer, WebTileLayer, MapView, Legend, Expand, Home, Print, SimpleLineSymbol, Collection, GraphicsLayer, Graphic, SimpleFillSymbol, LayerList, Query, SimpleMarkerSymbol, PictureMarkerSymbol) => {
   let selectedField;
   let clusterConfig;
   let isAnyFieldSelected = false;
@@ -25,7 +29,7 @@ require([
   /******************** LAYER LINKS  *********************/
 
   let baseLayerLink = "https://api.mapbox.com/styles/v1/anovak/cll6duwmo00at01pw0c28g05a/tiles/256/{level}/{col}/{row}@2x?access_token=pk.eyJ1IjoiYW5vdmFrIiwiYSI6ImNsa2Zyd2ZvdjFjbHAzaW8zNnd4ODkwaHcifQ.V-0D14XZBY5lfMfw8Qg7vg";
-  let baseLayerLabelsLink = "https://api.mapbox.com/styles/v1/anovak/clkvo8z6e001j01q0b8ln9s7j/tiles/256/{level}/{col}/{row}@2x?access_token=pk.eyJ1IjoiYW5vdmFrIiwiYSI6ImNsa2Zyd2ZvdjFjbHAzaW8zNnd4ODkwaHcifQ.V-0D14XZBY5lfMfw8Qg7vg";
+  let baseLayerLabelsLink = "";
   // boundaries
   let tourismRegionsLink = "https://services8.arcgis.com/YKIZLV97YLZN6bol/arcgis/rest/services/Tourism_Regions/FeatureServer";
   let cedrRegionsLink = "https://services8.arcgis.com/YKIZLV97YLZN6bol/arcgis/rest/services/NH_CEDR/FeatureServer";
@@ -53,166 +57,23 @@ require([
 
   var allowedLayers = ["NHconsvLand", "NHrecAreas", "NHrecPoints", "NHtrailsLines", "NHtrailsPoints", "NHwaterAccess", "NHstateLands", "NHdncrstateLands"];
 
-  /******************* DRAW CLUSTER FUNCTION  *******************/
 
-  function drawCluster() {
-  console.log(`${selectedField}`)
-   clusterConfig = {
-    
-    type: "cluster",
-
-    popupTemplate: {
-      title: "{cluster_count} Providers",
-      fieldInfos: [
-        {
-          fieldName: "cluster_count",
-          format: {
-            places: 0,
-            digitSeparator: true,
-          },
-        },
-        {
-          fieldName: "cluster_size",
-          format: {
-            places: 0,
-            digitSeparator: true,
-          },
-        },
-      ],
-    },
-    fields: [{
-      name: `${selectedField}`,
-      alias: `${selectedField}`,
-      onStatisticField: `${selectedField}`,
-      statisticType: "sum"
-    }],
-    renderer: {
-      type: "simple",
-      symbol: {
-        type: "simple-marker",
-        style: "circle",
-        color: "#83DBBB",
-        size: 24,
-        outline: {
-          color: "#9BF1D2",
-          width: 5
-        }
-      },
-      visualVariables: [
-        {
-          type: "size",
-          field: `${selectedField}`,
-          stops: [
-            { value: 1, size: 3 },
-            { value: 3, size: 9 },
-            { value: 9, size: 18},
-            { value: 16, size: 32 },
-            { value: 24, size: 48 },
-            { value: 32, size: 64 },
-
-          ]
-        }
-      ]
-    },
-
-    clusterRadius: "120px",
- 
-    labelingInfo: [{
-      deconflictionStrategy: "none",
-      labelExpressionInfo: {
-        expression: "Text($feature.cluster_count, '#,###')"
-      },
-      symbol: {
-        type: "text",
-        color: "#004a5d",
-        font: {
-          weight: "bold",
-          family: "Noto Sans",
-          size: "12px"
-        }
-      },
-      labelPlacement: "center-center",
-    }]
-  };
-  layer.featureReduction = clusterConfig;
-}
-
-/************************** SIMPLER CLUSTER RENDERER ******************/
-
-function drawSimpleCluster() {
-  clusterConfig = {
-      type: "cluster",
-      popupTemplate: {
-          title: "{cluster_count} Providers",
-          fieldInfos: [{
-              fieldName: "cluster_count",
-              format: {
-                  places: 0,
-                  digitSeparator: true,
-              }
-          }]
-      },
-      renderer: {
-          type: "simple",
-          symbol: {
-              type: "simple-marker",
-              style: "circle",
-              color: "#83DBBB",
-              size: 24,
-              outline: {
-                  color: "#9BF1D2",
-                  width: 5
-              }
-          },
-          visualVariables: [{
-              type: "size",
-              field: "cluster_count", 
-              stops: [
-                  { value: 1, size: 3 },
-                  { value: 3, size: 9 },
-                  { value: 9, size: 18 },
-                  { value: 16, size: 32 },
-                  { value: 24, size: 48 },
-                  { value: 32, size: 64 },
-              ]
-          }]
-      },
-      clusterRadius: "120px",
-      labelingInfo: [{
-          deconflictionStrategy: "none",
-          labelExpressionInfo: {
-              expression: "Text($feature.cluster_count, '#,###')"
-          },
-          symbol: {
-              type: "text",
-              color: "#004a5d",
-              font: {
-                  weight: "bold",
-                  family: "Noto Sans",
-                  size: "12px"
-              }
-          },
-          labelPlacement: "center-center",
-      }]
-  };
-  layer.featureReduction = clusterConfig;
-}
-
+  
 
 /************************ LABEL CLASSES***************************/
 const trailsLabelClass = {
   // autocasts as new LabelClass()
   symbol: {
       type: "text",  // autocasts as new TextSymbol()
-      color: "black",
+      color: "rgba(179, 255, 167  , 1)",
       haloSize: 1,
-      haloColor: "white"
+      haloColor: "#13444b"
   },
   labelPlacement: "center-along",  // This will make the label follow the path of the line
   labelExpressionInfo: {
       expression: "$feature.TRAILNAME"
   },
-  minScale: 50000,  // Example scale value; adjust this for the desired zoom level
+  minScale: 150000,  // Example scale value; adjust this for the desired zoom level
   maxScale: 0
 };
 
@@ -322,7 +183,17 @@ const countyLabels = {
     featureReduction: clusterConfig,
     popupTemplate: {
       title: "{Business_Name}",
-      content: "Town or City: {Township}<br>Website: <a href='{Website}' target='_blank'>{Website}</a>",
+      content:`
+      Town or City: {Township}<br>
+      Website: <a href='{Website}' target='_blank'>{Website}</a><br>
+      Physical Address: {Physical_Address}<br>
+      E-mail: <a href='mailto:{Email}'>{Email}</a><br>
+      Phone: {Phone}<br>
+      County: {County}<br>
+      Tourism Region: {Tourism_Region}<br>
+      CEDR: {CEDR}
+    `,
+      
       fieldInfos: [
         // Add additional fieldInfos for other properties you want to display in the popup
       ]
@@ -375,6 +246,8 @@ renderer: {
  const NHrecAreas = new FeatureLayer({
   url: NHrecAreasLink,
   visible: false,
+  minScale: 500000,  // Layer will not be visible when the map is zoomed out beyond this scale
+  maxScale: 0,   
 //  labelingInfo: [stateLandsLabels],
   renderer: {
     type: "simple",
@@ -393,22 +266,43 @@ renderer: {
  const NHrecPoints = new FeatureLayer({
   url: NHrecPointsLink,
   visible: false,
-//  labelingInfo: [stateLandsLabels],
-  
+  renderer: {
+    type: "unique-value",  // renderer type
+    field: "TYPE",
+    uniqueValueInfos: [
+      {
+        value: "Trailhead",
+        symbol: {
+          type: "picture-marker",  // symbol type
+          url:  "https://www.symbols.com/images/symbol/764_trailhead.png",
+          width: 10,
+          height: 10
+        }
+      },
+      // ... add other value-symbol pairs similarly
+    ]
+  },
+
+  popupTemplate: {
+    title: "Trailhead Name: {POINAME}",
+    content: "Notes: {NOTES}"
+  },
+
+     // No max scale limit
 });
 
 
  const NHtrailsLines = new FeatureLayer({
   url: NHtrailsLinesLink,
-  visible: false,
+  visible: true,
   labelingInfo: [trailsLabelClass],
 renderer: {
   type: "simple",
   symbol: {
     type: "simple-line", // Change from "simple-fill" to "simple-line"
-    color: "rgba(105, 141, 114 , .5)",
+    color: "rgba(207, 255, 167   , .4)",
     width: 1,
-    style: "dash",  // Add this line for a dashed style
+    style: "short-dot",  // Add this line for a dashed style
     cap: "round",   // Optional: This makes the ends of the dash round.
     join: "round"   // Optional: This makes the junctions between dashes round.
   }
@@ -471,27 +365,11 @@ const NHconsvLand = new FeatureLayer({
 });
 
 
-const NHwildlifeCorridors = new FeatureLayer({
-  url: NHwildlifeCorridorsLink,
-  visible: false,
-//  labelingInfo: [stateLandsLabels],
-  renderer: {
-    type: "simple",
-    symbol: {
-      type: "simple-fill",
-      color: "rgba(174, 228, 187, .25)",
-      outline: {
-        color: "rgba(105, 141, 114 , .5)",
-        width: 1
-      }
-    }
-  },
-
-});
 
   const NHstateLands = new FeatureLayer({
     url: NHstateLandsLink,
   //  labelingInfo: [stateLandsLabels],
+    visible: false,
     renderer: {
       type: "simple",
       symbol: {
@@ -529,6 +407,8 @@ const NHwildlifeCorridors = new FeatureLayer({
   const cedrRegions = new FeatureLayer({
     url: cedrRegionsLink,
     labelingInfo: [cedrRegionsLabels],
+    outFields: ["*"],
+   
     renderer: {
       type: "simple",
       symbol: {
@@ -547,6 +427,8 @@ const NHwildlifeCorridors = new FeatureLayer({
   const tourismRegions = new FeatureLayer({
     url: tourismRegionsLink,
     labelingInfo: [tourismRegionsLabels],
+    
+    outFields: ["*"],
     renderer: {
       type: "simple",
       symbol: {
@@ -564,6 +446,7 @@ const NHwildlifeCorridors = new FeatureLayer({
   const newHampshireCounties = new FeatureLayer({
     url: newHampshireCountiesLink,
     labelingInfo: [countyLabels],
+    
     renderer: {
       type: "simple",
       symbol: {
@@ -581,6 +464,8 @@ const NHwildlifeCorridors = new FeatureLayer({
   const newHampshireTownships = new FeatureLayer({
     url: newHampshireTownshipsLink,
     labelingInfo: [townshipLabels],
+    outFields: ["*"],
+    
     renderer: {
       type: "simple",
       symbol: {
@@ -611,7 +496,6 @@ const NHwildlifeCorridors = new FeatureLayer({
    
   });
 
-/********************** REC LAYER TOGGLES **************************** */
 
 /********************** MAIN LAYER TOGGLES *****************************/
 let selectedBoundaryLayer = null;
@@ -767,6 +651,221 @@ document.getElementById('toggleTownships').addEventListener('click', function() 
   };
   layer.effect = "bloom(3, 0.1px, 15%)";
 
+/******************* DRAW CLUSTER FUNCTION  *******************/
+
+function drawCluster() {
+  if (tourismRegions.visible || cedrRegions.visible || newHampshireCounties.visible || newHampshireTownships.visible) {
+    applyPolygonClustering();
+  } 
+else {
+  
+  clusterConfig = {
+  
+  type: "cluster",
+
+  popupTemplate: {
+    title: "{cluster_count} Providers",
+    fieldInfos: [
+      {
+        fieldName: "cluster_count",
+        format: {
+          places: 0,
+          digitSeparator: true,
+        },
+      },
+      {
+        fieldName: "cluster_size",
+        format: {
+          places: 0,
+          digitSeparator: true,
+        },
+      },
+    ],
+  },
+  fields: [{
+    name: `${selectedField}`,
+    alias: `${selectedField}`,
+    onStatisticField: `${selectedField}`,
+    statisticType: "sum"
+  }],
+  renderer: {
+    type: "simple",
+    symbol: {
+      type: "simple-marker",
+      style: "circle",
+      color: "#83DBBB",
+      size: 24,
+      outline: {
+        color: "#9BF1D2",
+        width: 5
+      }
+    },
+    visualVariables: [
+      {
+        type: "size",
+        field: `${selectedField}`,
+        stops: [
+          { value: 1, size: 3 },
+          { value: 3, size: 9 },
+          { value: 9, size: 18},
+          { value: 16, size: 32 },
+          { value: 24, size: 48 },
+          { value: 32, size: 64 },
+
+        ]
+      }
+    ]
+  },
+
+  clusterRadius: "120px",
+
+  labelingInfo: [{
+    deconflictionStrategy: "none",
+    labelExpressionInfo: {
+      expression: "Text($feature.cluster_count, '#,###')"
+    },
+    symbol: {
+      type: "text",
+      color: "#004a5d",
+      font: {
+        weight: "bold",
+        family: "Noto Sans",
+        size: "12px"
+      }
+    },
+    labelPlacement: "center-center",
+  }]
+};
+layer.featureReduction = clusterConfig;
+}
+}
+/********************************** CLUSTER BY POLYGON ******************************************** */
+const pseudoClusterLayer = new GraphicsLayer();
+map.add(pseudoClusterLayer);
+
+function applyPolygonClustering() {
+  let selectedPolygonLayer;
+
+  // Check which polygon layer is currently visible
+  if (tourismRegions.visible) {
+      selectedPolygonLayer = tourismRegions;
+  } else if (cedrRegions.visible) {
+      selectedPolygonLayer = cedrRegions;
+  } else if (newHampshireCounties.visible) {
+      selectedPolygonLayer = newHampshireCounties;
+  } else if (newHampshireTownships.visible) {
+      selectedPolygonLayer = newHampshireTownships;
+  } else {
+      return; // Exit the function if no polygon layer is visible
+  }
+
+  // Create and configure a query for the selected polygon layer
+  let polygonsQuery = selectedPolygonLayer.createQuery();
+
+  // Execute the polygon query to get polygon features
+  selectedPolygonLayer.queryFeatures(polygonsQuery).then(result => {
+      console.log(selectedPolygonLayer.title); // Log the title of the selected polygon layer
+      const polygons = result.features; // Get the polygon features from the query result
+      console.log(polygons);
+      for (let polygon of polygons) {
+          // Create and configure a query for points within the current polygon
+          let pointsQuery = layer.createQuery(); // This line should be corrected to use the appropriate layer variable
+          pointsQuery.geometry = polygon.geometry;
+          pointsQuery.spatialRelationship = "intersects";
+          pointsQuery.where = `${selectedField} = 1`;
+          pointsQuery.returnGeometry = true;
+          console.log(pointsQuery.where = `${selectedField} = 1`);
+          const sumStatistic = {
+            onStatisticField: `${selectedField}`,
+            outStatisticFieldName: "sumValue",
+            statisticType: "sum",
+        };
+        console.log(sumStatistic),
+        pointsQuery.outStatistics = [sumStatistic];
+          console.log(sumStatistic)
+          // Create a cluster marker graphic for the polygon centroid
+          const clusterGraphic = new Graphic({
+            geometry: polygon.geometry.centroid,
+            symbol: {
+                type: "simple-marker",
+                style: "circle",
+                color: "#83DBBB",
+                size: 15,
+                outline: {
+                    color: "#9BF1D2",
+                    width: 5
+                }
+            }
+          });
+
+  
+
+          pseudoClusterLayer.addmany([clusterGraphic]); // Add the cluster marker and text label to the cluster layer
+      }
+  });
+}
+/************************** SIMPLER CLUSTER RENDERER ******************/
+
+function drawSimpleCluster() {
+clusterConfig = {
+    type: "cluster",
+    popupTemplate: {
+        title: "{cluster_count} Providers",
+        fieldInfos: [{
+            fieldName: "cluster_count",
+            format: {
+                places: 0,
+                digitSeparator: true,
+            }
+        }]
+    },
+    renderer: {
+        type: "simple",
+        symbol: {
+            type: "simple-marker",
+            style: "circle",
+            color: "#83DBBB",
+            size: 24,
+            outline: {
+                color: "#9BF1D2",
+                width: 5
+            }
+        },
+        visualVariables: [{
+            type: "size",
+            field: "cluster_count", 
+            stops: [
+                { value: 1, size: 3 },
+                { value: 3, size: 9 },
+                { value: 9, size: 18 },
+                { value: 16, size: 32 },
+                { value: 24, size: 48 },
+                { value: 32, size: 64 },
+            ]
+        }]
+    },
+    clusterRadius: "120px",
+    labelingInfo: [{
+        deconflictionStrategy: "none",
+        labelExpressionInfo: {
+            expression: "Text($feature.cluster_count, '#,###')"
+        },
+        symbol: {
+            type: "text",
+            color: "#004a5d",
+            font: {
+                weight: "bold",
+                family: "Noto Sans",
+                size: "12px"
+            }
+        },
+        labelPlacement: "center-center",
+    }]
+};
+layer.featureReduction = clusterConfig;
+}
+
+
 
 
 /*********************** ONLY DISPLAY ONE BUSINESS CATEGORY *************/
@@ -796,6 +895,7 @@ exclusiveCheckboxes.forEach(id => {
 
 
 /******************************** FILTER DATA BY SELECTED FIELD *****************/
+
 function applyFilter() {
   
   const filters = {};
@@ -840,7 +940,6 @@ function applyFilter() {
     
     if (isClusteringEnabled) {
         this.classList.add('active');
-        this.textContent = "Disable Point Clustering";
         layer.effect = "bloom(0, 0.1px, 15%)";
         
         let selectedFields = [];
@@ -853,24 +952,30 @@ function applyFilter() {
         if (isAnyFieldSelected) {
             drawCluster();
         } else {
-            drawSimpleCluster();
+            applyPolygonClustering()
         }
     } else {
         this.classList.remove('active');
         layer.featureReduction = null;
-        this.textContent = "Enable Point Clustering";
+
         layer.effect = "bloom(3, 0.1px, 15%)";
     }
 });
 
    /*********************** QUERY AND HIGHLIGHT FUNCTION *************************/
-   const nameFieldMap = {
-    cedrRegions: "CEDR",
-    tourismRegions: "TourismReg",
-    newHampshireCounties: "County",
-    newHampshireTownships: "pbpNAME"
-  };
- 
+
+
+   layer.cedrRegions = "cedrRegions";
+   layer.tourismRegions = "tourismRegions";
+   layer.newHampshireCounties = "newHampshireCounties";
+   layer.ewHampshireTownships = "newHampshireTownships";
+
+ const nameFieldArray = [
+  { id: "cedrRegions", name: "CEDR" },
+  { id: "tourismRegions", name: "TourismReg" },
+  { id: "newHampshireCounties", name: "County" },
+  { id: "newHampshireTownships", name: "pbpNAME" }
+];
    
    const selectedFieldNameElement = document.getElementById("selectedFieldName");
    const statisticsValueElement = document.getElementById("statisticsValue");
@@ -886,6 +991,7 @@ function applyFilter() {
         if (result.features.length > 0) {
           const selectedPolygon = result.features[0];
           view.graphics.removeAll();
+          console.log(selectedPolygon);
   
           const highlightSymbol = new SimpleFillSymbol({
             color: "white",
@@ -903,8 +1009,8 @@ function applyFilter() {
   
           view.graphics.add(highlightGraphic);
   
-          const currentNameField = nameFieldMap[selectedBoundaryLayer.id];
-          console.log(selectedBoundaryLayer.id);
+          const currentNameField = nameFieldArray[selectedBoundaryLayer.id];
+          console.log(selectedBoundaryLayer.layerId),
           selectedFieldNameElement.textContent = selectedPolygon.attributes[currentNameField];
   
           queryPointData(selectedPolygon);
@@ -916,7 +1022,7 @@ function applyFilter() {
   });
   
   function queryPointData(selectedPolygon) {
-    const currentNameField = nameFieldMap[selectedBoundaryLayer.id];
+    const currentNameField = nameFieldArray[selectedBoundaryLayer.id];
   
     const query = layer.createQuery();
     query.geometry = selectedPolygon.geometry;
@@ -935,11 +1041,10 @@ function applyFilter() {
       if (result.features.length > 0) {
         const statistics = result.features[0].attributes.sum;
         const regionName = result.features[0].attributes[currentNameField];
-        console.log(currentNameField);
-        console.log(regionName);
-  
+ 
         selectedFieldNameElement.textContent = regionName;
         statisticsValueElement.textContent = statistics;
+      
       }
     }).catch(function(error) {
       console.error("Error during point data query:", error);
@@ -986,7 +1091,7 @@ function limitMapView(view) {
   view.ui.add(new Expand({
     view: view,
     content: infoDiv,
-    expandIcon: "selection-filter",
+    expandIcon: "select-category",
     expanded: true
   }), "top-left");
 
@@ -1012,6 +1117,7 @@ function limitMapView(view) {
     'NHconsvLandToggle': NHconsvLand,
     'NHrecAreasToggle': NHrecAreas,
     'NHtrailsLinesToggle': NHtrailsLines,
+    'NHrecPointsToggle' : NHrecPoints,
     'NHtrailsPointsToggle': NHtrailsPoints,
     'NHwaterAccessToggle': NHwaterAccess,
     'NHstateLandsToggle': NHstateLands,

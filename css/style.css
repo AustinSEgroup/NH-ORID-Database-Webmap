@@ -2,16 +2,134 @@ html,
 body {
   padding: 0;
   margin: 0;
-  height: 100%;
-  width: 100%;
   background: #13444b;
 }
+
+.dijitDialog {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 10000; /* Ensure it's above other content */
+}
+
+.navbar {
+  height: 50px;
+}
+.flex-column {
+
+  width: 100% !important;
+  align-items: flex-end;
+  padding-right: 15px;
+}
+.btn-altdark2 {
+  margin-left: 10%;
+  font-size: 14px;
+  font-weight: 400;
+  border:#5c9d86;
+  border-radius: 5px;
+  color: white;
+  outline-color: #6fac96;
+  outline-width: 1px;
+  outline-style: solid;
+  left: 0;
+  justify-content: left;
+  align-items: left;
+  background-color: #207380 ;
+  cursor: pointer;
+  text-align: center;
+  transition-duration: 0.4s;
+  margin-left: 15px;
+  transform: translateY(-4px);
+}
+
+.navnbar {
+  padding-right: 50px;
+}
+.dropdown-nav {
+  display: none;
+}
+.dropdown {
+  padding-left: 3px;
+}
+.dropdown-menu {
+  margin-right: 30px;
+  margin-left: 3px;
+}
+
+.dropdown-menu.show {
+  margin-right: 30px;
+  width:450px;
+  margin-left: 3px;
+}
+@media (max-width: 900px) {
+  .navbar-brand img {
+      width: 150px;
+  }
+}
+
+
+@media (max-width: 1375px) {
+  /* Hide regular nav items */
+  .navbar-break {
+      display: none !important;
+  }
+  
+  /* Show the dropdown */
+  .dropdown-nav {
+      display: block !important;
+  }
+}
+
+@media (min-width: 1201px) and (max-width: 1300px) {
+  /* Hide regular nav items */
+  .nav-items {
+      display: none;
+  }
+  
+  /* Show the dropdown */
+  .dropdown-nav {
+      display: block;
+  }
+}
+
+.navbar-toggler {
+color: #ffffff !important;
+
+}
+.LOGO {
+  margin-left: auto;
+  padding-right: 10px;
+
+}
+
+
+
+.navbar-nav .nav-link {
+  color: white; /* Change to your desired color */
+  display: flex;
+  align-content: flex-start;
+  margin-left: 13px;
+}
+.dropdown2 {
+  padding-right: 50px ;
+}
+.navbar-nav-center {
+      display: flex;
+      padding-left: 300px;
+      margin-left: auto;
+      transform: translateX(-150px);
+      
+    }
 
 .top-bar {
   background-color: #207380; /* Change the background color as desired */
   display: flex;
-  justify-content:center;
-  align-items: center;
+  flex-direction: row;
+  padding-left: 150px;
+  padding-right: 50px ;
+  height: 40px;
+ 
 }
 
 .center-top-btn {
@@ -19,52 +137,136 @@ body {
   top: 2%; 
   left: 50%;
   transform: translateX(-50%);
-  z-index: 1000; 
 }
 
-.toggle-btn {
+#toggleClustering {
+  justify-content: left;
+  align-items: left !important;
+  left: 0 !important;
+  outline-color: #6fac96;
+  outline-width: 1px;
+  outline-style: solid;
+  font-weight: 400;
+}
+
+.toggle-clust:hover {
+  background-color: #5c9d8666;
+}
+.toggle-clust {
   /* Button Default State */
-  padding: 10px 20px;
   font-size: 14px;
-  border: none;
+  font-weight: 400;
+  border:#5c9d86;
+  border-radius: 5px;
   color: white;
+  outline-color: #6fac96;
+  outline-width: 1px;
+  outline-style: solid;
+  justify-content: left;
+  align-items: left;
+  transform: translateX(16px);
   background-color: #207380 ;
   cursor: pointer;
   text-align: center;
   transition-duration: 0.4s;
-
+  margin-left: 5px;
 }
 
-.toggle-btn:hover {
-  /* Button Hover State */
-  background-color: #6bacad;
-}
 
-#mapContainer {
-  position: relative;
-  height: calc(100% - 10px); /* Adjust the height to make room for the top bar */
-}
 
-#infoDiv {
-  width: 140%;
+.toggle-clust.active {
+  /* Button Default State */
   background-color: #13444b;
+  color: white;
 }
 
-#viewDiv {
+.toggle-clust1:hover {
+  background-color: #5c9d8666;
+}
+.toggle-clust1 {
+  /* Button Default State */
   position: absolute;
-  top: 1%; /* Set the top position to match the height of the top bar */
-  bottom: 0;
-  width: 100%;
+  font-size: 14px;
+  font-weight: 600;
+  border:#5c9d86;
+  border-radius: 5px;
+  color: white;
+  margin-left: 15px;
+  margin-right: auto;
+  background-color: #207380 ;
+  cursor: pointer;
+  text-align: center;
+  transition-duration: 0.4s;
 }
 
-#filterNationalChain + label {
-    font-weight: bold /* Light red for National Chain */
+
+
+.toggle-clust1.active {
+  /* Button Default State */
+  background-color: #5c9d86;
+  color: white;
+
+}
+.navbar-nav.btn {
+   /* Button Default State */
+   left: 16px;
+   right: 80%;
+   font-size: 14px;
+   font-weight: 700;
+   border:#5c9d86 !important;
+   border-radius: 5px;
+   color: white;
+   background-color: #207380 !important;
+   cursor: pointer;
+   text-align: center;
+   transition-duration: 0.4s;
+ }
+
+#mapRow {
+  z-index: 1;
+}
+#mapContainer {
+  height: calc(100vh - (90px));
+}
+#infoDiv2 {
+  width: 400px;
+  padding-right: 20px;
+  z-index: 9;
+  background-color:#207380;
+  padding: 5px;
+}
+#infoDiv {
+  margin-top: -13px;
+  width: 140%;
+  padding: 5px;
+  z-index: 9;
 }
 
-#filterRegionalChain + label {
-    font-weight: bold /* Light green for Regional Chain */
+#layerToggleContainer {
+  margin-left: 10px;
+}
+#filterDiv {
+  margin-left: 10px;
+  z-index: 9;
+}
+#legendDiv {
+  background-color:  #13444b
+  
+}
+#viewDiv {
+  z-index: 1;
+  height: calc(100vh - (90px));
+
 }
 
-#filterLocalBusiness + label {
-    font-weight: bold; /* Light blue for Local Business */
+p {
+  color: white;
+  font-size: 12pt;
+}
+
+#selArea {
+
+  position: absolute;
+  left: 17%;
+  font-size: 14px;
 }

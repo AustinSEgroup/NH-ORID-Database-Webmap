@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no" />
+    <link rel="stylesheet" href="/css/main.min.css">
+    <title>New Hampshire Outdoor Economy</title>
+    <style>
+   
+    </style>
+
+    <link rel="stylesheet" href="https://js.arcgis.com/4.27/esri/themes/dark/main.css" />
+    <link rel="stylesheet" href="css/style.css" />
+    <link rel="stylesheet" href="css/sassytheme.css" />
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.min.js" integrity="sha384-Rx+T1VzGupg4BHQYs2gCW9It+akI2MM/mndMCy36UVfodzcJcF0GGLxZIzObiEfa" crossorigin="anonymous"></script>
+    <script src="https://js.arcgis.com/4.27/"></script>
+    <script src="js/main.js"></script>
+  </head>
+  
+  <body class = "sassy-theme">
+
+
+    <nav class="navbar-dark navbar-expand-xl navbar bg-altdark">
+    
+  
+      <!-- Direct links for larger screens -->
+      <ul class="navbar-break navbar-nav flex-column flex-xl-row flex-wrap d-none d-xl-flex"> <!-- Show only on lg screens and above -->
+          <li class="nav-item">
+              <a class="nav-link btn btn-dark active" href="">Retail-Service Businesses</a>
+          </li>
+          <li class="nav-item">
+              <a class="nav-link btn btn-dark" href="indexRecProv.html">Recreation Providers</a>
+          </li>
+          <li class="nav-item">
+              <a class="nav-link btn btn-dark" href="indexServMan.html">Services and Manufacturers</a>
+          </li>
+          <li class="nav-item">
+              <a class="nav-link btn btn-dark" href="indexNonProf.html">Non-Profit Organizations</a>
+          </li>
+      </ul>
+  
+      <!-- Dropdown for smaller screens -->
+      <div class="d-xl-none">
+          <div class="dropdown">
+              <button class="btn btn-altdark dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
+                  Select Database Category
+              </button>
+              <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                  <li><a class="dropdown-item" href="">Retail-Service Businesses</a></li>
+                  <li><a class="dropdown-item" href="indexRecProv.html">Recreation Providers</a></li>
+                  <li><a class="dropdown-item" href="indexServMan.html">Services and Manufacturers</a></li>
+                  <li><a class="dropdown-item" href="indexNonProf.html">Non-Profit Organizations</a></li>
+              </ul>
+          </div>
+      </div>
+
+      <div class="LOGO" >
+        <img src="img/LOGO.png" width="300px" class="d-none d-sm-block">
+    </div>
+  </nav>
+  
+  <nav class="navbar navbar-expand-md top-bar">
+    <button id="toggleClustering" class="toggle-clust1"><img src="img/clustering.svg" width="30"> Point Clustering</button>
+    <!-- Buttons for larger screens (lg and above) -->
+    <div class="navbar-nav d-none d-sm-block">
+     
+       
+        <button id="toggleCEDRregions" class="toggle-clust">CEDR Regions</button>
+        <button id="toggleTourismRegions" class="toggle-clust">Tourism Regions</button>
+        <button id="toggleCounties" class="toggle-clust">Counties</button>
+        <button id="toggleTownships" class="toggle-clust">Municipalities</button>
+    </div>
+
+      <div class="d-sm-none">
+
+        <div class="dropdown">
+            <button class="btn btn-altdark2 dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              Boundary Layers
+            </button>
+              <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                <button id="toggleCEDRregions" class="toggle-clust">CEDR Regions</button>
+                <button id="toggleTourismRegions" class="toggle-clust">Tourism Regions</button>
+                <button id="toggleCounties" class="toggle-clust">Counties</button>
+                <button id="toggleTownships" class="toggle-clust">Municipalities</button>
+              </ul>
+        </div>
+    </div>
+  </nav>
+    
+  <div id="mapContainer">
+
+  
+
+        <div id="viewDiv" class="sassytheme">
+          <div id="legendDiv"></div>
+          <div id="infoDiv2">
+            <div id="layerToggleContainer">
+              <label><input type="checkbox" id="NHconsvLandToggle"> New Hampshire Conservation Public Lands</label>
+              <br>
+              <label><input type="checkbox" id="NHrecAreasToggle"> NH Recreation Inventory (Areas)</label>
+              <br>
+              <label><input type="checkbox" id="NHrecPointsToggle"> NH Recreation Inventory (Points)</label>
+              <br>
+              <label><input type="checkbox" id="NHtrailsLinesToggle"> NH Recreational Trails (Polylines)</label>
+              <br>
+              <label><input type="checkbox" id="NHtrailsPointsToggle"> NH Recreational Trails (Points)</label>
+              <br>
+              <label><input type="checkbox" id="NHwaterAccessToggle"> NH Access Sites To Public Waters</label>
+              <br>
+              <label><input type="checkbox" id="NHstateLandsToggle"> State Lands View</label>
+              <br>
+              <label><input type="checkbox" id="NHdncrstateLandsToggle"> NH DCNRStateLands</label>
+          </div>
+          </div>
+          
+          <div id="infoDiv" class="esri-widget">
+            <div id="filterDiv">
+              <p> Business Category</p>
+              <input type="checkbox" id="filterNationalChain" />
+              <label for="filterNationalChain">National Chain</label>
+              <br>
+              <input type="checkbox" id="filterRegionalChain" />
+              <label for="filterRegionalChain">Regional Chain</label>
+              <br>
+              <input type="checkbox" id="filterLocalBusiness" />
+              <label for="filterLocalBusiness">Local Business</label>
+              <br>
+              <br>
+              <p> Activity Type</p>
+              <input type="checkbox" id="filterHiking" />
+              <label for="filterHiking">Hiking</label>
+              <br>
+              <input type="checkbox" id="filterSnowshoeing" />
+              <label for="filterSnowshoeing">Snowshoeing</label>
+              <br>
+              <input type="checkbox" id="filterRunningTrailRunning" />
+              <label for="filterRunningTrailRunning">Running/Trail Running</label>
+              <br>
+              <input type="checkbox" id="filterMotorizedBoatingWaterSports" />
+              <label for="filterMotorizedBoatingWaterSports">Motorized Boating & Watersports</label>
+              <br>
+              <input type="checkbox" id="filterWhitewaterSports" />
+              <label for="filterWhitewaterSports">Whitewater sports</label>
+              <br>
+              <input type="checkbox" id="filterPaddleSports" />
+              <label for="filterPaddleSports">Paddle sports</label>
+              <br>
+              <input type="checkbox" id="filterMountainBiking" />
+              <label for="filterMountainBiking">Mountain Biking</label>
+              <br>
+              <input type="checkbox" id="filterRoadGravelBiking" />
+              <label for="filterRoadGravelBiking">Road/Gravel Biking</label>
+              <br>
+              <input type="checkbox" id="filterBMX" />
+              <label for="filterBMX">BMX</label>
+              <br>
+              <input type="checkbox" id="filterSkateboardingRollerskating" />
+              <label for="filterSkateboardingRollerskating">Skateboarding/Rollerskating</label>
+              <br>
+              <input type="checkbox" id="filterOHRV" />
+              <label for="filterOHRV">OHRV</label>
+              <br>
+              <input type="checkbox" id="filterHunting" />
+              <label for="filterHunting">Hunting</label>
+              <br>
+              <input type="checkbox" id="filterFishing" />
+              <label for="filterFishing">Fishing</label>
+              <br>
+              <input type="checkbox" id="filterCamping" />
+              <label for="filterCamping">Camping</label>
+              <br>
+              <input type="checkbox" id="filterWildlifeViewing" />
+              <label for="filterWildlifeViewing">Wildlife Viewing</label>
+              <br>
+              <input type="checkbox" id="filterSurfing" />
+              <label for="filterSurfing">Surfing</label>
+              <br>
+              <input type="checkbox" id="filterSwimmingDiving" />
+              <label for="filterSwimmingDiving">Swimming/Diving</label>
+              <br>
+              <input type="checkbox" id="filterSnowmobiling" />
+              <label for="filterSnowmobiling">Snowmobiling</label>
+              <br>
+              <input type="checkbox" id="filterDownhillSkiingSnowboarding" />
+              <label for="filterDownhillSkiingSnowboarding">Downhill Skiing & Snowboarding</label>
+              <br>
+              <input type="checkbox" id="filterBackcountryAlpineSkiing" />
+              <label for="filterBackcountryAlpineSkiing">Backcountry Alpine Skiing</label>
+              <br>
+              <input type="checkbox" id="filterNordicSkiing" />
+              <label for="filterNordicSkiing">Nordic Skiing</label>
+              <br>
+              <input type="checkbox" id="filterRockClimbing" />
+              <label for="filterRockClimbing">Rock Climbing</label>
+              <br>
+              <input type="checkbox" id="filterIceClimbing" />
+              <label for="filterIceClimbing">Ice Climbing</label>
+              <br>
+              <input type="checkbox" id="filterMountaineering" />
+              <label for="filterMountaineering">Mountaineering</label>
+              <br>
+              <input type="checkbox" id="filterHorseback" />
+              <label for="filterHorseback">Horseback</label>
+              <br>
+              <input type="checkbox" id="filterOther" />
+              <label for="filterOther">Other</label>
+      
+              
+            </div>
+
+        </div>
+
+            
+        </div>
+        
+    </div>
+      
+    </div>
+    
+  </div>
+ 
+  </body>
+</html>

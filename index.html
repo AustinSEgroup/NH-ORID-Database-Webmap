@@ -1,317 +1,54 @@
 <!DOCTYPE html>
-<html>
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no" />
-
-    <title>Recreation Providers</title>
-
-    <style>
-    html,
-body {
-  padding: 0;
-  margin: 0;
-  height: 100%;
-  width: 100%;
-  background: #13444b;
-}
-
-.top-bar {
-  background-color: #207380; /* Change the background color as desired */
-  display: flex;
-  justify-content:center;
-  align-items: center;
-}
-
-.center-top-btn {
-  position: absolute;
-  top: 2%; 
-  left: 50%;
-  transform: translateX(-50%);
-  z-index: 1000; 
-}
-
-.toggle-clust {
-  /* Button Default State */
-  position: absolute;
-  left: 44px;
-  padding: 10px 20px;
-  font-size: 14px;
-  font-weight: 700;
-  border:#5c9d86;
-  color: white;
-  background-color: #207380 ;
-  cursor: pointer;
-  text-align: center;
-  transition-duration: 0.4s;
-}
-
-#cluster-icon {
-  position: absolute;
-  left: 2%;
-}
-
-.toggle-clust.active {
-  /* Button Default State */
-  background-color: #5c9d86;
-  color: white;
-
-}
-
-.toggle-button {
-  /* Button Default State */
-  padding: 10px 20px;
-  font-size: 14px;
-  border: none;
-  color: white;
-  background-color: #207380;
-  cursor: pointer;
-  text-align: center;
-  transition-duration: 0.4s;
-
-}
-
-.toggle-button.active {
-  background-color: #5c9d86;
-  color: white;
-}
-
-.toggle-button:hover {
-  /* Button Hover State */
-  background-color: #97cdba61;
-}
-
-#mapContainer {
-  position: relative; /* Adjust the height to make room for the top bar */
-  position: relative;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  height: calc(100% - 50px); /* Assuming your top-bar has a height of 50px, adjust as needed */
-  width: 100%;
-}
-#infoDiv2 {
-  width: 280%;
-}
-#infoDiv {
-  margin-top: -13px;
-  width: 140%;
-  padding: 5px;
-}
-#filterDiv {
-  margin-left: 10px;
-
-
-}
-#legendDiv {
-  background-color:  #13444b
-  
-}
-#viewDiv {
-  position: relative;
-  top: 0; /* Set the top position to match the height of the top bar */
-  bottom: 0;
-  width: 100%;
-  z-index: 1;
-}
-
-#statisticsWindow2 {
-  position: absolute;
-  top: 0px; /* Adjust this value as needed */
-  left: 50%; /* Adjust this value as needed */
-  transform: translateX(-50%);
-  z-index: 4;
-  background-color:#207380;
-  color: white;
-  padding-left: 25px;
-  padding-right: 25px; 
-  display: flex;
-  justify-content: center;
-  font-size: 10pt;
-}
-
-#statisticsWindow {
-  position: absolute;
-  top: 0px; /* Adjust this value as needed */
-  left: 50%; /* Adjust this value as needed */
-  transform: translateX(-50%);
-  z-index: 4;
-  background-color:#207380;
-  color: white;
-  padding-left: 25px;
-  padding-right: 25px; 
-  display: flex;
-  justify-content: center;
-  font-size: 10pt;
-}
-
-#statistics-container {
-  /* Button Default State */
-  padding: 10px 20px;
-  font-size: 14px;
-  border: none;
-  color: white;
-  background-color: #207380 ;
-  cursor: pointer;
-  text-align: center;
-  transition-duration: 0.4s;
-}
-p {
-  color: white;
-  font-size: 12pt;
-}
-
-#selArea {
-
-  position: absolute;
-  left: 17%;
-  font-size: 14px;
-}
-    </style>
-
-    <link rel="stylesheet" href="https://js.arcgis.com/4.27/esri/themes/dark/main.css" />
-    <link rel="stylesheet" href="css/style.css" />
-    <script src="https://js.arcgis.com/4.27/"></script>
-    <script src="recLayerToggle.js"></script>
-    <script src="drawSimpleCluster.js"></script>
-    <script src="js/main.js"></script>
-  </head>
-  >
-  <body>
-
-    <div class="top-bar">
-      <div id="cluster-icon" class="esri-widget"></div>
-      <div id="statistics-container"> <p> Business Count Within Selection: <span id="statisticsValue"></span></p></div>
-      <button id="toggleClustering" class="toggle-clust">Enable Point Clustering</button>
-      <button id="toggleCEDRregions" class="toggle-button">CEDR Regions</button>
-      <button id="toggleTourismRegions" class="toggle-button">Tourism Regions</button>
-      <button id="toggleCounties" class="toggle-button">Counties</button>
-      <button id="toggleTownships" class="toggle-button">Townships</button>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+  <title>Responsive Centered Navbar</title>
+  <style>
+    /* Custom CSS to center the categories within the navbar */
+    .navbar-nav-center {
+      display: flex;
+      justify-content: center;
+      width: 100%;
+    }
     
-    </div>
-    
-    <div id="mapContainer">
-    
-      
-    <div id="viewDiv">
+    /* Style for the active tab */
+    .nav-item.active .nav-link {
+      background-color: #007bff;
+      color: #742323;
+    }
+  </style>
+</head>
+<body>
+  <nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <a class="navbar-brand" href="#">Navbar</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
 
-      <div id="legendDiv"></div>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav navbar-nav-center flex-row flex-wrap"> <!-- Use the "navbar-nav-center" class to center the categories -->
+        <li class="nav-item">
+          <a class="nav-link active" href="#">Retail-Service Businesses</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#">Recreation Providers</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#">Services and Manufacturers</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#">Non-Profit Organizations</a>
+        </li>
+      </ul>
     </div>
-    <div id="infoDiv2" class="esri-widget">
-      <div id="layerToggleContainer">
-        <label><input type="checkbox" id="NHconsvLandToggle"> New Hampshire Conservation Public Lands</label>
-        <br>
-        <label><input type="checkbox" id="NHrecAreasToggle"> NH Recreation Inventory (Areas)</label>
-        <br>
-        <label><input type="checkbox" id="NHtrailsLinesToggle"> NH Recreational Trails (Polylines)</label>
-        <br>
-        <label><input type="checkbox" id="NHtrailsPointsToggle"> NH Recreational Trails (Points)</label>
-        <br>
-        <label><input type="checkbox" id="NHwaterAccessToggle"> NH Access Sites To Public Waters</label>
-        <br>
-        <label><input type="checkbox" id="NHstateLandsToggle"> State Lands View</label>
-        <br>
-        <label><input type="checkbox" id="NHdncrstateLandsToggle"> NH DCNRStateLands</label>
-    </div>
-    </div>
-    <div id="infoDiv" class="esri-widget">
-      <div id="filterDiv">
-        <p> Business Category</p>
-        <input type="checkbox" id="filterNationalChain" />
-        <label for="filterNationalChain">National Chain</label>
-        <br>
-        <input type="checkbox" id="filterRegionalChain" />
-        <label for="filterRegionalChain">Regional Chain</label>
-        <br>
-        <input type="checkbox" id="filterLocalBusiness" />
-        <label for="filterLocalBusiness">Local Business</label>
-        <br>
-        <p> Activity Type</p>
-        <input type="checkbox" id="filterHiking" />
-        <label for="filterHiking">Hiking</label>
-        <br>
-        <input type="checkbox" id="filterSnowshoeing" />
-        <label for="filterSnowshoeing">Snowshoeing</label>
-        <br>
-        <input type="checkbox" id="filterRunningTrailRunning" />
-        <label for="filterRunningTrailRunning">Running/Trail Running</label>
-        <br>
-        <input type="checkbox" id="filterMotorizedBoatingWaterSports" />
-        <label for="filterMotorizedBoatingWaterSports">Motorized Boating & Watersports</label>
-        <br>
-        <input type="checkbox" id="filterWhitewaterSports" />
-        <label for="filterWhitewaterSports">Whitewater sports</label>
-        <br>
-        <input type="checkbox" id="filterPaddleSports" />
-        <label for="filterPaddleSports">Paddle sports</label>
-        <br>
-        <input type="checkbox" id="filterMountainBiking" />
-        <label for="filterMountainBiking">Mountain Biking</label>
-        <br>
-        <input type="checkbox" id="filterRoadGravelBiking" />
-        <label for="filterRoadGravelBiking">Road/Gravel Biking</label>
-        <br>
-        <input type="checkbox" id="filterBMX" />
-        <label for="filterBMX">BMX</label>
-        <br>
-        <input type="checkbox" id="filterSkateboardingRollerskating" />
-        <label for="filterSkateboardingRollerskating">Skateboarding/Rollerskating</label>
-        <br>
-        <input type="checkbox" id="filterOHRV" />
-        <label for="filterOHRV">OHRV</label>
-        <br>
-        <input type="checkbox" id="filterHunting" />
-        <label for="filterHunting">Hunting</label>
-        <br>
-        <input type="checkbox" id="filterFishing" />
-        <label for="filterFishing">Fishing</label>
-        <br>
-        <input type="checkbox" id="filterCamping" />
-        <label for="filterCamping">Camping</label>
-        <br>
-        <input type="checkbox" id="filterWildlifeViewing" />
-        <label for="filterWildlifeViewing">Wildlife Viewing</label>
-        <br>
-        <input type="checkbox" id="filterSurfing" />
-        <label for="filterSurfing">Surfing</label>
-        <br>
-        <input type="checkbox" id="filterSwimmingDiving" />
-        <label for="filterSwimmingDiving">Swimming/Diving</label>
-        <br>
-        <input type="checkbox" id="filterSnowmobiling" />
-        <label for="filterSnowmobiling">Snowmobiling</label>
-        <br>
-        <input type="checkbox" id="filterDownhillSkiingSnowboarding" />
-        <label for="filterDownhillSkiingSnowboarding">Downhill Skiing & Snowboarding</label>
-        <br>
-        <input type="checkbox" id="filterBackcountryAlpineSkiing" />
-        <label for="filterBackcountryAlpineSkiing">Backcountry Alpine Skiing</label>
-        <br>
-        <input type="checkbox" id="filterNordicSkiing" />
-        <label for="filterNordicSkiing">Nordic Skiing</label>
-        <br>
-        <input type="checkbox" id="filterRockClimbing" />
-        <label for="filterRockClimbing">Rock Climbing</label>
-        <br>
-        <input type="checkbox" id="filterIceClimbing" />
-        <label for="filterIceClimbing">Ice Climbing</label>
-        <br>
-        <input type="checkbox" id="filterMountaineering" />
-        <label for="filterMountaineering">Mountaineering</label>
-        <br>
-        <input type="checkbox" id="filterHorseback" />
-        <label for="filterHorseback">Horseback</label>
-        <br>
-        <input type="checkbox" id="filterOther" />
-        <label for="filterOther">Other</label>
-
-        
-      </div>
-      
-    </div>
-    
-  </div>
-    
-  </body>
+  </nav>
+  <!-- Your page content here -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
 </html>
+
+
+
+

@@ -1,0 +1,42 @@
+html,
+body,
+
+.sassy-theme .esri-widget,
+.sassy-theme .esri-widget--button,
+.sassy-theme .esri-menu,
+.sassy-theme .esri-popup__main-container,
+.sassy-theme .esri-popup .esri-popup__pointer-direction,
+.sassy-theme .esri-popup .esri-popup__button,
+.sassy-theme .esri-button,
+.sassy-theme .esri-input,
+.sassy-theme .esri-widget a {
+  background-color: #207380;
+  color: #fff;
+}
+
+.sassy-theme .esri-widget--button:focus,
+.sassy-theme .esri-widget--button:hover,
+.sassy-theme .esri-menu li:focus,
+.sassy-theme .esri-menu li:hover {
+  background-color: rgb(80, 128, 128);
+  color: #fff;
+}
+
+.sassy-theme .esri-button:focus,
+.sassy-theme .esri-button:hover {background-color: #207380;
+  color: #fff;
+}
+
+.sassy-theme .esri-search__input::-moz-placeholder {
+background-color: #207380;
+  color: #ccc;
+  opacity: 1;
+}
+.sassy-theme .esri-search__input:-ms-input-placeholder {
+    background-color: #207380;
+  color: #ccc;
+}
+.sassy-theme .esri-search__input::-webkit-input-placeholder {
+    background-color: #207380;
+  color: #ccc;
+}
