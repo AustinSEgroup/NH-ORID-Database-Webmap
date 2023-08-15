@@ -5,13 +5,29 @@ body {
   background: #13444b;
 }
 
-.dijitDialog {
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  z-index: 10000; /* Ensure it's above other content */
+.filterOption {
+  cursor: pointer;
+  display: inline-block;
+  user-select: none;
+  outline-color: #6fac96;
+  padding-left: 15px ;
+  padding-right: 15px;
+  outline-offset: 2px;
+  border-radius: px;
+  margin: 3px;
+
 }
+
+.filterOption.active {
+  background-color: #5c9d86;  /* or any color of your choice */
+  color: white;
+}
+
+.filterOption:hover {
+  background-color: #5c9d86bd;  /* or any color of your choice */
+  color: white;
+}
+
 
 .navbar {
   height: 50px;
@@ -22,12 +38,29 @@ body {
   align-items: flex-end;
   padding-right: 15px;
 }
+
+.btn {
+  border-radius: 0px;
+  background-color: #13444b;
+}
+
+.btn.active {
+  border-radius: 0px;
+  background-color: #6ea572;
+}
+
+
+.btn:hover {
+  border-radius: 0px;
+  background-color: #5c9d8675;
+}
+
 .btn-altdark2 {
   margin-left: 10%;
   font-size: 14px;
   font-weight: 400;
   border:#5c9d86;
-  border-radius: 5px;
+  border-radius: 0px;
   color: white;
   outline-color: #6fac96;
   outline-width: 1px;
@@ -51,6 +84,7 @@ body {
 }
 .dropdown {
   padding-left: 3px;
+  margin-right: 5px;
 }
 .dropdown-menu {
   margin-right: 30px;
@@ -59,8 +93,7 @@ body {
 
 .dropdown-menu.show {
   margin-right: 30px;
-  width:450px;
-  margin-left: 3px;
+
 }
 @media (max-width: 900px) {
   .navbar-brand img {
@@ -111,7 +144,7 @@ color: #ffffff !important;
   align-content: flex-start;
   margin-left: 13px;
 }
-.dropdown2 {
+.dropdown {
   padding-right: 50px ;
 }
 .navbar-nav-center {
@@ -151,17 +184,18 @@ color: #ffffff !important;
 
 .toggle-clust:hover {
   background-color: #5c9d8666;
+  outline-color: #6fac96;
+  outline-width: 1px;
+  outline-style: solid;
 }
 .toggle-clust {
   /* Button Default State */
   font-size: 14px;
   font-weight: 400;
   border:#5c9d86;
-  border-radius: 5px;
+  border-radius: 0px;
   color: white;
-  outline-color: #6fac96;
-  outline-width: 1px;
-  outline-style: solid;
+
   justify-content: left;
   align-items: left;
   transform: translateX(16px);
@@ -176,7 +210,7 @@ color: #ffffff !important;
 
 .toggle-clust.active {
   /* Button Default State */
-  background-color: #13444b;
+  background-color: #5c9d86;
   color: white;
 }
 
@@ -189,11 +223,11 @@ color: #ffffff !important;
   font-size: 14px;
   font-weight: 600;
   border:#5c9d86;
-  border-radius: 5px;
+  border-radius: 0px;
   color: white;
   margin-left: 15px;
   margin-right: auto;
-  background-color: #207380 ;
+  background-color: #20807b ;
   cursor: pointer;
   text-align: center;
   transition-duration: 0.4s;
@@ -205,6 +239,9 @@ color: #ffffff !important;
   /* Button Default State */
   background-color: #5c9d86;
   color: white;
+  outline-color: #13444b;
+  outline-width: 4px;
+  outline-style: solid;
 
 }
 .navbar-nav.btn {
@@ -228,6 +265,15 @@ color: #ffffff !important;
 #mapContainer {
   height: calc(100vh - (90px));
 }
+
+#infoDiv3 {
+  width: 200px;
+  padding-right: 20px;
+  z-index: 9;
+  background-color:#207380;
+  padding: 5px;
+}
+
 #infoDiv2 {
   width: 400px;
   padding-right: 20px;
@@ -236,8 +282,7 @@ color: #ffffff !important;
   padding: 5px;
 }
 #infoDiv {
-  margin-top: -13px;
-  width: 140%;
+  width: 260px;
   padding: 5px;
   z-index: 9;
 }
@@ -247,6 +292,7 @@ color: #ffffff !important;
 }
 #filterDiv {
   margin-left: 10px;
+  padding-top: 15px;
   z-index: 9;
 }
 #legendDiv {
@@ -259,14 +305,55 @@ color: #ffffff !important;
 
 }
 
-p {
-  color: white;
-  font-size: 12pt;
+#loadingDiv {
+  background: #e3fff5;
+  border-radius: 100%;
+  padding:40px;
+  border: #5c9d86;
+  border-width: 80px;
+  position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
 }
 
+h1 {
+  color:#13444b;
+  font-size: 14pt;
+  position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+}
+p {
+  color: white;
+  font-size: 11pt;
+  font-weight: 600;
+  margin-top: 5px;
+  margin-bottom: 5px;
+}
+
+p2 {
+  font-style: italic;
+}
 #selArea {
 
   position: absolute;
   left: 17%;
   font-size: 14px;
+}
+
+.styled-text {
+  color: rgb(255, 255, 255);
+  font-weight: bold;
+  font-size: 12pt;
+  transform: translateY(+12px) !important;
+}
+
+#checkbox {
+  margin: 10px;
+}
+
+p3 {
+  color: white;
+  font-size: 12pt;
+  font-weight: bold;
+  transform: translateY(-15px) !important;
+  margin-top: 50x;
+  margin-bottom: 24px !important;
+  margin-left: 8px;
 }
