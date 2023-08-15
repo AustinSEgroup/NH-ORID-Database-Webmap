@@ -1656,7 +1656,7 @@ require([
   
      /*********************** QUERY AND HIGHLIGHT FUNCTION *************************/
   
-  
+  /*
      layer.cedrRegions = "cedrRegions";
      layer.tourismRegions = "tourismRegions";
      layer.newHampshireCounties = "newHampshireCounties";
