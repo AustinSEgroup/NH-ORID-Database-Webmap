@@ -29,7 +29,7 @@ require([
 
     console.log('Script loaded!');
     /******************** LAYER LINKS  *********************/
-  
+    
     let baseLayerLink = "https://api.mapbox.com/styles/v1/anovak/cll6duwmo00at01pw0c28g05a/tiles/256/{level}/{col}/{row}@2x?access_token=pk.eyJ1IjoiYW5vdmFrIiwiYSI6ImNsa2Zyd2ZvdjFjbHAzaW8zNnd4ODkwaHcifQ.V-0D14XZBY5lfMfw8Qg7vg";
     let baseLayerLabelsLink = "https://api.mapbox.com/styles/v1/anovak/clkvo8z6e001j01q0b8ln9s7j/tiles/256/{level}/{col}/{row}@2x?access_token=pk.eyJ1IjoiYW5vdmFrIiwiYSI6ImNsa2Zyd2ZvdjFjbHAzaW8zNnd4ODkwaHcifQ.V-0D14XZBY5lfMfw8Qg7vg";
 
@@ -117,119 +117,104 @@ require([
 
 
 function updateFields(datasetName) {
-  
-    console.log('Updating fields for:', datasetName);
-    layer.visible = false;
-    pseudoClusterLayer.removeAll();
-    const infoDivText = document.querySelector('#infoDiv p3');
-    switch (datasetName) {
-        case 'retailBusiness':
-          
-            filterFieldsMap = filterFieldsRetBus;
-            currentLayerLink = retailBusinessesLink;
-            layer.url = currentLayerLink;
-            layer.visible = true;
-            
-          
-            break;
-            
-        case 'recreationProviders':
-            filterFieldsMap = filterFieldsRecProv;
-            currentLayerLink = recreationProvidersLink;
-            layer.url = currentLayerLink;
-            layer.visible = true;
-            layer.refresh();
-            break;
+  console.log('[updateFields] Initialization started for:', datasetName);
+  layer.visible = false;
+  pseudoClusterLayer.removeAll();
+  console.log('[updateFields] Layer visibility set to false and pseudo clusters removed.');
 
-        case 'b2bManufacturers':
-            filterFieldsMap = filterFieldsB2B;
-            currentLayerLink = b2bManufacturersLink;
-            layer.url = currentLayerLink;
-            layer.visible = true;
-            break;
+  const infoDivText = document.querySelector('#infoDiv p3');
+  switch (datasetName) {
+      case 'retailBusiness':
+          console.log('[updateFields] Processing retailBusiness dataset.');
+          filterFieldsMap = filterFieldsRetBus;
+          currentLayerLink = retailBusinessesLink;
+          layer.url = currentLayerLink;
+          layer.visible = true;
+          break;
+      case 'recreationProviders':
+          console.log('[updateFields] Processing recreationProviders dataset.');
+          filterFieldsMap = filterFieldsRecProv;
+          currentLayerLink = recreationProvidersLink;
+          layer.url = currentLayerLink;
+          layer.visible = true;
+          break;
+      case 'b2bManufacturers':
+          console.log('[updateFields] Processing b2bManufacturers dataset.');
+          filterFieldsMap = filterFieldsB2B;
+          currentLayerLink = b2bManufacturersLink;
+          layer.url = currentLayerLink;
+          layer.visible = true;
+          break;
+      case 'nonProfits':
+          console.log('[updateFields] Processing nonProfits dataset.');
+          filterFieldsMap = filterFieldsNonProfits;
+          currentLayerLink = nonProfitsLink;
+          layer.url = currentLayerLink;
+          layer.visible = true;
+          break;
+  }
 
-        case 'nonProfits':
-            filterFieldsMap = filterFieldsNonProfits;
-            currentLayerLink = nonProfitsLink;
-            layer.url = currentLayerLink;
-            layer.visible = true;
-            break;
-    }
-      // Log the current layer URL for debugging
-    
-      // Remove the current layer from the map
-      map.layers.remove(layer);
-      
-      // Update the layer's URL to the new currentLayerLink
-      layer.url = currentLayerLink;
-      console.log("Setting popupTemplate to:", layer.popupTemplate);
-      layer.load().then(() => {
-        console.log('Layer loaded successfully.');
-        map.layers.add(layer);
-        console.log("Layer loaded:", layer.loaded);
-       console.log("Layer visible:", layer.visible);
-      console.log("Layer has popupTemplate:", !!layer.popupTemplate);
-      setNewHampshireRenderer();
-    }).catch((error) => {
-        console.error("Error loading the layer:", error);
-    });
-      // Reload the layer and then add it back to the map
-      layer.load().then(() => {
-          map.layers.add(layer);
-      }).catch((error) => {
-          console.error("Error loading the layer:", error);
-      });
-  
-    
-    // Create checkboxes for the current filterFieldsMap and append them to filterDiv
-    filterDiv.innerHTML = '';
-    for (let item of filterFieldsMap) {
-        const div = document.createElement('div');
-        if (item.label) {  // If item is a label
-            div.innerHTML = `<strong>${item.label}</strong>`;
-        }
-        else if (item.fieldlabel) {
-            div.innerHTML = `<strong style="font-size: larger;">${item.fieldlabel}</strong>`; // larger font size for labels
-        } else {  // If item is a field
-            div.innerHTML = `<input type='checkbox' id='${item.id}'><label for='${item.id}'>${item.displayName}</label>`;
-        }
-        filterDiv.appendChild(div);
-        if (item.id) {
-            document.getElementById(item.id).addEventListener('click', function() {
-                handleExclusiveCheckboxes(item.id);
-            });
-            document.getElementById(item.id).addEventListener('change', function() {
-                applyFilter();
-            });
-        }
-    }
+  console.log('[updateFields] Removing layer from the map and updating its URL.');
+  map.layers.remove(layer);
+  layer.url = currentLayerLink;
 
-    // Call applyFilter after updating fields
-    applyFilter();
-    console.log(`Layer definitionExpression after updateFields: ${layer.definitionExpression}`);
-    console.log(`Layer URL after updateFields: ${layer.url}`);
-    // Check clustering status and visibility of specific boundary layers
-    if (isClusteringEnabled && (tourismRegions.visible || cedrRegions.visible || newHampshireCounties.visible || newHampshireTownships.visible)) {
-        pseudoClusterLayer.removeAll();
-        terminateOngoingClustering();
-        debouncedApplyPolygonClustering(selectedBoundaryLayer, layer, selectedField);
-        layer.visible = false;
-    }
-    if (isClusteringEnabled && (!tourismRegions.visible || !cedrRegions.visible || !newHampshireCounties.visible || !newHampshireTownships.visible)){
-        pseudoClusterLayer.removeAll();
-        layer.visible = true;
-        drawCluster();
-    }
-    if (!isClusteringEnabled){
-        pseudoClusterLayer.removeAll();
-        layer.visible = true;
-        applyFilter();
-    }
-    console.log('Current layer URL:', layer.url);
-    console.log('Layer visibility after updateFields:', layer.visible);
+  console.log('[updateFields] Reloading layer and adding it back to the map.');
+  layer.load().then(() => {
+      console.log('[updateFields] Layer loaded successfully.');
+      map.layers.add(layer);
+  }).catch((error) => {
+      console.error("[updateFields] Error loading the layer:", error);
+  });
+
+  console.log('[updateFields] Populating filter div with filter fields.');
+  filterDiv.innerHTML = '';
+  for (let item of filterFieldsMap) {
+      const div = document.createElement('div');
+      if (item.label) {
+          div.innerHTML = `<strong>${item.label}</strong>`;
+      } else if (item.fieldlabel) {
+          div.innerHTML = `<strong style="font-size: larger;">${item.fieldlabel}</strong>`;
+      } else {
+          div.innerHTML = `<input type='checkbox' id='${item.id}'><label for='${item.id}'>${item.displayName}</label>`;
+      }
+      filterDiv.appendChild(div);
+      if (item.id) {
+          document.getElementById(item.id).addEventListener('click', function() {
+              console.log('[updateFields] Checkbox clicked:', item.id);
+              handleExclusiveCheckboxes(item.id);
+          });
+          document.getElementById(item.id).addEventListener('change', function() {
+              console.log('[updateFields] Checkbox value changed:', item.id);
+              applyFilter();
+          });
+      }
+  }
+
+  console.log('[updateFields] Applying filters.');
+  applyFilter();
+
+  console.log('[updateFields] Checking clustering status and boundary layer visibility.');
+  if (isClusteringEnabled && (tourismRegions.visible || cedrRegions.visible || newHampshireCounties.visible || newHampshireTownships.visible)) {
+      console.log('[updateFields] Applying polygon clustering.');
+      pseudoClusterLayer.removeAll();
+      debouncedApplyPolygonClustering(selectedBoundaryLayer, layer, selectedField);
+      layer.visible = false;
+  } else if (isClusteringEnabled) {
+      console.log('[updateFields] Drawing clusters.');
+      pseudoClusterLayer.removeAll();
+      layer.visible = true;
+      drawCluster();
+  } else {
+      console.log('[updateFields] Clustering is disabled. Removing pseudo clusters and applying filter.');
+      pseudoClusterLayer.removeAll();
+      layer.visible = true;
+      applyFilter();
+  }
+
+  console.log('[updateFields] End of function execution. Layer URL:', layer.url, 'Layer visibility:', layer.visible);
 }
-  
-  const debouncedUpdateFields = debounce(updateFields, 20);
+
+const debouncedUpdateFields = debounce(updateFields, 20);
 
   // Initial load to show 'retailBusiness' fields
 
@@ -384,10 +369,10 @@ function updateFields(datasetName) {
         type: "simple",
         symbol: {
           type: "simple-marker",
-          size: 3,
-          color: "rgba(89, 249, 213, 0.4)",
+          size: 4,
+          color: "rgba(158, 243, 171, 0.4)",
           outline: {
-            color: "rgba(80, 249, 213, 0.07)",
+            color: "rgba(158, 243, 171, 0.07)",
             width: 8
           }
         }
@@ -527,18 +512,6 @@ function updateFields(datasetName) {
           }
         },
         {
-          value: "Rapids/Falls",
-          symbol: {
-            type: "simple-marker",
-            style: "circle",
-            color: "#E68310",  // Color for Rapids/Falls
-            size: 3,
-            outline: {
-              width: 0
-            }
-          }
-        },
-        {
           value: "Recreation Facility",
           symbol: {
             type: "simple-marker",
@@ -573,7 +546,7 @@ function updateFields(datasetName) {
               value: "Trailhead",
               symbol: {
                   type: "picture-marker",  // symbol type
-                  url:  "URL_FOR_TRAILHEAD",
+                  url:  "https://raw.githubusercontent.com/AustinSEgroup/NHOE-RetailBusinesses/main/img/trailhead.png",
                   width: 7,
                   height: 7
               }
@@ -614,15 +587,7 @@ function updateFields(datasetName) {
                   height: 8
               }
           },
-          {
-              value: "Tent Site",
-              symbol: {
-                  type: "picture-marker",  // symbol type
-                  url:  "URL_FOR_TENT_SITE",
-                  width: 8,
-                  height: 8
-              }
-          },
+
           {
               value: "Cultural Attraction",
               symbol: {
@@ -716,70 +681,32 @@ function updateFields(datasetName) {
       join: "round"   // Optional: This makes the junctions between dashes round.
     }
     },
-  
+    popupTemplate: {
+      title: "{TRAILNAME}",
+      content: "Trail System: {TRAILSYS} <br> Community: {COMMUNITY}"
+    }
   });
 
-   
-  const siteAccessWeights = {
-    "Accessible": 9,
-    "Accessible/Partial": 8,
-    "Partial": 7,
-    "Partial/Limited": 6,
-    "Limited": 5,
-    "Limited/Difficult": 4,
-    "Difficult": 3,
-    "Future": 2,
-    "Undetermined": 1
-};
-
-var weightedAccessField = {
-  name: "WeightedAccess",
-  alias: "Weighted Access",
-  type: "integer",
-  expression: `
-  var access = $feature.SITEACCESS;
-  var weight = ${JSON.stringify(siteAccessWeights)}[access];
-  Console('Access: ' + access + ', Weight: ' + weight);
-  return weight;
-  `
-};
-
-var heatmapRenderer = {
+const heatmapRenderer = {
   type: "heatmap",
-  field: "WeightedAccess",
   colorStops: [
-      { color: "rgba(232, 239, 255 , .3)", ratio: 0 },
-      { color: "#A9B9E0", ratio: 0.1 },
-      { color: "#697ECB", ratio: 0.2 },
-      { color: "#2F4C99", ratio: 0.3 },
-      { color: "#1D2882", ratio: 0.4 }
+    { color: "rgba(232, 239, 255 , .3)", ratio: 0 },    // Transparent Light Pastel Yellow
+    { color: "#A9B9E0", ratio: 0.1 },               // Cornsilk
+    { color: "#697ECB", ratio: 0.2 },                // Gold
+    { color: "#2F4C99", ratio: 0.3 },               // DarkOrange
+    { color: "#1D2882", ratio: 0.4 }  
   ],
   minPixelIntensity: 0,
-  maxPixelIntensity: 9,
-  radius: 25
+  maxPixelIntensity: 100,
+  radius: 25,
 };
+
 const NHwaterAccess = new FeatureLayer({
   url: NHwaterAccessLink,
   visible: false,
-  renderer: heatmapRenderer,
-  fields: [weightedAccessField],
-  outFields: ["*"],
-  popupTemplate: {
-      title: "{NAME}",
-      content: "Notes: {NOTES}"
-  }
+  renderer: heatmapRenderer
 });
 
-NHwaterAccess.queryFeatures({
-  where: "1=1",
-  outFields: ["SITEACCESS"],
-  returnGeometry: false,
-  num: 10 // Get 10 sample features
-}).then(function(result) {
-  result.features.forEach(function(feature) {
-      console.log(feature.attributes.SITEACCESS);
-  });
-});
 
   const NHwaterAccess2 = new FeatureLayer({
     url: NHwaterAccessLink,
@@ -1138,6 +1065,7 @@ const boundaryBtns = ['toggleCEDRregions', 'toggleTourismRegions', 'toggleCounti
   
   
   function handleBoundaryLayerToggle(layerToToggle, otherLayers, isSwitching = true) {
+    
     pseudoClusterLayer.removeAll();
     // Create a new instance of AbortController for subsequent operations
     controller = new AbortController();
@@ -1218,28 +1146,36 @@ attachLayerToggleEvents('toggleCounties', 'dropdownToggleCounties', function() {
   
   
   /************************* MAP INITIALIZATION *************************/
-    const map = new Map({
-      layers: [baseLayer, NHconsvLand, NHstateLands, NHdncrstateLands, layer, NHrecAreas, NHrecPoints, NHtrailsLines, NHwaterAccess, NHwaterAccess2,  newHampshire, newHampshireTownships, newHampshireCounties, cedrRegions, tourismRegions,layer]
-    });
-    
-    
-    map.layers.add(baseLayerLabels);
-    const view = new MapView({
-      container: "viewDiv",
-      center: [-71.5, 43.9],
-      constraints: {
-        minScale: 2800000
-      },
-      map: map
-    });
+  const nhExtent = {
+    xmin: -72.557247,
+    ymin: 42.3,
+    xmax: -70.610620,
+    ymax: 45.5,
+    spatialReference: { wkid: 4326 }
+  };
   
+  const map = new Map({
+    layers: [baseLayer, NHconsvLand, NHstateLands, NHdncrstateLands, layer, NHrecAreas, NHrecPoints, NHtrailsLines, NHwaterAccess, NHwaterAccess2,  newHampshire, newHampshireTownships, newHampshireCounties, cedrRegions, tourismRegions,layer]
+  });
+  
+  map.layers.add(baseLayerLabels);
+  
+  const view = new MapView({
+    container: "viewDiv",
+    extent: nhExtent,
+    constraints: {
+      maxExtent: nhExtent,
+      minScale: 5000000
+    },
+    map: map
+  });
     NHstateLands.effect = "bloom(0.5px, 0.1px, 1%)";
     newHampshire.effect = "bloom(1, 0.1px, 15%)";
     
   
     const filterFieldsRetBus = [
       { fieldlabel: "Retail-Service Business Filters"},
-      { id: 'filterNationalChain', field: 'National_Chain', displayName: '<br>National Chain' },
+      { id: 'filterNationalChain', field: 'National_Chain', displayName: '<br style="line-height: 10px" />National Chain' },
       { id: 'filterRegionalChain', field: 'Regional_Chain', displayName: 'Regional Chain' },
       { id: 'filterLocalBusiness', field: 'Local_Business', displayName: 'Local Business' },
       { label: "<br>Filter by Activity Type"},
@@ -1271,7 +1207,7 @@ attachLayerToggleEvents('toggleCounties', 'dropdownToggleCounties', function() {
       { id: 'filterIceClimbing', field: 'Ice_Climbing', displayName: 'Ice Climbing' },
       { id: 'filterMountaineering', field: 'Mountaineering', displayName: 'Mountaineering' },
       { id: 'filterHorseback', field: 'Horseback', displayName: 'Horseback' },
-      { id: 'filterOther', field: 'Other', displayName: 'Other' },
+     // { id: 'filterOther', field: 'Other', displayName: 'Other' },
   ];
   
   const filterFieldsRecProv = [
@@ -1302,7 +1238,7 @@ attachLayerToggleEvents('toggleCounties', 'dropdownToggleCounties', function() {
     { id: 'filterManufacturing', field: 'Manufacturing', displayName: 'Manufacturing' },
     { id: 'filterDesignConstruction', field: 'Design_Construction', displayName: 'Design & Construction' },
     { id: 'filterConsultingService', field: 'Consulting_Services', displayName: 'Consulting Services' },
-    { id: 'filterOtherB2B', field: 'Other', displayName: 'Other' },
+   // { id: 'filterOtherB2B', field: 'Other', displayName: 'Other' },
    
 ];
   
@@ -1430,7 +1366,7 @@ attachLayerToggleEvents('toggleCounties', 'dropdownToggleCounties', function() {
   
   
   
-  const CHUNK_SIZE = 10;
+  const CHUNK_SIZE = 20;
   
   const pseudoClusterLayer = new GraphicsLayer();
   map.add(pseudoClusterLayer);
@@ -1497,7 +1433,7 @@ function processChunk(polygons, layer, selectedField, index = 0) {
 
             setTimeout(() => {
                 processChunk(polygons, layer, selectedField, index + CHUNK_SIZE);
-            }, 50);
+            }, 25);
         })
         .catch(error => {
             console.error("Error processing a chunk:", error);
@@ -1548,7 +1484,7 @@ function processPolygon(polygon, layer, selectedField) {
                           break;
                       }
                   }
-  
+                  
                   const clusterGraphic = new Graphic({
                       geometry: polygon.geometry.centroid,
                       symbol: {
@@ -1580,7 +1516,7 @@ function processPolygon(polygon, layer, selectedField) {
                           horizontalAlignment: "center"
                       }
                   });
-  
+                  console.log('Drawing clusters....');
                   pseudoClusterLayer.addMany([clusterGraphic, labelGraphic]);
                   
                   resolve();
@@ -1605,6 +1541,7 @@ function processPolygon(polygon, layer, selectedField) {
 
   /********************************* SPINNER FUNCTION ********************************************* */
   function showSpinner() {
+      
       document.getElementById('loadingDiv').style.display = 'block';
       const overlayElement = document.getElementById("overlay");
 
@@ -1636,9 +1573,11 @@ const selectedFieldIds = filterFieldsMap.filter(item => document.getElementById(
   
   
   function drawSimpleCluster() {
-
+  
   console.log('Applying drawSimpleCluster...');
   layer.effect = "bloom(0, 2px, 15%)";
+  layer.visible = true;
+  pseudoClusterLayer.removeAll();
   currentQueryId = Date.now();
 
   clusterConfig = {
@@ -1935,15 +1874,21 @@ const legend = new Legend({
 });
 
 const layerMap = {
-    'NHconsvLandToggle': NHconsvLand,
-    'NHrecAreasToggle': NHrecAreas,
-    'NHtrailsLinesToggle': NHtrailsLines,
-    'NHrecPointsToggle': NHrecPoints,
-    'NHwaterAccessHeatToggle': NHwaterAccess,
-    'NHwaterAccessToggle': NHwaterAccess2,
-    'NHstateLandsToggle': NHstateLands,
-    'NHdncrstateLandsToggle': NHdncrstateLands
+  'NHconsvLandToggle': NHconsvLand,
+  'NHrecAreasToggle': NHrecAreas,
+  'NHtrailsLinesToggle': NHtrailsLines,
+  'NHrecPointsToggle' : NHrecPoints,
+  'NHwaterAccessHeatToggle': NHwaterAccess, 
+  'NHwaterAccessToggle': NHwaterAccess2, 
+  'NHstateLandsToggle': NHstateLands,
+  'NHdncrstateLandsToggle': NHdncrstateLands
 };
+
+Object.keys(layerMap).forEach((toggleId) => {
+  document.getElementById(toggleId).addEventListener('change', function() {
+      layerMap[toggleId].visible = this.checked;
+  });
+});
 
 Object.keys(layerMap).forEach((toggleId) => {
     document.getElementById(toggleId).addEventListener('change', function() {
@@ -1959,46 +1904,40 @@ view.ui.add(new Expand({
     expanded: true
 }), "top-right");
 
-// Initialize the link variables
 document.getElementById("retailLink").addEventListener('click', function() {
   console.log("Button clicked!");
   debouncedUpdateFields('retailBusiness');
   if (this.classList.contains('active')) {
-      // If button is already active, deactivate it
       this.classList.remove('active');
   } else {
-      // Otherwise, activate the button
       this.classList.add('active');
-
-      // Remove 'active' class from other buttons with null checks
       if (nonProfitLink) nonProfitLink.classList.remove('active');
       if (recProvidersLink) recProvidersLink.classList.remove('active');
       if (b2bManufacturersLink) b2bManufacturersLink.classList.remove('active');
   }
 });
-  
-    const linkIds = [
-      'retailLink',
-      'recProviderLink', 
-      'b2bManufacturerLink', 
-      'nonProfitLink'
-  ];
-  
-  const dataMappingForLinks = {
-    'retailLink': 'retailBusiness',
-      'recProviderLink': 'recreationProviders',
-      'b2bManufacturerLink': 'b2bManufacturers',
-      'nonProfitLink': 'nonProfits'
-  };
-  
-  linkIds.forEach(id => {
-      document.getElementById(id).addEventListener('click', function() {
-          updateFields(dataMappingForLinks[id]);
-          togglePrimaryActiveState(this);
-      });
-  });
-  
 
+const linkIds = [
+    'retailLink',
+    'recProviderLink',
+    'b2bManufacturerLink',
+    'nonProfitLink'
+];
+
+const dataMappingForLinks = {
+    'retailLink': 'retailBusiness',
+    'recProviderLink': 'recreationProviders',
+    'b2bManufacturerLink': 'b2bManufacturers',
+    'nonProfitLink': 'nonProfits'
+};
+
+linkIds.forEach(id => {
+    document.getElementById(id).addEventListener('click', function() {
+        updateFields(dataMappingForLinks[id]);
+        // togglePrimaryActiveState should handle the toggling of the active class to avoid conflicts
+        togglePrimaryActiveState(this);
+    });
+});
   
     // For smaller screens (dropdown links)
     document.getElementById("retailDropdownLink").addEventListener('click', function() {
@@ -2112,5 +2051,15 @@ closePopupButton.addEventListener('click', () => {
     popupContainer.style.display = 'none';
   }, 300); // Wait for the animation to complete (300ms)
 });
+
+const legind = new Legend({
+  view: view,
+  layerInfos: [{
+    layer: layer,  // reference to your feature layer
+    title: "Your Layer Title"  // Optional: Provide a title for your layer in the legend
+  }]
+});
+
+view.ui.add(legend, 'bottom-right');
 
     });

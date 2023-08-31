@@ -26,6 +26,8 @@
   </head>
   
   <body class = "sassy-theme">
+
+    </body>
     <div id="overlay" class="overlay"></div>
     <div id="popupContainer" class="popup">
       
@@ -72,7 +74,7 @@
           </div>
       </div>
       <div class="LOGO">
-          <img src="./img/logo.png" width="300px" class="d-none d-sm-block">
+          <img src="./img/LOGO.png" width="300px" class="d-none d-sm-block">
       </div>
   </nav>
   
@@ -114,11 +116,15 @@
           
           <div id="infoDiv2">
             <div id="layerToggleContainer">
+              <br style="line-height: 8px" />
+              <h3>Other Recreational Layers</h3>
+              <p4>Checkboxes expand to provide more options.</p4>
+              <br>
               <label><input type="checkbox" id="NHconsvLandToggle"> Conservation Public Lands</label>
-                <div id="NHconsvLandAccessOptions" style="display:none;">
+                <div id="NHconsvLandAccessOptions" style="display:none; margin-left:20px;">
                   <p>Public Access</p>
-                    <label><input type="radio" name="NHconsvLandAccess" value="1"> Allowed</label><br>
-                    <label><input type="radio" name="NHconsvLandAccess" value="2"> Restricted to Certain Areas</label><br>
+                    <label><input type="checkbox" name="NHconsvLandAccess" value="1"> Allowed</label><br>
+                    <label><input type="checkbox" name="NHconsvLandAccess" value="2"> Restricted to Certain Areas</label><br>
                 </div>
               <br>
               <label><input type="checkbox" id="NHrecAreasToggle"> Recreation Areas </label>
@@ -177,9 +183,9 @@
                           <br>
               <label><input type="checkbox" id="NHrecPointsToggle"> Recreational Sites</label>
               
-              <input type="checkbox" style="margin-left: 8px;" id="NHrecPointsSymbolToggle" checked> <p2> Show Symbols</p2>
+             
               <div id="NHrecPointsFilterContainer" style="display:none; margin-left:20px;">
-                <br>
+                <input type="checkbox" id="NHrecPointsSymbolToggle" checked> <p2> Show Icons</p2>
                 <p>Type</p>
                 <div>
                   <input type="checkbox" class="NHrecPointsFilter" name="Trailhead" value="Trailhead" id="Trailhead">
@@ -222,11 +228,12 @@
                   <label for="RecreationFacility">Recreation Facility</label>
                 </div>
               </div>
-                  
+                  <br>
 
               <label><input type="checkbox" id="NHtrailsLinesToggle"> Recreational Trails </label>
-              <input type="checkbox" style="margin-left: 8px;" id="NHtrailsBloomToggle" checked> <p2> Highlight Trails</p2>
+              
               <div id="NHtrailsFilterContainer" style="display: none;margin-left:20px;">
+                <input type="checkbox"  id="NHtrailsBloomToggle" checked> <p2> Highlight Trails</p2>
                   <p>Trail Categories</p>
                   <input type="checkbox" id="filterPED">
                   <label for="filterPED">Pedestrian</label>
@@ -274,12 +281,12 @@
                 
               
               <br>
-              <label><input type="checkbox" id="NHwaterAccessToggle"> NH Access Sites To Public Waters</label>
-              <input type="checkbox" style="margin-left: 8px;" id="NHwaterAccessHeatToggle"> <p2> Heatmap</p2>
+              <label><input type="checkbox" id="NHwaterAccessToggle"> Access Sites To Public Waters</label>
+              <input type="checkbox" style="margin-left: 8px;" id="NHwaterAccessHeatToggle"> <p2> Access Heatmap</p2>
               <br>
-              <label><input type="checkbox" id="NHstateLandsToggle"> State Lands View</label>
+              <label><input type="checkbox" id="NHstateLandsToggle"> State Lands </label>
               <br>
-              <label><input type="checkbox" id="NHdncrstateLandsToggle"> NH DCNRStateLands</label>
+              <label><input type="checkbox" id="NHdncrstateLandsToggle"> DCNR State Lands</label>
           </div>
           </div>
 
@@ -290,6 +297,10 @@
             
       </div>
     </div> 
+
+    <div class="legend">
+      <img src="./img/legend.png" width="300px" class="d-none d-sm-block">
+  </div>
   </div>
 </div>
 <script src="js/main.js"></script>
