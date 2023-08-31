@@ -26,7 +26,19 @@
   </head>
   
   <body class = "sassy-theme">
+    <div id="overlay" class="overlay"></div>
+    <div id="popupContainer" class="popup">
+      
+    <div class="popup-content">
+      <div class="horizontal-line"></div> <h2>Before entering the map viewer, please read this disclaimer.</h2> <div class="horizontal-line"></div>
+      <p>
+        The data present represents a "snapshot" of business activity as of 2022 and 2023. This data may not depict the most up-to-date 
+        information and may contain errors or omissions. Trail and recreation facility data is provided by the State of New Hampshire and may contain errors or omissions. 
+        The New Hampshire Bureau of Economic Affairs is not responsible for the use or interpretation of this information by third parties. Not for legal use.</p>
+      <button id="closePopup" class="btn btn-altdark">I accept this disclaimer</button>
+    </div>
 
+</div>
 
     <nav class="navbar-dark navbar-expand-xl navbar bg-altdark">
       <!-- Direct links for larger screens -->
@@ -66,9 +78,10 @@
   
   <nav class="navbar navbar-expand-md top-bar">
     <button id="toggleClustering" class="toggle-clust1">
-        <img src="./img/clustering.svg" width="30"> Point Clustering
-    </button>
-    
+      <img src="./img/clustering.svg" width="30"> <span>Turn Point Clustering: ON</span>
+  </button>
+  <img src="./img/arrow.svg" width="20" class="arrow-icon">
+ 
     <!-- Buttons for larger screens (lg and above) -->
     <div class="navbar-nav d-none d-sm-block">     
         <button id="toggleCEDRregions" class="toggle-clust">CEDR Regions</button>
@@ -94,120 +107,124 @@
     
   <div id="mapContainer">
 
-  
-
         <div id="viewDiv" class="sassytheme">
           <div id="loadingDiv" style="display: none;">
-            <img id="spinner" src="./img/spinner2.gif" alt="Loading..."> <!-- This is if you want an animated spinner -->
+            <img id="spinner" src="./img/spinner2.gif" alt="Loading...">
         </div>
-          <div id="legendDiv"></div>
+          
           <div id="infoDiv2">
             <div id="layerToggleContainer">
-              <label><input type="checkbox" id="NHconsvLandToggle"> New Hampshire Conservation Public Lands</label>
+              <label><input type="checkbox" id="NHconsvLandToggle"> Conservation Public Lands</label>
+                <div id="NHconsvLandAccessOptions" style="display:none;">
+                  <p>Public Access</p>
+                    <label><input type="radio" name="NHconsvLandAccess" value="1"> Allowed</label><br>
+                    <label><input type="radio" name="NHconsvLandAccess" value="2"> Restricted to Certain Areas</label><br>
+                </div>
               <br>
-              <label><input type="checkbox" id="NHrecAreasToggle"> NH Recreation Inventory (Areas)</label>
-                    <div id="NHrecAreasFilterContainer" style="display:none; margin-left:20px;">
-                        <div id="legendCheckboxes">
-                            <p>Primary Use</p>
-                              <input type="checkbox" class="NHrecAreasFilter" value="Golf" id="Golf">
-                              <label for="Golf">Golf</label>
-                              <br>
-                              <input type="checkbox" class="NHrecAreasFilter" value="Natural Area" id="NaturalArea">
-                              <label for="NaturalArea">Natural Area</label>
-                              <br> 
-                              <input type="checkbox" class="NHrecAreasFilter" value="Field Sports" id="FieldSports">
-                              <label for="FieldSports">Field Sports</label>
-                              <br>
-                              <input type="checkbox" class="NHrecAreasFilter" value="Trail Area" id="TrailArea">
-                              <label for="TrailArea">Trail Area</label>
-                              <br>
-                              <input type="checkbox" class="NHrecAreasFilter" value="Campground" id="Campground">
-                              <label for="Campground">Campground</label>
-                              <br>
-                              <input type="checkbox" class="NHrecAreasFilter" value="Park" id="Park">
-                              <label for="Park">Park</label>
-                              <br>
-                              <input type="checkbox" class="NHrecAreasFilter" value="Fishing" id="Fishing">
-                              <label for="Fishing">Fishing</label>
-                              <br>
-                              <input type="checkbox" class="NHrecAreasFilter" value="Scenic Road" id="ScenicRoad">
-                              <label for="ScenicRoad">Scenic Road</label>
-                              <br>
-                              <input type="checkbox" class="NHrecAreasFilter" value="Picnic Area" id="PicnicArea">
-                              <label for="PicnicArea">Picnic Area</label>
-                              <br>
-                              <input type="checkbox" class="NHrecAreasFilter" value="Other" id="Other">
-                              <label for="Other">Other</label>
-                              <br>
-                              <input type="checkbox" class="NHrecAreasFilter" value="Special Event Fac." id="SpecialEventFac">
-                              <label for="SpecialEventFac">Special Event Fac.</label>
-                              <br>
-                              <input type="checkbox" class="NHrecAreasFilter" value="Winter Sports Area" id="WinterSportsArea">
-                              <label for="WinterSportsArea">Winter Sports Area</label>
-                              <br>
-                              <input type="checkbox" class="NHrecAreasFilter" value="Water Sports Area" id="WaterSportsArea">
-                              <label for="WaterSportsArea">Water Sports Area</label>
-                              <br>
-                              <input type="checkbox" class="NHrecAreasFilter" value="Snow Ski Area" id="SnowSkiArea">
-                              <label for="SnowSkiArea">Snow Ski Area</label>
-                              <br>
-                              <input type="checkbox" class="NHrecAreasFilter" value="Hunting Area" id="HuntingArea">
-                              <label for="HuntingArea">Hunting Area</label>
-                              <br>
-                              <input type="checkbox" class="NHrecAreasFilter" value="Historic" id="Historic">
-                              <label for="Historic">Historic</label>
-                            </div>  
-                          </div>
-                  
-    
-              <label><input type="checkbox" id="NHrecPointsToggle"> NH Recreation Inventory (Points)</label>
+              <label><input type="checkbox" id="NHrecAreasToggle"> Recreation Areas </label>
+              <div id="NHrecAreasFilterContainer" style="display:none; margin-left:20px;">
+                <div id="legendCheckboxes">
+                    <p>Primary Use</p>
+                      <input type="checkbox" class="NHrecAreasFilter" value="Golf" id="Golf">
+                      <label for="Golf">Golf</label>
+                      <br>
+                      <input type="checkbox" class="NHrecAreasFilter" value="Natural Area" id="NaturalArea">
+                      <label for="NaturalArea">Natural Area</label>
+                      <br> 
+                      <input type="checkbox" class="NHrecAreasFilter" value="Field Sports" id="FieldSports">
+                      <label for="FieldSports">Field Sports</label>
+                      <br>
+                      <input type="checkbox" class="NHrecAreasFilter" value="Trail Area" id="TrailArea">
+                      <label for="TrailArea">Trail Area</label>
+                      <br>
+                      <input type="checkbox" class="NHrecAreasFilter" value="Campground" id="Campground">
+                      <label for="Campground">Campground</label>
+                      <br>
+                      <input type="checkbox" class="NHrecAreasFilter" value="Park" id="Park">
+                      <label for="Park">Park</label>
+                      <br>
+                      <input type="checkbox" class="NHrecAreasFilter" value="Fishing" id="Fishing">
+                      <label for="Fishing">Fishing</label>
+                      <br>
+                      <input type="checkbox" class="NHrecAreasFilter" value="Scenic Road" id="ScenicRoad">
+                      <label for="ScenicRoad">Scenic Road</label>
+                      <br>
+                      <input type="checkbox" class="NHrecAreasFilter" value="Picnic Area" id="PicnicArea">
+                      <label for="PicnicArea">Picnic Area</label>
+                      <br>
+                      <input type="checkbox" class="NHrecAreasFilter" value="Other" id="Other">
+                      <label for="Other">Other</label>
+                      <br>
+                      <input type="checkbox" class="NHrecAreasFilter" value="Special Event Fac." id="SpecialEventFac">
+                      <label for="SpecialEventFac">Special Event Fac.</label>
+                      <br>
+                      <input type="checkbox" class="NHrecAreasFilter" value="Winter Sports Area" id="WinterSportsArea">
+                      <label for="WinterSportsArea">Winter Sports Area</label>
+                      <br>
+                      <input type="checkbox" class="NHrecAreasFilter" value="Water Sports Area" id="WaterSportsArea">
+                      <label for="WaterSportsArea">Water Sports Area</label>
+                      <br>
+                      <input type="checkbox" class="NHrecAreasFilter" value="Snow Ski Area" id="SnowSkiArea">
+                      <label for="SnowSkiArea">Snow Ski Area</label>
+                      <br>
+                      <input type="checkbox" class="NHrecAreasFilter" value="Hunting Area" id="HuntingArea">
+                      <label for="HuntingArea">Hunting Area</label>
+                      <br>
+                      <input type="checkbox" class="NHrecAreasFilter" value="Historic" id="Historic">
+                      <label for="Historic">Historic</label>
+                    </div>  
+                  </div>
+                          <br>
+              <label><input type="checkbox" id="NHrecPointsToggle"> Recreational Sites</label>
+              
               <input type="checkbox" style="margin-left: 8px;" id="NHrecPointsSymbolToggle" checked> <p2> Show Symbols</p2>
-                    <div id="NHrecPointsFilterContainer" style="display:none; margin-left:20px;">
-                      <p>Type</p>
-                          <div>
-          
-                              <input type="checkbox" class="NHrecPointsFilter" name="Trailhead" value="Trailhead" id="Trailhead">
-                              <label for="Trailhead">Trailhead</label>
-                          </div>
-                          <div>
-                       
-                              <input type="checkbox" class="NHrecPointsFilter"name="Parking" value="Parking" id="Parking">
-                              <label for="Parking">Parking</label>
-                          </div>
-                          <div>
-                            
-                              <input type="checkbox" class="NHrecPointsFilter"name="Shelter" value="Shelter" id="Shelter">
-                              <label for="Shelter">Shelter</label>
-                          </div>
-                          <div>
-                            
-                              <input type="checkbox" class="NHrecPointsFilter"name="Gate" value="Gate" id="Gate">
-                              <label for="Gate">Gate</label>
-                          </div>
-                          <div>
-                           
-                              <input type="checkbox" class="NHrecPointsFilter"name="WildlifeViewing" value="Wildlife Viewing" id="WildlifeViewing">
-                              <label for="WildlifeViewing">Wildlife Viewing</label>
-                          </div>
-                          <div>
-                            
-                              <input type="checkbox" class="NHrecPointsFilter"name="HutLodgeCabin" value="Hut/Lodge/Cabin" id="HutLodgeCabin">
-                              <label for="HutLodgeCabin">Hut/Lodge/Cabin</label>
-                          </div>
-                          <div>
-                             
-                              <input type="checkbox" class="NHrecPointsFilter"name="ParkOffice" value="Park Office" id="ParkOffice">
-                              <label for="ParkOffice">Park Office</label>
-                          </div>
-                          <div>
-                            
-                              <input type="checkbox" class="NHrecPointsFilter"name="LookoutTower" value="Lookout Tower" id="LookoutTower">
-                              <label for="LookoutTower">Lookout Tower</label>
-                          </div>  
-                     
-                    </div>
+              <div id="NHrecPointsFilterContainer" style="display:none; margin-left:20px;">
+                <br>
+                <p>Type</p>
+                <div>
+                  <input type="checkbox" class="NHrecPointsFilter" name="Trailhead" value="Trailhead" id="Trailhead">
+                  <label for="Trailhead">Trailhead</label>
+                </div>
+                <div>
+                  <input type="checkbox" class="NHrecPointsFilter" name="Landmark" value="Landmark" id="Landmark">
+                  <label for="Landmark">Landmark</label>
+                </div>
+                <div>
+                  <input type="checkbox" class="NHrecPointsFilter" name="ScenicView" value="Scenic View" id="ScenicView">
+                  <label for="ScenicView">Scenic View</label>
+                </div>
+                <div>
+                  <input type="checkbox" class="NHrecPointsFilter" name="NaturalAttraction" value="Natural Attraction" id="NaturalAttraction">
+                  <label for="NaturalAttraction">Natural Attraction</label>
+                </div>
+                <div>
+                  <input type="checkbox" class="NHrecPointsFilter" name="Shelter" value="Shelter" id="Shelter">
+                  <label for="Shelter">Shelter</label>
+                </div>
+                <div>
+                  <input type="checkbox" class="NHrecPointsFilter" name="TentSite" value="Tent Site" id="TentSite">
+                  <label for="TentSite">Tent Site</label>
+                </div>
+                <div>
+                  <input type="checkbox" class="NHrecPointsFilter" name="CulturalAttraction" value="Cultural Attraction" id="CulturalAttraction">
+                  <label for="CulturalAttraction">Cultural Attraction</label>
+                </div>
+                <div>
+                  <input type="checkbox" class="NHrecPointsFilter" name="HutLodgeCabin" value="Hut/Lodge/Cabin" id="HutLodgeCabin">
+                  <label for="HutLodgeCabin">Hut/Lodge/Cabin</label>
+                </div>
+                <div>
+                  <input type="checkbox" class="NHrecPointsFilter" name="RapidsFalls" value="Rapids/Falls" id="RapidsFalls">
+                  <label for="RapidsFalls">Rapids/Falls</label>
+                </div>
+                <div>
+                  <input type="checkbox" class="NHrecPointsFilter" name="RecreationFacility" value="Recreation Facility" id="RecreationFacility">
+                  <label for="RecreationFacility">Recreation Facility</label>
+                </div>
+              </div>
+                  
 
-              <label><input type="checkbox" id="NHtrailsLinesToggle"> NH Recreational Trails (Polylines)</label>
+              <label><input type="checkbox" id="NHtrailsLinesToggle"> Recreational Trails </label>
               <input type="checkbox" style="margin-left: 8px;" id="NHtrailsBloomToggle" checked> <p2> Highlight Trails</p2>
               <div id="NHtrailsFilterContainer" style="display: none;margin-left:20px;">
                   <p>Trail Categories</p>
@@ -255,7 +272,7 @@
                   <br>
                 </div>
                 
-              <label><input type="checkbox" id="NHtrailsPointsToggle"> NH Recreational Trails (Points)</label>
+              
               <br>
               <label><input type="checkbox" id="NHwaterAccessToggle"> NH Access Sites To Public Waters</label>
               <input type="checkbox" style="margin-left: 8px;" id="NHwaterAccessHeatToggle"> <p2> Heatmap</p2>
@@ -268,14 +285,13 @@
 
 
           <div id="infoDiv" class="esri-widget">
-            <p3>Filter Database</p3>
             <div id="filterDiv">
            
-        
+            
       </div>
     </div> 
   </div>
 </div>
-<script src="js/mainNew.js"></script>
+<script src="js/main.js"></script>
   </body>
 </html>

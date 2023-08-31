@@ -32,9 +32,7 @@ require([
   
     let baseLayerLink = "https://api.mapbox.com/styles/v1/anovak/cll6duwmo00at01pw0c28g05a/tiles/256/{level}/{col}/{row}@2x?access_token=pk.eyJ1IjoiYW5vdmFrIiwiYSI6ImNsa2Zyd2ZvdjFjbHAzaW8zNnd4ODkwaHcifQ.V-0D14XZBY5lfMfw8Qg7vg";
     let baseLayerLabelsLink = "https://api.mapbox.com/styles/v1/anovak/clkvo8z6e001j01q0b8ln9s7j/tiles/256/{level}/{col}/{row}@2x?access_token=pk.eyJ1IjoiYW5vdmFrIiwiYSI6ImNsa2Zyd2ZvdjFjbHAzaW8zNnd4ODkwaHcifQ.V-0D14XZBY5lfMfw8Qg7vg";
-
     // boundaries
-
     let tourismRegionsLink = "https://services8.arcgis.com/YKIZLV97YLZN6bol/arcgis/rest/services/Tourism_Regions/FeatureServer";
     let cedrRegionsLink = "https://services8.arcgis.com/YKIZLV97YLZN6bol/arcgis/rest/services/NH_CEDR/FeatureServer";
     let newHampshireCountiesLink = "https://services8.arcgis.com/YKIZLV97YLZN6bol/arcgis/rest/services/NH_Counties/FeatureServer";
@@ -42,7 +40,6 @@ require([
     let newHampshireLink = "https://services8.arcgis.com/YKIZLV97YLZN6bol/arcgis/rest/services/New_Hampshire_State_Boundary/FeatureServer";
     
     // business census data
-
     let retailBusinessesLink = "https://services8.arcgis.com/YKIZLV97YLZN6bol/arcgis/rest/services/Retail_Service_Businesses/FeatureServer";
     let recreationProvidersLink = "https://services8.arcgis.com/YKIZLV97YLZN6bol/arcgis/rest/services/Recreation_Providers/FeatureServer";
     let b2bManufacturersLink = "https://services8.arcgis.com/YKIZLV97YLZN6bol/arcgis/rest/services/B2B_and_Manufacturers/FeatureServer";
@@ -50,8 +47,8 @@ require([
     let currentLayerLink = "https://services8.arcgis.com/YKIZLV97YLZN6bol/arcgis/rest/services/Retail_Service_Businesses/FeatureServer";
   
     // NH rec layers
-
     let NHwaterAccessLink = "https://services8.arcgis.com/YKIZLV97YLZN6bol/arcgis/rest/services/NH_Access_Sites_To_Public_Waters/FeatureServer";
+    let NHtrailsPointsLink = "https://services8.arcgis.com/YKIZLV97YLZN6bol/arcgis/rest/services/NH_Recreational_Trails_(Points)/FeatureServer";
     let NHtrailsLinesLink = "https://services8.arcgis.com/YKIZLV97YLZN6bol/arcgis/rest/services/NH_Recreational_Trails_(Polylines)/FeatureServer";
     let NHrecAreasLink = "https://services8.arcgis.com/YKIZLV97YLZN6bol/arcgis/rest/services/NH_Recreation_Inventory_(Areas)/FeatureServer";
     let NHrecPointsLink = "https://services8.arcgis.com/YKIZLV97YLZN6bol/arcgis/rest/services/NH_Recreational_Trails_(Points)/FeatureServer";
@@ -59,14 +56,12 @@ require([
     let NHconsvLandLink = "https://services8.arcgis.com/YKIZLV97YLZN6bol/arcgis/rest/services/New_Hampshire_Conservation_Public_Lands/FeatureServer";
     let NHdncrStateLandsLink = "https://services8.arcgis.com/YKIZLV97YLZN6bol/arcgis/rest/services/NH_DCNRStateLands/FeatureServer";
   
-    var allowedLayers = ["NHconsvLand", "NHrecAreas", "NHrecPoints", "NHtrailsLines", "NHwaterAccess", "NHstateLands", "NHdncrstateLands"];
+    var allowedLayers = ["NHconsvLand", "NHrecAreas", "NHrecPoints", "NHtrailsLines", "NHtrailsPoints", "NHwaterAccess", "NHstateLands", "NHdncrstateLands"];
     
     let currentQueryId = null;
     let controller = new AbortController();
     let signal = controller.signal;
-
   /************************ DEBOUNCE FUNCTION ***********************/
-
   function debounce(func, delay) {
     let debounceTimer;
     return function() {
@@ -80,154 +75,120 @@ require([
 
   /************************ CHANGE DATA SOURCE ********************** */
   
-  let filterFieldsMap = [];
-
-  function handleExclusiveCheckboxes(selectedCheckbox) {
-    console.log("Called handleExclusiveCheckboxes with:", selectedCheckbox);
-    
-    const exclusiveCheckboxes = ['filterNationalChain', 'filterRegionalChain', 'filterLocalBusiness'];
-
-    if (exclusiveCheckboxes.includes(selectedCheckbox)) {
-        console.log("Inside exclusive checkboxes condition");
-        for (let checkbox of exclusiveCheckboxes) {
-            console.log("Checking checkbox:", checkbox);
-            if (checkbox !== selectedCheckbox) {
-                console.log("Unchecking checkbox:", checkbox);
-                let checkboxElement = document.getElementById(checkbox);
-                if (checkboxElement) {
-                    checkboxElement.checked = false;
-                } else {
-                    console.error("Checkbox with ID:", checkbox, "not found!");
-                }
-            }
-        }
-    }
-
-    // Log the state of checkboxes after they've been modified
-    for (let checkbox of exclusiveCheckboxes) {
-        let checkboxElement = document.getElementById(checkbox);
-        if (checkboxElement) {
-            console.log(checkbox, checkboxElement.checked);
-        } else {
-            console.error("Checkbox with ID:", checkbox, "not found!");
-        }
-    }
-}
-
-
-
-function updateFields(datasetName) {
+  let filterFieldsMap = {};
   
-    console.log('Updating fields for:', datasetName);
-    layer.visible = false;
-    pseudoClusterLayer.removeAll();
-    const infoDivText = document.querySelector('#infoDiv p3');
-    switch (datasetName) {
-        case 'retailBusiness':
-          
-            filterFieldsMap = filterFieldsRetBus;
-            currentLayerLink = retailBusinessesLink;
-            layer.url = currentLayerLink;
-            layer.visible = true;
-            
-          
-            break;
-            
-        case 'recreationProviders':
-            filterFieldsMap = filterFieldsRecProv;
-            currentLayerLink = recreationProvidersLink;
-            layer.url = currentLayerLink;
-            layer.visible = true;
-            layer.refresh();
-            break;
-
-        case 'b2bManufacturers':
-            filterFieldsMap = filterFieldsB2B;
-            currentLayerLink = b2bManufacturersLink;
-            layer.url = currentLayerLink;
-            layer.visible = true;
-            break;
-
-        case 'nonProfits':
-            filterFieldsMap = filterFieldsNonProfits;
-            currentLayerLink = nonProfitsLink;
-            layer.url = currentLayerLink;
-            layer.visible = true;
-            break;
-    }
-      // Log the current layer URL for debugging
-    
-      // Remove the current layer from the map
-      map.layers.remove(layer);
-      
-      // Update the layer's URL to the new currentLayerLink
+  const exclusiveCheckboxes = [
+    'filterNationalChain',
+    'filterRegionalChain',
+    'filterLocalBusiness'
+  ];
+  
+  function updateFields(datasetName) {
+      const filterDiv = document.getElementById("filterDiv");
+  
+      switch (datasetName) {
+          case 'retailBusiness':
+              filterFieldsMap = filterFieldsRetBus;
+              currentLayerLink = retailBusinessesLink;
+              layer.url = currentLayerLink;
+              layer.popupTemplate = popTemp1;
+  
+              break;
+          case 'recProviders':
+              filterFieldsMap = filterFieldsRecProv;
+              currentLayerLink = recreationProvidersLink;
+              layer.url = currentLayerLink;
+              layer.popupTemplate = popTemp2;
+   
+              break;
+          case 'b2bManufacturers':
+              filterFieldsMap = filterFieldsB2B;
+              currentLayerLink = b2bManufacturersLink;
+              layer.popupTemplate = popTemp2;
+              break;
+          case 'nonProfits':
+              filterFieldsMap = filterFieldsNonProfits;
+              currentLayerLink = nonProfitsLink;
+              layer.popupTemplate = popTemp2;
+              break;
+          default:
+              filterFieldsMap = {};
+              currentLayerLink = retailBusinessesLink; 
+      }
+      console.log(layer.url);
+      pseudoClusterLayer.removeAll();
       layer.url = currentLayerLink;
-      console.log("Setting popupTemplate to:", layer.popupTemplate);
-      layer.load().then(() => {
-        console.log('Layer loaded successfully.');
-        map.layers.add(layer);
-        console.log("Layer loaded:", layer.loaded);
-       console.log("Layer visible:", layer.visible);
-      console.log("Layer has popupTemplate:", !!layer.popupTemplate);
-      setNewHampshireRenderer();
-    }).catch((error) => {
-        console.error("Error loading the layer:", error);
-    });
-      // Reload the layer and then add it back to the map
+      map.layers.remove(layer);
+  
       layer.load().then(() => {
           map.layers.add(layer);
       }).catch((error) => {
           console.error("Error loading the layer:", error);
       });
+      // Clear the filterDiv
+      filterDiv.innerHTML = "";
   
-    
-    // Create checkboxes for the current filterFieldsMap and append them to filterDiv
-    filterDiv.innerHTML = '';
-    for (let item of filterFieldsMap) {
-        const div = document.createElement('div');
-        if (item.label) {  // If item is a label
-            div.innerHTML = `<strong>${item.label}</strong>`;
-        }
-        else if (item.fieldlabel) {
-            div.innerHTML = `<strong style="font-size: larger;">${item.fieldlabel}</strong>`; // larger font size for labels
-        } else {  // If item is a field
-            div.innerHTML = `<input type='checkbox' id='${item.id}'><label for='${item.id}'>${item.displayName}</label>`;
-        }
-        filterDiv.appendChild(div);
-        if (item.id) {
-            document.getElementById(item.id).addEventListener('click', function() {
-                handleExclusiveCheckboxes(item.id);
-            });
-            document.getElementById(item.id).addEventListener('change', function() {
-                applyFilter();
-            });
-        }
-    }
-
-    // Call applyFilter after updating fields
-    applyFilter();
-    console.log(`Layer definitionExpression after updateFields: ${layer.definitionExpression}`);
-    console.log(`Layer URL after updateFields: ${layer.url}`);
-    // Check clustering status and visibility of specific boundary layers
-    if (isClusteringEnabled && (tourismRegions.visible || cedrRegions.visible || newHampshireCounties.visible || newHampshireTownships.visible)) {
+      // Populate filterDiv with the current fields
+      for (const id in filterFieldsMap) {
+          const input = document.createElement("input");
+          input.type = "checkbox";
+          input.id = id;
+  
+          // Check if this checkbox is part of the exclusiveCheckboxes array
+          if (exclusiveCheckboxes.includes(id)) {
+              input.addEventListener('change', function() {
+                  if (this.checked) {
+                      // Uncheck other exclusive checkboxes
+                      for (let otherId of exclusiveCheckboxes) {
+                          if (otherId !== id) {
+                              document.getElementById(otherId).checked = false;
+                          }
+                      }
+                  }
+  
+                  // Call your applyFilter function or any other logic you want to trigger on change
+                  console.log(currentLayerLink);
+                  debouncedApplyFilter();
+                  console.log(selectedBoundaryLayer);
+              
+            
+              });
+          }
+  
+          
+          const label = document.createElement("label");
+          label.setAttribute("for", id);
+  
+          // Convert underscores and double underscores in field names
+          let displayName = filterFieldsMap[id].replace(/__/g, '&').replace(/_/g, ' ');
+          label.innerText = displayName;
+  
+          filterDiv.appendChild(input);
+          filterDiv.appendChild(label);
+          filterDiv.appendChild(document.createElement("br"));
+  
+          const allCheckboxes = filterDiv.querySelectorAll('input[type="checkbox"]');
+          allCheckboxes.forEach(checkbox => {
+            checkbox.addEventListener('change', debounceApplyFilter);
+          });
+        console.log(currentLayerLink);
+      }
+      if (isClusteringEnabled && (tourismRegions.visible || cedrRegions.visible || newHampshireCounties.visible || newHampshireTownships.visible)) {
         pseudoClusterLayer.removeAll();
-        terminateOngoingClustering();
-        debouncedApplyPolygonClustering(selectedBoundaryLayer, layer, selectedField);
+        applyPolygonClustering(selectedBoundaryLayer, layer, selectedField);
         layer.visible = false;
-    }
-    if (isClusteringEnabled && (!tourismRegions.visible || !cedrRegions.visible || !newHampshireCounties.visible || !newHampshireTownships.visible)){
+    }  if (isClusteringEnabled && (!tourismRegions.visible || !cedrRegions.visible || !newHampshireCounties.visible || !newHampshireTownships.visible)){
         pseudoClusterLayer.removeAll();
         layer.visible = true;
         drawCluster();
     }
-    if (!isClusteringEnabled){
+       if (!isClusteringEnabled){
         pseudoClusterLayer.removeAll();
         layer.visible = true;
         applyFilter();
-    }
-    console.log('Current layer URL:', layer.url);
-    console.log('Layer visibility after updateFields:', layer.visible);
-}
+      }
+    
+  }
   
   const debouncedUpdateFields = debounce(updateFields, 20);
 
@@ -358,6 +319,38 @@ function updateFields(datasetName) {
       minScale: 25000000,
     };
   
+    let popTemp1 = {
+        title: "{Business_Name}",
+        content:`
+        Town or City: {Township}<br>
+        Website: <a href='{Website}' target='_blank'>{Website}</a><br>
+        Physical Address: {Physical_Address}<br>
+        E-mail: <a href='mailto:{Email}'>{Email}</a><br>
+        Phone: {Phone}<br>
+        County: {County}<br>
+        Tourism Region: {Tourism_Region}<br>
+        CEDR: {CEDR}<br>
+        Notes: {Notes}
+      `,
+      }
+      
+      let popTemp2 = {
+        title: "{Name}",
+        content:`
+        Town or City: {Town_or_City}<br>
+        Website: <a href='{Website}' target='_blank'>{Website}</a><br>
+        Physical Address: {Physical_Address}<br>
+        E-mail: <a href='mailto:{Email}'>{Email}</a><br>
+        Phone: {Phone}<br>
+        County: {County}<br>
+        Tourism Region: {Tourism_Region}<br>
+        CEDR: {CEDR}<br>
+        Notes: {Notes}
+      `,
+      }
+
+
+    
   /************************** LAYER IMPORTS **********************/
   
 
@@ -367,13 +360,16 @@ function updateFields(datasetName) {
     url: currentLayerLink,
     featureReduction: clusterConfig,
     popupTemplate: {
-      title: "{Name}",
+      title: "{Business_Name}",
       content:`
-      Town or City: {Town_or_City}<br>
+      Town or City: {Township}<br>
       Website: <a href='{Website}' target='_blank'>{Website}</a><br>
       Physical Address: {Physical_Address}<br>
-      E-mail: <a href='mailto:{E_mail}'>{E_mail}</a><br>
+      E-mail: <a href='mailto:{Email}'>{Email}</a><br>
       Phone: {Phone}<br>
+      County: {County}<br>
+      Tourism Region: {Tourism_Region}<br>
+      CEDR: {CEDR}
     `,
       
       fieldInfos: [
@@ -427,7 +423,7 @@ function updateFields(datasetName) {
   
     /********************* REC POINTS RENDERS *************** */
     let dotRenderer = {
-      type: "unique-value",
+      type: "unique-value", // renderer type
       field: "TYPE",
       uniqueValueInfos: [
         {
@@ -435,232 +431,148 @@ function updateFields(datasetName) {
           symbol: {
             type: "simple-marker",
             style: "circle",
-            color: "#9C4C86",  // Color for Trailhead
+            color: "#9C4C86", // Color for Trailhead
             size: 2,
             outline: {
-              width: 0
-            }
-          }
+              width: 0,
+            },
+          },
         },
         {
-          value: "Landmark",
+          value: "Parking",
           symbol: {
             type: "simple-marker",
             style: "circle",
-            color: "#11A579",  // Color for Landmark
+            color: "#88A4E0", // Color for Parking
             size: 2,
             outline: {
-              width: 0
-            }
-          }
-        },
-        {
-          value: "Scenic View",
-          symbol: {
-            type: "simple-marker",
-            style: "circle",
-            color: "#7F3C8D",  // Color for Scenic View
-            size: 2,
-            outline: {
-              width: 0
-            }
-          }
-        },
-        {
-          value: "Natural Attraction",
-          symbol: {
-            type: "simple-marker",
-            style: "circle",
-            color: "#11A579",  // Color for Natural Attraction
-            size: 2,
-            outline: {
-              width: 0
-            }
-          }
+              width: 0,
+            },
+          },
         },
         {
           value: "Shelter",
           symbol: {
             type: "simple-marker",
             style: "circle",
-            color: "#3969AC",  // Color for Shelter
+            color: "#3969AC", // Color for Shelter
             size: 2,
             outline: {
-              width: 0
-            }
-          }
+              width: 0,
+            },
+          },
         },
         {
-          value: "Tent Site",
+          value: "Gate",
           symbol: {
             type: "simple-marker",
             style: "circle",
-            color: "#F2B701",  // Color for Tent Site
+            color: "#F2B701", // Color for Gate
             size: 2,
             outline: {
-              width: 0
-            }
-          }
+              width: 0,
+            },
+          },
         },
         {
-          value: "Cultural Attraction",
+          value: "Wildlife Viewing",
           symbol: {
             type: "simple-marker",
             style: "circle",
-            color: "#E73F74",  // Color for Cultural Attraction
+            color: "#E73F74", // Color for Wildlife Viewing
             size: 3,
             outline: {
-              width: 0
-            }
-          }
+              width: 0,
+            },
+          },
         },
         {
           value: "Hut/Lodge/Cabin",
           symbol: {
             type: "simple-marker",
             style: "circle",
-            color: "#F64747",  // Color for Hut/Lodge/Cabin
+            color: "#F64747", // Color for Hut/Lodge/Cabin
             size: 3,
             outline: {
-              width: 0
-            }
-          }
+              width: 0,
+            },
+          },
         },
         {
-          value: "Rapids/Falls",
+          value: "Park Office",
           symbol: {
             type: "simple-marker",
             style: "circle",
-            color: "#E68310",  // Color for Rapids/Falls
+            color: "#E68310", // Color for Park Office
             size: 3,
             outline: {
-              width: 0
-            }
-          }
+              width: 0,
+            },
+          },
         },
         {
-          value: "Recreation Facility",
+          value: "Lookout Tower",
           symbol: {
             type: "simple-marker",
             style: "circle",
-            color: "#008695",  // Color for Recreation Facility
+            color: "#002CFF", // Color for Lookout Tower
             size: 4,
             outline: {
-              width: 0
-            }
-          }
+              width: 0,
+            },
+          },
         },
+        // Add the new values with unique colors
         {
           value: "Landmark",
           symbol: {
             type: "simple-marker",
             style: "circle",
-            color: "#4b4b8f",  // Color for Landmark
-            size: 3,
+            color: "#4b4b8f", // Unique color for Landmark
+            size: 2,
             outline: {
-              width: 0
-            }
-          }
-        }
-      ]
-    }
-    
-    let picRenderer = {
-      type: "unique-value",  // renderer type
-      field: "TYPE",
-      uniqueValueInfos: [
-          {
-              value: "Trailhead",
-              symbol: {
-                  type: "picture-marker",  // symbol type
-                  url:  "URL_FOR_TRAILHEAD",
-                  width: 7,
-                  height: 7
-              }
+              width: 0,
+            },
           },
-          {
-              value: "Landmark",
-              symbol: {
-                  type: "picture-marker",  // symbol type
-                  url:  "URL_FOR_LANDMARK",
-                  width: 8,
-                  height: 8
-              }
+        },
+        {
+          value: "Scenic View",
+          symbol: {
+            type: "simple-marker",
+            style: "circle",
+            color: "#11A579", // Unique color for Scenic View
+            size: 2,
+            outline: {
+              width: 0,
+            },
           },
-          {
-              value: "Scenic View",
-              symbol: {
-                  type: "picture-marker",  // symbol type
-                  url:  "URL_FOR_SCENIC_VIEW",
-                  width: 8,
-                  height: 8
-              }
+        },
+        {
+          value: "Natural Attraction",
+          symbol: {
+            type: "simple-marker",
+            style: "circle",
+            color: "#80BA5A", // Unique color for Natural Attraction
+            size: 2,
+            outline: {
+              width: 0,
+            },
           },
-          {
-              value: "Natural Attraction",
-              symbol: {
-                  type: "picture-marker",  // symbol type
-                  url:  "URL_FOR_NATURAL_ATTRACTION",
-                  width: 8,
-                  height: 8
-              }
+        },
+        {
+          value: "Cultural Attraction",
+          symbol: {
+            type: "simple-marker",
+            style: "circle",
+            color: "#A5AA99", // Unique color for Cultural Attraction
+            size: 2,
+            outline: {
+              width: 0,
+            },
           },
-          {
-              value: "Shelter",
-              symbol: {
-                  type: "picture-marker",  // symbol type
-                  url:  "URL_FOR_SHELTER",
-                  width: 8,
-                  height: 8
-              }
-          },
-          {
-              value: "Tent Site",
-              symbol: {
-                  type: "picture-marker",  // symbol type
-                  url:  "URL_FOR_TENT_SITE",
-                  width: 8,
-                  height: 8
-              }
-          },
-          {
-              value: "Cultural Attraction",
-              symbol: {
-                  type: "picture-marker",  // symbol type
-                  url:  "URL_FOR_CULTURAL_ATTRACTION",
-                  width: 8,
-                  height: 8
-              }
-          },
-          {
-              value: "Hut/Lodge/Cabin",
-              symbol: {
-                  type: "picture-marker",  // symbol type
-                  url:  "URL_FOR_HUT_LODGE_CABIN",
-                  width: 8,
-                  height: 8
-              }
-          },
-          {
-              value: "Recreation Facility",
-              symbol: {
-                  type: "picture-marker",  // symbol type
-                  url:  "URL_FOR_RECREATION_FACILITY",
-                  width: 8,
-                  height: 8
-              }
-          },
-          {
-              value: "Landmark",
-              symbol: {
-                  type: "picture-marker",  // symbol type
-                  url:  "URL_FOR_LANDMARK",
-                  width: 8,
-                  height: 8
-              }
-          }
-      ]
-  };
+        },
+      ],
+    };
    /********************** SUPPLEMENTAL RECREATION LAYERS ****************/
   
    const NHrecAreas = new FeatureLayer({
@@ -718,69 +630,44 @@ function updateFields(datasetName) {
     },
   
   });
-
-   
-  const siteAccessWeights = {
-    "Accessible": 9,
-    "Accessible/Partial": 8,
-    "Partial": 7,
-    "Partial/Limited": 6,
-    "Limited": 5,
-    "Limited/Difficult": 4,
-    "Difficult": 3,
-    "Future": 2,
-    "Undetermined": 1
-};
-
-var weightedAccessField = {
-  name: "WeightedAccess",
-  alias: "Weighted Access",
-  type: "integer",
-  expression: `
-  var access = $feature.SITEACCESS;
-  var weight = ${JSON.stringify(siteAccessWeights)}[access];
-  Console('Access: ' + access + ', Weight: ' + weight);
-  return weight;
-  `
-};
-
-var heatmapRenderer = {
-  type: "heatmap",
-  field: "WeightedAccess",
-  colorStops: [
-      { color: "rgba(232, 239, 255 , .3)", ratio: 0 },
-      { color: "#A9B9E0", ratio: 0.1 },
-      { color: "#697ECB", ratio: 0.2 },
-      { color: "#2F4C99", ratio: 0.3 },
-      { color: "#1D2882", ratio: 0.4 }
-  ],
-  minPixelIntensity: 0,
-  maxPixelIntensity: 9,
-  radius: 25
-};
-const NHwaterAccess = new FeatureLayer({
-  url: NHwaterAccessLink,
-  visible: false,
-  renderer: heatmapRenderer,
-  fields: [weightedAccessField],
-  outFields: ["*"],
-  popupTemplate: {
-      title: "{NAME}",
-      content: "Notes: {NOTES}"
-  }
-});
-
-NHwaterAccess.queryFeatures({
-  where: "1=1",
-  outFields: ["SITEACCESS"],
-  returnGeometry: false,
-  num: 10 // Get 10 sample features
-}).then(function(result) {
-  result.features.forEach(function(feature) {
-      console.log(feature.attributes.SITEACCESS);
+  
+   const NHtrailsPoints = new FeatureLayer({
+    url: NHtrailsPointsLink,
+    visible: false,
+  //  labelingInfo: [stateLandsLabels],
+    renderer: {
+      type: "simple",
+      symbol: {
+        type: "simple-marker",
+        color: "rgba(174, 228, 187, .25)",
+        outline: {
+          color: "rgba(105, 141, 114 , .5)",
+          width: 1
+        }
+      }
+    },
+  
   });
-});
-
+  const heatmapRenderer = {
+    type: "heatmap",
+    colorStops: [
+      { color: "rgba(232, 239, 255 , .3)", ratio: 0 },    // Transparent Light Pastel Yellow
+      { color: "#A9B9E0", ratio: 0.1 },               // Cornsilk
+      { color: "#697ECB", ratio: 0.2 },                // Gold
+      { color: "#2F4C99", ratio: 0.3 },               // DarkOrange
+      { color: "#1D2882", ratio: 0.4 }  
+    ],
+    minPixelIntensity: 0,
+    maxPixelIntensity: 100,
+    radius: 25,
+  };
+  
+  const NHwaterAccess = new FeatureLayer({
+    url: NHwaterAccessLink,
+    visible: false,
+    renderer: heatmapRenderer
+  });
+  
   const NHwaterAccess2 = new FeatureLayer({
     url: NHwaterAccessLink,
     visible: false,
@@ -799,50 +686,29 @@ NHwaterAccess.queryFeatures({
     }
   });
   
-
-  
   NHwaterAccess2.effect = "bloom(1, 2px, 15%)";
   
-  const NHconsvLandRenderer = {
-    type: "unique-value",
-    field: "ACCESS",
-    uniqueValueInfos: [
-        {
-            value: "1",
-            symbol: {
-                type: "simple-fill",
-                color: "rgba(173, 252, 106, 0.4)", // Allowed
-                outline: {
-                    color: "black",
-                    width: 0
-                }
-            },
-            label: "Allowed"
-        },
-        {
-            value: "2",
-            symbol: {
-                type: "simple-fill",
-                color: "rgba(252, 222, 106  , 0.7)", // Restricted to Certain Areas
-                outline: {
-                    color: "black",
-                    width: 0
-                }
-            },
-            label: "Restricted to Certain Areas"
-        },
   
-    ]
-};
   
   const NHconsvLand = new FeatureLayer({
     url: NHconsvLandLink,
     visible: false,
   //  labelingInfo: [stateLandsLabels],
-    renderer: NHconsvLandRenderer,
+    renderer: {
+      type: "simple",
+      symbol: {
+        type: "simple-fill",
+        color: "rgba(255, 220, 156, .25)",
+        outline: {
+          color: "rgba(105, 141, 114 , .5)",
+          width: 1
+        }
+      }
+    },
   
     popupTemplate: {
       title: "{NAME}",
+      content: "Notes: {NOTES}"
     },
   
   });
@@ -981,20 +847,8 @@ NHwaterAccess.queryFeatures({
   
   
   /*********************** REC POINTS TOGGLE ****************************/
-  document.getElementById('NHconsvLandToggle').addEventListener('change', function() {
-    const isChecked = this.checked;
-    NHconsvLand.visible = isChecked;
-    document.getElementById('NHconsvLandAccessOptions').style.display = isChecked ? 'block' : 'none';
-});
-
-
-const radioButtons = document.querySelectorAll('[name="NHconsvLandAccess"]');
-radioButtons.forEach(function(radio) {
-    radio.addEventListener('change', function() {
-        const selectedValue = this.value;
-        NHconsvLand.definitionExpression = `ACCESS = ${selectedValue}`;
-    });
-});
+  
+  
   
   document.getElementById('NHrecPointsToggle').addEventListener('change', function() {
     const filterContainer = document.getElementById('NHrecPointsFilterContainer');
@@ -1137,6 +991,27 @@ const boundaryBtns = ['toggleCEDRregions', 'toggleTourismRegions', 'toggleCounti
   }
   
   
+  function handleDataLayerToggle(selectedBoundaryLayer) {
+    console.log("handleBoundaryLayerToggle")
+    console.log(selectedBoundaryLayer);
+  
+    if (isClusteringEnabled && selectedBoundaryLayer .visible) {
+        pseudoClusterLayer.removeAll();
+        applyPolygonClustering(selectedBoundaryLayer, layer, selectedField);
+        layer.visible = false;
+    }  if (isClusteringEnabled && !selectedBoundaryLayer .visible){
+        pseudoClusterLayer.removeAll();
+        layer.visible = true;
+        drawCluster();
+    }
+       if (!isClusteringEnabled){
+        pseudoClusterLayer.removeAll();
+        layer.visible = true;
+        applyFilter();
+      }
+    }
+  
+  
   function handleBoundaryLayerToggle(layerToToggle, otherLayers, isSwitching = true) {
     pseudoClusterLayer.removeAll();
     // Create a new instance of AbortController for subsequent operations
@@ -1169,8 +1044,7 @@ const boundaryBtns = ['toggleCEDRregions', 'toggleTourismRegions', 'toggleCounti
             layer.visible = true;
             drawCluster();
         }
-    } else if (isClusteringEnabled) {
-        layer.effect = "bloom(0, 0.1px, 15%)";
+    } else {
         layer.visible = true;
         applyFilter();
     }
@@ -1219,7 +1093,7 @@ attachLayerToggleEvents('toggleCounties', 'dropdownToggleCounties', function() {
   
   /************************* MAP INITIALIZATION *************************/
     const map = new Map({
-      layers: [baseLayer, NHconsvLand, NHstateLands, NHdncrstateLands, layer, NHrecAreas, NHrecPoints, NHtrailsLines, NHwaterAccess, NHwaterAccess2,  newHampshire, newHampshireTownships, newHampshireCounties, cedrRegions, tourismRegions,layer]
+      layers: [baseLayer, NHconsvLand, NHstateLands, NHdncrstateLands, layer, NHrecAreas, NHrecPoints, NHtrailsLines, NHtrailsPoints, NHwaterAccess, NHwaterAccess2,  newHampshire, newHampshireTownships, newHampshireCounties, cedrRegions, tourismRegions,layer]
     });
     
     
@@ -1237,96 +1111,100 @@ attachLayerToggleEvents('toggleCounties', 'dropdownToggleCounties', function() {
     newHampshire.effect = "bloom(1, 0.1px, 15%)";
     
   
-    const filterFieldsRetBus = [
-      { fieldlabel: "Retail-Service Business Filters"},
-      { id: 'filterNationalChain', field: 'National_Chain', displayName: '<br>National Chain' },
-      { id: 'filterRegionalChain', field: 'Regional_Chain', displayName: 'Regional Chain' },
-      { id: 'filterLocalBusiness', field: 'Local_Business', displayName: 'Local Business' },
-      { label: "<br>Filter by Activity Type"},
-     //{ id: 'filterGuidingTraining', field: 'Guiding_Training', displayName: 'Guiding Training' },
-     // { id: 'filterSocialEvents', field: 'Social_Events', displayName: 'Social Events' },
-     // { id: 'filterUsedGear', field: 'Used_Gear', displayName: 'Used Gear' },
-      { id: 'filterHiking', field: 'Hiking', displayName: '<br>Hiking' },
-      { id: 'filterSnowshoeing', field: 'Snowshoeing', displayName: 'Snowshoeing' },
-      { id: 'filterRunningTrailRunning', field: 'Running_Trail_Running', displayName: 'Running & Trail Running' },
-      { id: 'filterMotorizedBoatingWaterSports', field: 'Motorized_Boating___Water_sport', displayName: 'Motorized Boating & Water Sports' },
-      { id: 'filterWhitewaterSports', field: 'Whitewater_sports', displayName: 'Whitewater Sports' },
-      { id: 'filterPaddleSports', field: 'Paddle_sports', displayName: 'Paddle Sports' },
-      { id: 'filterMountainBiking', field: 'Mountain_Biking', displayName: 'Mountain Biking' },
-      { id: 'filterRoadGravelBiking', field: 'Road_Gravel_Biking', displayName: 'Road & Gravel Biking' },
-     // { id: 'filterBMX', field: 'BMX', displayName: 'BMX' },
-     // { id: 'filterSkateboardingRollerskating', field: 'Skateboarding_Rollerskating', displayName: 'Skateboarding & Rollerskating' },
-      { id: 'filterOHRV', field: 'OHRV', displayName: 'OHRV' },
-      { id: 'filterHunting', field: 'Hunting', displayName: 'Hunting' },
-      { id: 'filterFishing', field: 'Fishing', displayName: 'Fishing' },
-      { id: 'filterCamping', field: 'Camping', displayName: 'Camping' },
-      { id: 'filterWildlifeViewing', field: 'Wildlife_Viewing', displayName: 'Wildlife Viewing' },
-      { id: 'filterSurfing', field: 'Surfing', displayName: 'Surfing' },
-      { id: 'filterSwimmingDiving', field: 'Swimming_Diving', displayName: 'Swimming & Diving' },
-      { id: 'filterSnowmobiling', field: 'Snowmobiling', displayName: 'Snowmobiling' },
-      { id: 'filterDownhillSkiingSnowboarding', field: 'Downhill_Skiing___Snowboarding', displayName: 'Downhill Skiing & Snowboarding' },
-      { id: 'filterBackcountryAlpineSkiing', field: 'Backcountry_Alpine_Skiing', displayName: 'Backcountry Alpine Skiing' },
-      { id: 'filterNordicSkiing', field: 'Nordic_Skiing', displayName: 'Nordic Skiing' },
-      { id: 'filterRockClimbing', field: 'Rock_Climbing', displayName: 'Rock Climbing' },
-      { id: 'filterIceClimbing', field: 'Ice_Climbing', displayName: 'Ice Climbing' },
-      { id: 'filterMountaineering', field: 'Mountaineering', displayName: 'Mountaineering' },
-      { id: 'filterHorseback', field: 'Horseback', displayName: 'Horseback' },
-      { id: 'filterOther', field: 'Other', displayName: 'Other' },
-  ];
+    const filterFieldsRetBus = {
+      filterNationalChain: "National_Chain",
+      filterRegionalChain: "Regional_Chain",
+      filterLocalBusiness: "Local_Business",
+      filterGuidingTraining: "Guiding_Training",
+      filterSocialEvents: "Social_Events",
+      filterUsedGear: "Used_Gear",
+      filterHiking: "Hiking",
+      filterSnowshoeing: "Snowshoeing",
+      filterRunningTrailRunning: "Running_Trail_Running",
+      filterMotorizedBoatingWaterSports: "Motorized_Boating___Water_sport",
+      filterWhitewaterSports: "Whitewater_sports",
+      filterPaddleSports: "Paddle_sports",
+      filterMountainBiking: "Mountain_Biking",
+      filterRoadGravelBiking: "Road_Gravel_Biking",
+      filterBMX: "BMX",
+      filterSkateboardingRollerskating: "Skateboarding_Rollerskating",
+      filterOHRV: "OHRV",
+      filterHunting: "Hunting",
+      filterFishing: "Fishing",
+      filterCamping: "Camping",
+      filterWildlifeViewing: "Wildlife_Viewing",
+      filterSurfing: "Surfing",
+      filterSwimmingDiving: "Swimming_Diving",
+      filterSnowmobiling: "Snowmobiling",
+      filterDownhillSkiingSnowboarding: "Downhill_Skiing___Snowboarding",
+      filterBackcountryAlpineSkiing: "	Backcountry_Alpine_Skiing",
+      filterNordicSkiing: "Nordic_Skiing",
+      filterRockClimbing: "Rock_Climbing",
+      filterIceClimbing: "Ice_Climbing",
+      filterMountaineering: "Mountaineering",
+      filterHorseback: "Horseback",
+      filterOther: "Other",
+    };
   
-  const filterFieldsRecProv = [
-    { fieldlabel: "Recreation Providers"},
-    { label: "<br>Filter by Activity Type"},
-    { id: 'filterLessonsGuiding', field: 'Lessons_Guiding', displayName: '<br>Lessons & Guiding' },
-    { id: 'filterDownhillSki', field: 'Downhill_Ski', displayName: 'Downhill Skiing' },
-    { id: 'filterNordicSkiSnowshoe', field: 'Nordic_Ski_Snowshoe', displayName: 'Nordic Skiing & Snowshoeing' },
-    { id: 'filterBiking', field: 'Biking', displayName: 'Biking' },
-    { id: 'filterWhitewater', field: 'Whitewater_Paddle', displayName: 'Whitewater Paddling' },
-    { id: 'filterOHRV', field: 'OHRV', displayName: 'OHRV' },
-    { id: 'filterCampground', field: 'Campground', displayName: 'Camping' },
-    { id: 'filterClimbingMountaineeringHiking', field: 'Climbing_Mountaineering_Hiking', displayName: 'Climbing, Mountaineering, & Hiking' },
-    { id: 'filterMotorizedBoatingWaterSports', field: 'Motorized_Boating_Water_Sports', displayName: 'Motorized Boating & Water Sports' },
-    { id: 'filterSnowmobile', field: 'Snowmobile', displayName: 'Snowmobiling' },
-    { id: 'filterFishing', field: 'Fishing', displayName: 'Fishing' },
-    { id: 'filterArcheryShootingHunting', field: 'Archery_Shooting_Hunting', displayName: 'Archery, Shooting, & Hunting' },
-    { id: 'filterSurfing', field: 'Surfing', displayName: 'Surfing' },
-    { id: 'filterHorsebackRiding', field: 'Horseback_Riding', displayName: 'Horseback Riding' },
-    { id: 'filterWildlifeViewing', field: 'Wildlife_Viewing', displayName: 'Wildlife Viewing' },
-    { id: 'filterSleepawaySummerCamps', field: 'Sleepaway_Summer_Camps', displayName: 'Sleepaway Summer Camps' }
-];
+  const filterFieldsRecProv = {
+    filterLessonsGuiding: "Lessons_Guiding",
+    filterDownhillSki: "Downhill_Ski",
+    filterNordicSkiSnowshoe: "Nordic_Ski_Snowshoe",
+    filterBiking: "Biking",
+    filterWhitewater: "Whitewater_Paddle",
+    filterOHRV: "OHRV",
+    filterCampground: "Campground",
+    filterClimbingMountaineeringHiking: "Climbing_Mountaineering_Hiking",
+    filterMotorizedBoatingWaterSports: "Motorized_Boating_Water_Sports",
+    filterSnowmobile: "Snowmobile",
+    filterFishing: "Fishing",
+    filterArcheryShootingHunting: "Archery_Shooting_Hunting",
+    filterSurfing: "Surfing",
+    filterHorsebackRiding: "Horseback_Riding",
+    filterWildlifeViewing: "Wildlife_Viewing",
+    filterSleepawaySummerCamps: "Sleepaway_Summer_Camps"
+  };
   
-  const filterFieldsB2B = [
-    { fieldlabel: "Business Services and Manufacturers"},
-    { label: "<br>Filter by Category"},
-    { id: 'filterB2BSalesDistribution', field: 'B2B_Sales_Distribution', displayName: '<br>Business to Business Sales & Distribution' },
-    { id: 'filterManufacturing', field: 'Manufacturing', displayName: 'Manufacturing' },
-    { id: 'filterDesignConstruction', field: 'Design_Construction', displayName: 'Design & Construction' },
-    { id: 'filterConsultingService', field: 'Consulting_Services', displayName: 'Consulting Services' },
-    { id: 'filterOtherB2B', field: 'Other', displayName: 'Other' },
-   
-];
+  const filterFieldsB2B = {
+    filterB2BSalesDistribution: "	B2B_Sales_Distribution",
+    filterManufacturing: "Manufacturing",
+    filterDesignConstruction: "Design_Construction",
+    filterConsultingServices: "Consulting_Services",
+    filterOtherB2B: "Other",
+  };
   
-  const filterFieldsNonProfits = [
-    { fieldlabel: "Non-Profit Organizations"},
-      { label: "<br>Filter by Category"},
-      { id: 'filterIndustryAssociationAdvocate', field: 'Industry_Association_Advocate', displayName: '<br>Industry Association Advocate' },
-      { id: 'filterOutdoorRecOutings', field: 'Outdoor_Rec__Outings', displayName: 'Outdoor Recreation Outings' },
-      { id: 'filterEnvEd', field: 'Env__Ed_', displayName: 'Environmental Education' },
-      { id: 'filterTrailDevelopmentMaintenance', field: 'Trail_Development___Maintenance', displayName: 'Trail Development & Maintenance' },
-      { id: 'filterLandConservationStewardship', field: 'Land_Conservation_Stewardship', displayName: 'Land Conservation Stewardship' },
-];
+  const filterFieldsNonProfits = {
+    filterIndustryAssociationAdvocate: "Industry_Association_Advocate",
+    filterOutdoorRecOutings: "Outdoor_Rec__Outings",
+    filterEnvEd: "Env__Ed_",
+    filterTrailDevelopmentMaintenance: "Trail_Development___Maintenance",
+    filterLandConservationStewardship: "Land_Conservation_Stewardship",
+  };
   
-
+  const trailFilterFieldsMap = {
+    filterPED: "PED",
+    filterMTNBIKE: "MTNBIKE",
+    filterROADBIKE: "ROADBIKE",
+    filterXCSKI: "XCSKI",
+    filterSNOWMBL: 'SNOWMBL',
+    filterATV: 'ATV',
+    filterDIRTBIKE: 'DIRTBIKE',
+    filterHORSE: 'HORSE',
+    filterPADDLE: 'PADDLE',
+    filterPAVED: 'PAVED',
+    filterGROOMED: 'GROOMED',
+    filterADA: 'ADA',
+    filterWIDE: 'WIDE',
+    filterALPINESKI: 'ALPINESKI',
+    filterOther: 'Other'
+  };
   /******************* DRAW CLUSTER FUNCTION  *******************/
   
   function drawCluster() {
-
-    console.log('Applying drawCluster...');
-    layer.effect = "bloom(0, 2px, 15%)";
-
+  
     currentQueryId = Date.now();
     
-    if (isClusteringEnabled && selectedBoundaryLayer && selectedBoundaryLayer.visible) {
+    if (isClusteringEnabled && selectedBoundaryLayer.visible) {
         pseudoClusterLayer.removeAll();
         applyPolygonClustering(selectedBoundaryLayer, layer, selectedField);
         layer.visible = false;
@@ -1339,7 +1217,7 @@ attachLayerToggleEvents('toggleCounties', 'dropdownToggleCounties', function() {
         return;
     } else {
         layer.visible = true;
-        
+        // ... (rest of your code
     clusterConfig = {
     
     type: "cluster",
@@ -1436,16 +1314,14 @@ attachLayerToggleEvents('toggleCounties', 'dropdownToggleCounties', function() {
   map.add(pseudoClusterLayer);
   
  function applyPolygonClustering(selectedBoundaryLayer, layer, selectedField) {
-  console.log('Attempting to apply polygon clustering...');
+  
     if (isTaskRunning) {
-        console.log('Task already running. Exiting applyPolygonClustering.');
         return; // If a task is already running, don't start a new one.
     }
-    console.log("Starting applyPolygonClustering...");
+    
     isTaskRunning = true;
 
     if (!isClusteringEnabled) {
-      console.log("Exiting because clustering is disabled.");
         return;
     }
 
@@ -1468,18 +1344,12 @@ attachLayerToggleEvents('toggleCounties', 'dropdownToggleCounties', function() {
         const polygons = result.features;
         processChunk(polygons, layer, selectedField);
 
-      }).catch(error => {
-        console.error("Error during applyPolygonClustering:", error);
-        isTaskRunning = false; // Make sure to reset the flag in case of errors too
-
-    }).finally(() => {
-        isTaskRunning = false; // Reset the flag when all processing is done or if there's an early exit
-        console.log("Finished applyPolygonClustering.");
+        }).finally(() => {
+        isTaskRunning = false;
     });
 }
 
 function processChunk(polygons, layer, selectedField, index = 0) {
-  console.log('Processing chunk starting at index:', index);
     if (index >= polygons.length) {
         hideSpinner();
         return;
@@ -1506,7 +1376,6 @@ function processChunk(polygons, layer, selectedField, index = 0) {
 }
   
 function processPolygon(polygon, layer, selectedField) {
-  console.log('Processing polygon:', polygon);
   return new Promise((resolve, reject) => {
       let queryIdAtTimeOfExecution = currentQueryId;
         let pointsQuery = layer.createQuery();
@@ -1563,8 +1432,7 @@ function processPolygon(polygon, layer, selectedField) {
                       },
                       effect: "bloom(150%, 25%, 1%)"
                   });
-                  clusterGraphic.effect = "bloom(1, 0.1px, 15%)";
-                  
+  
                   const labelGraphic = new Graphic({
                       geometry: polygon.geometry.centroid,
                       symbol: {
@@ -1598,36 +1466,22 @@ function processPolygon(polygon, layer, selectedField) {
             
                 });
         });
-        
     }
-
-    const debouncedApplyPolygonClustering = debounce(applyPolygonClustering, 20);
 
   /********************************* SPINNER FUNCTION ********************************************* */
   function showSpinner() {
       document.getElementById('loadingDiv').style.display = 'block';
-      const overlayElement = document.getElementById("overlay");
-
-  if(overlayElement) {
-    overlayElement.style.opacity = "100";
-    setTimeout(() => { overlayElement.style.display = "block"; }, 0);  // Delay should match the transition duration to ensure opacity completes
   }
-  }
+  
   function hideSpinner() {
-    
       document.getElementById('loadingDiv').style.display = 'none';
-      const overlayElement = document.getElementById("overlay");
-
-  if(overlayElement) {
-    overlayElement.style.opacity = "0";
-    setTimeout(() => { overlayElement.style.display = "none"; }, 0);  // Delay should match the transition duration to ensure opacity completes
-  }
+      
   }
 
   Object.keys(filterFieldsMap).forEach(id => {
     document.getElementById(id).addEventListener('change', function() {
         showSpinner(); // Show spinner when filters are changed
-const selectedFieldIds = filterFieldsMap.filter(item => document.getElementById(item.id).checked).map(item => item.id);
+        isAnyFieldSelected = Object.keys(filterFieldsMap).some(key => document.getElementById(key).checked);
         applyFilter();
         drawCluster();
     });
@@ -1637,18 +1491,12 @@ const selectedFieldIds = filterFieldsMap.filter(item => document.getElementById(
   
   function drawSimpleCluster() {
 
-  console.log('Applying drawSimpleCluster...');
-  layer.effect = "bloom(0, 2px, 15%)";
   currentQueryId = Date.now();
 
   clusterConfig = {
       type: "cluster",
       popupTemplate: {
-          title: "{cluster_count} Locations",
-          content:  `
-          Click browse features to view extent of coverage and individual features.
-          `,
-          
+          title: "{cluster_count} Providers",
           fieldInfos: [{
               fieldName: "Point Cluster Size",
               format: {
@@ -1707,13 +1555,33 @@ const selectedFieldIds = filterFieldsMap.filter(item => document.getElementById(
   }
   
   
-    /******************************** TERMINATE PSUEDO CLUSTERING *****************/
   
-  function terminateOngoingClustering() {
-    isTaskRunning = false;
-     // Abort any ongoing queries
-    // Perform any other necessary cleanup here
-}
+  
+  /*********************** ONLY DISPLAY ONE BUSINESS CATEGORY *************/
+  
+  /* const exclusiveCheckboxes = [
+    'filterNationalChain',
+    'filterRegionalChain',
+    'filterLocalBusiness'
+  ];
+  
+  exclusiveCheckboxes.forEach(id => {
+    document.getElementById(id).addEventListener('change', function() {
+        if (this.checked) {
+            // Uncheck other exclusive checkboxes
+            for (let otherId of exclusiveCheckboxes) {
+                if (otherId !== id) {
+                    document.getElementById(otherId).checked = false;
+                }
+            }
+        }
+  
+        // Call your applyFilter function or any other logic that you want to trigger on change
+        applyFilter();
+    });
+  });
+  
+  
   
   /******************************** FILTER DATA BY SELECTED FIELD *****************/
   NHtrailsLines.visible = false;
@@ -1722,16 +1590,11 @@ const selectedFieldIds = filterFieldsMap.filter(item => document.getElementById(
   
   
   function applyClusterIfNecessary(boundaryLayerVisible, layer, selectedField) {
-    
     if (isClusteringEnabled && boundaryLayerVisible) {
-      
-        terminateOngoingClustering() ;
         applyPolygonClustering(selectedBoundaryLayer, layer, selectedField);
         layer.visible = false;
         return true;
-        
     }
-    
     return false;
   }
   
@@ -1745,40 +1608,37 @@ const selectedFieldIds = filterFieldsMap.filter(item => document.getElementById(
     }
   }
   
-  window.applyFilter = function() {
-    console.log('Applying filter...');
+  function applyFilter() {
     const filters = {};
-
-    const selectedFields = filterFieldsMap
-        .filter(item => item.id && document.getElementById(item.id).checked)
-        .map(item => item.field);
-
+  
+    const selectedFields = Object.entries(filterFieldsMap)
+        .filter(([id, field]) => document.getElementById(id).checked)
+        .map(([id, field]) => field);
+  
     if (selectedFields.length) {
         selectedFields.forEach(field => {
             filters[field] = "1";
         });
-
+  
         setLayerDefinitionExpression(layer, filters);
-
+  
         if (applyClusterIfNecessary(boundaryLayerVisible, layer, selectedField)) return;
-
+  
         if (isClusteringEnabled) {
             drawCluster();
             return;
         }
     } else {
         layer.definitionExpression = null; // Ensure all points are displayed when no fields are checked
-
+  
         if (applyClusterIfNecessary(boundaryLayerVisible, layer, selectedField)) return;
-
+  
         if (isClusteringEnabled) {
             drawSimpleCluster();
             return;
         }
     }
-    console.log('Selected fields for filtering:', selectedFields);
-    console.log('Final layer visibility after applyFilter:', layer.visible);
-}
+  }
 
   // DEBOUNCE VERSION
 
@@ -1786,7 +1646,7 @@ const selectedFieldIds = filterFieldsMap.filter(item => document.getElementById(
 
   Object.keys(filterFieldsMap).forEach(id => {
     document.getElementById(id).addEventListener('change', function() {
-const selectedFieldIds = filterFieldsMap.filter(item => document.getElementById(item.id).checked).map(item => item.id);
+        isAnyFieldSelected = Object.keys(filterFieldsMap).some(key => document.getElementById(key).checked);
         applyFilter();
         drawCluster();
     });
@@ -1816,6 +1676,49 @@ const selectedFieldIds = filterFieldsMap.filter(item => document.getElementById(
       NHrecPoints.effect = "bloom(3, .3px, 15%)";
     }
   });
+      /*************************** FILTER TRAILS ********************* */
+      /* document.getElementById('NHtrailsLinesToggle').addEventListener('change', function() {
+        const filterContainer = document.getElementById('NHtrailsFilterContainer');
+        
+        if (this.checked) {
+            filterContainer.style.display = 'block';
+        } else {
+            filterContainer.style.display = 'none';
+        }
+      });
+      
+      function applyTrailsFilter() {
+        const filters = {};
+      
+        if (isAnyTrailFieldSelected) {
+            for (let [id, field] of Object.entries(trailFilterFieldsMap)) {
+                if (document.getElementById(id).checked) {
+                    selectedTrailField = field;
+                    filters[field] = "1";
+                }
+            }
+            
+            let definitionExpression = Object.keys(filters).map(field => `${field} = '1'`).join(" AND ");
+            NHtrailsLines.definitionExpression = definitionExpression;
+            NHtrailsLines.renderer.symbol.color = "#F5475C";
+            
+            NHtrailsLines.renderer.symbol.width = "1";
+            NHtrailsLines.effect = false;
+  
+        } else {
+          NHtrailsLines.definitionExpression = null;
+          NHtrailsLines.renderer.symbol.color = "rgba(224, 176, 136, .8)";
+          NHtrailsLines.renderer.symbol.style = "short-dot";
+        }
+      }
+      
+      // Assuming trailFilterFieldsMap is an object you've defined elsewhere
+      for (let id of Object.keys(trailFilterFieldsMap)) {
+          document.getElementById(id).addEventListener('change', function() {
+              isAnyTrailFieldSelected = Array.from(Object.keys(trailFilterFieldsMap)).some(key => document.getElementById(key).checked);
+              applyTrailsFilter();
+          });
+      }
       
    
     /*************************** TOGGLE CLUSTERING  ***********************/
@@ -1823,11 +1726,8 @@ const selectedFieldIds = filterFieldsMap.filter(item => document.getElementById(
   
    document.getElementById('toggleClustering').addEventListener('click', function() {
       isClusteringEnabled = !isClusteringEnabled;
-      const textSpan = this.querySelector('span');
+      
       if (isClusteringEnabled && (tourismRegions.visible || cedrRegions.visible || newHampshireCounties.visible || newHampshireTownships.visible)) {
-        console.log("Cluster toggled ON");
-        textSpan.innerText = "Turn Point Clustering: OFF";
-        
         applyPolygonClustering(selectedBoundaryLayer, layer, selectedField);
         this.classList.add('active');
         layer.visible = false;
@@ -1835,45 +1735,120 @@ const selectedFieldIds = filterFieldsMap.filter(item => document.getElementById(
   
       else if (isClusteringEnabled) {
           this.classList.add('active');
-          textSpan.innerText = "Turn Point Clustering: OFF";
           layer.effect = "bloom(0, 0.1px, 15%)";
           pseudoClusterLayer.removeAll();
           let selectedFields = [];
-          for (let item of filterFieldsMap) {
-        let id = item.id;
-        let field = item.field;
-        if (item.id && document.getElementById(item.id)) {
-          console.log("Checking element with ID:", item.id);
-          if (document.getElementById(item.id).checked) {
-              selectedFields.push(field);
-              console.log("Pushing checked fields...");
-          }
-      } else {
-          console.warn("Undefined or null ID encountered in filterFieldsMap item:", item);
-      }
+          for (let [id, field] of Object.entries(filterFieldsMap)) {
+              if (document.getElementById(id).checked) {
+                  selectedFields.push(field);
+              }
           }
           
           if (isAnyFieldSelected) {
               layer.visible = true;
               drawCluster();
-              console.log("Applying drawCluster...");
           } else {
               layer.visible = true;
               drawSimpleCluster();
-              console.log("Applying drawSimpleCluster...");
           }
       } else {
           pseudoClusterLayer.removeAll();
-          textSpan.innerText = "Turn Point Clustering: ON";
           this.classList.remove('active');
           layer.featureReduction = null;
           layer.visible = true;
           layer.effect = "bloom(3.5, 0.1px, 5%)";
-          console.log("Cluster toggled OFF");
       }
   });
   
+     /*********************** QUERY AND HIGHLIGHT FUNCTION *************************/
+  /*
+  
+     layer.cedrRegions = "cedrRegions";
+     layer.tourismRegions = "tourismRegions";
+     layer.newHampshireCounties = "newHampshireCounties";
+     layer.ewHampshireTownships = "newHampshireTownships";
+  
+   const nameFieldArray = [
+    { id: "cedrRegions", name: "CEDR" },
+    { id: "tourismRegions", name: "TourismReg" },
+    { id: "newHampshireCounties", name: "County" },
+    { id: "newHampshireTownships", name: "pbpNAME" }
+  ];
+     
+     const selectedFieldNameElement = document.getElementById("selectedFieldName");
+     const statisticsValueElement = document.getElementById("statisticsValue");
+     
+   
+     view.on("click", function(event) {
+      
+      if (selectedBoundaryLayer && selectedBoundaryLayer.visible) {
+        const query = selectedBoundaryLayer.createQuery();
+        query.geometry = event.mapPoint;
     
+        selectedBoundaryLayer.queryFeatures(query).then(function(result) {
+          if (result.features.length > 0) {
+            const selectedPolygon = result.features[0];
+            view.graphics.removeAll();
+            console.log(selectedPolygon);
+    
+            const highlightSymbol = new SimpleFillSymbol({
+              color: "white",
+              style: "none",
+              outline: {
+                color: "#D5FF9C",
+                width: 3
+              }
+            });
+    
+            const highlightGraphic = new Graphic({
+              geometry: selectedPolygon.geometry,
+              symbol: highlightSymbol
+            });
+    
+            view.graphics.add(highlightGraphic);
+    
+            const currentNameField = nameFieldArray[selectedBoundaryLayer.id];
+            console.log(selectedBoundaryLayer.layerId),
+            selectedFieldNameElement.textContent = selectedPolygon.attributes[currentNameField];
+    
+            queryPointData(selectedPolygon);
+          }
+        }).catch(function(error) {
+          console.error("Error during boundary layer query:", error);
+        });
+      }
+    });
+    
+    function queryPointData(selectedPolygon) {
+      const currentNameField = nameFieldArray[selectedBoundaryLayer.id];
+    
+      const query = layer.createQuery();
+      query.geometry = selectedPolygon.geometry;
+      query.where = `${selectedField} = '1'`; 
+      query.outFields = [currentNameField];
+    
+      query.outStatistics = [
+        {
+          onStatisticField: `${selectedField}`,
+          outStatisticFieldName: "sum",
+          statisticType: "sum"
+        }
+      ];
+    
+      layer.queryFeatures(query).then(function(result) {
+        if (result.features.length > 0) {
+          const statistics = result.features[0].attributes.sum;
+          const regionName = result.features[0].attributes[currentNameField];
+   
+          selectedFieldNameElement.textContent = regionName;
+          statisticsValueElement.textContent = statistics;
+        
+        }
+      }).catch(function(error) {
+        console.error("Error during point data query:", error);
+      });
+    }
+  
   /*********************** PRINT FUNCTION *************************/
   
    const print = new Print({
@@ -1908,77 +1883,83 @@ const selectedFieldIds = filterFieldsMap.filter(item => document.getElementById(
   }
   
   /************************ VIEW FUNCTIONS ******************************/
-  view.ui.remove("zoom");
-
-const infoDiv = document.getElementById("infoDiv");
-view.ui.add(new Expand({
-    view: view,
-    content: infoDiv,
-    expandIcon: "select-category",
-    expanded: true
-}), "top-left");
-
-view.ui.add(new Expand({
-    view: view,
-    content: print,
-    expandIcon: "print",
-    expanded: false
-}), "top-left");
-
-view.ui.add(new Home({
-    view: view
-}), "top-left");
-
-const legend = new Legend({
-    view: view,
-    container: "legendDiv"
-});
-
-const layerMap = {
-    'NHconsvLandToggle': NHconsvLand,
-    'NHrecAreasToggle': NHrecAreas,
-    'NHtrailsLinesToggle': NHtrailsLines,
-    'NHrecPointsToggle': NHrecPoints,
-    'NHwaterAccessHeatToggle': NHwaterAccess,
-    'NHwaterAccessToggle': NHwaterAccess2,
-    'NHstateLandsToggle': NHstateLands,
-    'NHdncrstateLandsToggle': NHdncrstateLands
-};
-
-Object.keys(layerMap).forEach((toggleId) => {
-    document.getElementById(toggleId).addEventListener('change', function() {
-        layerMap[toggleId].visible = this.checked;
+    view.ui.remove("zoom")
+  
+    const infoDiv = document.getElementById("infoDiv");
+    view.ui.add(new Expand({
+      view: view,
+      content: infoDiv,
+      expandIcon: "select-category",
+      expanded: true
+    }), "top-left");
+  
+    view.ui.add(new Expand({
+      view: view,
+      content: print,
+      expandIcon: "print",
+      expanded: false,
+  
+    }), "top-left");
+  
+    view.ui.add(new Home({
+      view: view
+    }), "top-left");
+  
+    const legend = new Legend({
+      view: view,
+      container: "legendDiv"
     });
-});
-
-const infoDiv2 = document.getElementById("infoDiv2");
-view.ui.add(new Expand({
+  
+  
+    const layerMap = {
+      'NHconsvLandToggle': NHconsvLand,
+      'NHrecAreasToggle': NHrecAreas,
+      'NHtrailsLinesToggle': NHtrailsLines,
+      'NHrecPointsToggle' : NHrecPoints,
+      'NHtrailsPointsToggle': NHtrailsPoints,
+      'NHwaterAccessHeatToggle': NHwaterAccess, 
+      'NHwaterAccessToggle': NHwaterAccess2, 
+      'NHstateLandsToggle': NHstateLands,
+      'NHdncrstateLandsToggle': NHdncrstateLands
+  };
+  
+  Object.keys(layerMap).forEach((toggleId) => {
+      document.getElementById(toggleId).addEventListener('change', function() {
+          layerMap[toggleId].visible = this.checked;
+      });
+  });
+  const infoDiv2 = document.getElementById("infoDiv2");
+  view.ui.add(new Expand({
     view: view,
     content: infoDiv2,
     expandIcon: "collection",
     expanded: true
-}), "top-right");
-
-// Initialize the link variables
-document.getElementById("retailLink").addEventListener('click', function() {
-  console.log("Button clicked!");
-  debouncedUpdateFields('retailBusiness');
-  if (this.classList.contains('active')) {
-      // If button is already active, deactivate it
-      this.classList.remove('active');
-  } else {
-      // Otherwise, activate the button
-      this.classList.add('active');
-
-      // Remove 'active' class from other buttons with null checks
-      if (nonProfitLink) nonProfitLink.classList.remove('active');
-      if (recProvidersLink) recProvidersLink.classList.remove('active');
-      if (b2bManufacturersLink) b2bManufacturersLink.classList.remove('active');
-  }
-});
+  }), "top-right");
+  
+    // For larger screens
+    document.getElementById("retailLink").addEventListener('click', function() {
+      console.log("Button clicked!");
+        debouncedUpdateFields('retailBusiness');
+        if (this.classList.contains('active')) {
+          // If button is already active, deactivate it
+          this.classList.remove('active');
+    
+          
+      } else {
+          // Otherwise, activate the button
+          this.classList.add('active');
+    
+          // Remove 'active' class from other buttons
+          nonProfitLink.classList.remove('active');
+      
+          b2bManufacturersLink.classList.remove('active');
+          recProvidersLink.classList.remove('active');
+      }
+        
+    });
   
     const linkIds = [
-      'retailLink',
+        'retailLink',
       'recProviderLink', 
       'b2bManufacturerLink', 
       'nonProfitLink'
@@ -1986,7 +1967,7 @@ document.getElementById("retailLink").addEventListener('click', function() {
   
   const dataMappingForLinks = {
     'retailLink': 'retailBusiness',
-      'recProviderLink': 'recreationProviders',
+      'recProviderLink': 'recProviders',
       'b2bManufacturerLink': 'b2bManufacturers',
       'nonProfitLink': 'nonProfits'
   };
@@ -2008,7 +1989,7 @@ document.getElementById("retailLink").addEventListener('click', function() {
     });
   
     document.getElementById("recProviderDropdownLink").addEventListener('click', function() {
-      debouncedUpdateFields('recreationProviders');
+      debouncedUpdateFields('recProviders');
      
         
     });
@@ -2022,95 +2003,6 @@ document.getElementById("retailLink").addEventListener('click', function() {
       debouncedUpdateFields('nonProfits');
       
   
-    });
-
-    /************************************** TERMS AND CONDITIONS  ********************************************/
-
-    const overlay = document.getElementById('overlay');
-    const popupContainer = document.getElementById('popupContainer');
-    const closePopupButton = document.getElementById('closePopup');
-    
-// Show the popup when the page loads
-window.addEventListener('load', () => {
-  popupContainer.style.display = 'block';
-});
-
-// Close the popup when the "Close" button is clicked
-closePopupButton.addEventListener('click', () => {
-  popupContainer.style.display = 'none';
-});
-
-
-// Watch 'loaded' property
-layer.watch('loaded', function(newValue, oldValue, propertyName, target) {
-  console.log(`Layer property ${propertyName} changed from ${oldValue} to ${newValue}`);
-});
-
-// Watch 'visible' property
-layer.watch('visible', function(newValue, oldValue, propertyName, target) {
-  console.log(`Layer property ${propertyName} changed from ${oldValue} to ${newValue}`);
-});
-
-// Watch 'popupTemplate' property
-layer.watch('popupTemplate', function(newValue, oldValue, propertyName, target) {
-  console.log(`Layer property ${propertyName} changed. Has value:`, !!newValue);
-});
-
-// 'layerview-create' event
-view.on('layerview-create', function(event) {
-  if (event.layer === layer) {
-      console.log('LayerView for the layer was created:', event.layerView);
-  }
-});
-
-// 'layerview-destroy' event
-view.on('layerview-destroy', function(event) {
-  if (event.layer === layer) {
-      console.log('LayerView for the layer was destroyed:', event.layerView);
-  }
-});
-/**************************************** CHANGE BORDER COLOR  ********************************/
-function setNewHampshireRenderer() {
-  const symbology = {
-      [retailBusinessesLink]: '#E5A359',
-      [recreationProvidersLink]: '#59A2E5',
-      [b2bManufacturersLink]: '#59E594',
-      [nonProfitsLink]: '#ECFB6C',
-  };
-
-  const currentColor = symbology[currentLayerLink];
+  });
   
-  if (currentColor) {
-      const newHampshireRenderer = {
-          type: 'simple',
-          symbol: {
-              type: 'simple-line',
-              color: currentColor,
-              width: '2px'
-          }
-      };
-      newHampshire.renderer = newHampshireRenderer;
-  }
-}
-/**************************************** PAGE MASK ********************************************/
-
-
-// Show the popup and overlay with a fade-in animation when the page loads
-window.addEventListener('load', () => {
-  overlay.style.opacity = '1';
-  popupContainer.style.opacity = '1';
-  popupContainer.style.transform = 'translate(-50%, -50%) scale(1)';
-});
-
-// Close the popup and overlay with a fade-out animation when the "Close" button is clicked
-closePopupButton.addEventListener('click', () => {
-  overlay.style.opacity = '0';
-  popupContainer.style.opacity = '0';
-  popupContainer.style.transform = 'translate(-50%, -50%) scale(0.8)';
-  setTimeout(() => {
-    overlay.style.display = 'none';
-    popupContainer.style.display = 'none';
-  }, 300); // Wait for the animation to complete (300ms)
-});
-
     });

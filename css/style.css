@@ -4,6 +4,18 @@ body {
   margin: 0;
   background: #13444b;
 }
+#loadingOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(255, 255, 255, 0.7);
+  z-index: 9999;
+  display: none;
+  align-items: center;
+  justify-content: center;
+}
 
 .filterOption {
   cursor: pointer;
@@ -46,9 +58,12 @@ body {
 
 .btn.active {
   border-radius: 0px;
-  background-color: #6ea572;
+  background-color: #6ea572 !important;
 }
-
+.button.active {
+  border-radius: 0px;
+  background-color: #6ea572 !;
+}
 
 .btn:hover {
   border-radius: 0px;
@@ -130,13 +145,54 @@ body {
 color: #ffffff !important;
 
 }
-.LOGO {
+.logo {
   margin-left: auto;
   padding-right: 10px;
 
 }
 
+.horizontal-line {
+  top: 48%;
+  left: 48%;
+  
+  height: 1px;
+  background-color: #ccc; /* Adjust the color as needed */
+  margin: 10px auto; /* Center the line horizontally */
+}
 
+.overlay {
+
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(202, 248, 246, 0.637); /* Semi-transparent black */
+  z-index: 999; /* Place the overlay behind the popup */
+  transition: opacity 0.3s ease;
+}
+
+.popup {
+
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: #13444b;
+  padding: 20px;
+  border: 1px solid #ccc;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  z-index: 1000;
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+.popup-content {
+  text-align: center;
+}
+
+#closePopup {
+  margin-top: 10px;
+}
 
 .navbar-nav .nav-link {
   color: white; /* Change to your desired color */
@@ -171,7 +227,12 @@ color: #ffffff !important;
   left: 50%;
   transform: translateX(-50%);
 }
-
+.arrow-icon {
+  margin-left: 95px;         /* Spacing between the button and the arrow */
+  
+  vertical-align: middle;   /* Align it with the button and boundary layers */
+  filter: invert(0%);    
+}
 #toggleClustering {
   justify-content: left;
   align-items: left !important;
@@ -203,7 +264,7 @@ color: #ffffff !important;
   cursor: pointer;
   text-align: center;
   transition-duration: 0.4s;
-  margin-left: 5px;
+  margin-left: 0px;
 }
 
 
@@ -282,7 +343,7 @@ color: #ffffff !important;
   padding: 5px;
 }
 #infoDiv {
-  width: 260px;
+  width: 300px;
   padding: 5px;
   z-index: 9;
 }
@@ -293,6 +354,7 @@ color: #ffffff !important;
 #filterDiv {
   margin-left: 10px;
   padding-top: 15px;
+  height: 100vw;
   z-index: 9;
 }
 #legendDiv {
@@ -308,9 +370,10 @@ color: #ffffff !important;
 #loadingDiv {
   background: #e3fff5;
   border-radius: 100%;
-  padding:40px;
+  padding:15px;
   border: #5c9d86;
   border-width: 80px;
+  z-index: 1000;
   position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
 }
 
@@ -356,4 +419,9 @@ p3 {
   margin-top: 50x;
   margin-bottom: 24px !important;
   margin-left: 8px;
+}
+
+h2 {
+  font-size: 14pt;
+  font-style: italic;
 }
