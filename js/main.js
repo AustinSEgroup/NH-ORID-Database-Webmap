@@ -67,6 +67,8 @@ require([
 
   /************************ DEBOUNCE FUNCTION ***********************/
 
+
+
   function debounce(func, delay) {
     let debounceTimer;
     return function() {
@@ -220,6 +222,8 @@ const debouncedUpdateFields = debounce(updateFields, 20);
 
   window.onload = function() {
       updateFields('retailBusiness');
+      drawCluster();
+      layer.featureReduction = null;
       layer.effect = "bloom(3.5, 0.1px, 5%)";
   }
 
@@ -1179,6 +1183,7 @@ attachLayerToggleEvents('toggleCounties', 'dropdownToggleCounties', function() {
       { id: 'filterRegionalChain', field: 'Regional_Chain', displayName: 'Regional Chain' },
       { id: 'filterLocalBusiness', field: 'Local_Business', displayName: 'Local Business' },
       { label: "<br>Filter by Activity Type"},
+      { label: "<br>Filter by Activity Type"},
      //{ id: 'filterGuidingTraining', field: 'Guiding_Training', displayName: 'Guiding Training' },
      // { id: 'filterSocialEvents', field: 'Social_Events', displayName: 'Social Events' },
      // { id: 'filterUsedGear', field: 'Used_Gear', displayName: 'Used Gear' },
@@ -1869,10 +1874,23 @@ view.ui.add(new Home({
 }), "top-left");
 
 const legend = new Legend({
-    view: view,
-    container: "legendDiv"
+  view: view,
+  layerInfos: [{
+    layer: layer,  // reference to your feature layer
+    title: "Business or Organization"  // Optional: Provide a title for your layer in the legend
+  }]
 });
 
+const legendExpand = new Expand({
+  view: view,
+  content: legend,  // Embed the Legend inside the Expand widget
+  expanded: false,  // Start with the widget collapsed
+  group: "top-right",  // Optional: If you have other widgets in this corner, they can be grouped together
+  expandIconClass: "esri-icon-layer-list",  // Optional: Icon for the collapsed state
+  expandTooltip: "Show Legend"  // Optional: Tooltip for the collapsed state
+});
+
+view.ui.add(legendExpand, 'bottom-right');
 const layerMap = {
   'NHconsvLandToggle': NHconsvLand,
   'NHrecAreasToggle': NHrecAreas,
@@ -2052,13 +2070,7 @@ closePopupButton.addEventListener('click', () => {
   }, 300); // Wait for the animation to complete (300ms)
 });
 
-const legind = new Legend({
-  view: view,
-  layerInfos: [{
-    layer: layer,  // reference to your feature layer
-    title: "Your Layer Title"  // Optional: Provide a title for your layer in the legend
-  }]
-});
+
 
 view.ui.add(legend, 'bottom-right');
 
