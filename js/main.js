@@ -1253,7 +1253,7 @@ attachLayerToggleEvents('toggleCounties', 'dropdownToggleCounties', function() {
     { fieldlabel: "Non-Profit Organizations"},
       { label: "<br>Filter by Category"},
       { label: "<p4>Select one or multiple to change displayed points/clusters<p4>"},
-      { id: 'filterIndustryAssociationAdvocate', field: 'Industry_Association_Advocate', displayName: '<Industry Association Advocate' },
+      { id: 'filterIndustryAssociationAdvocate', field: 'Industry_Association_Advocate', displayName: 'Industry Association Advocate' },
       { id: 'filterOutdoorRecOutings', field: 'Outdoor_Rec__Outings', displayName: 'Outdoor Recreation Outings' },
       { id: 'filterEnvEd', field: 'Env__Ed_', displayName: 'Environmental Education' },
       { id: 'filterTrailDevelopmentMaintenance', field: 'Trail_Development___Maintenance', displayName: 'Trail Development & Maintenance' },
