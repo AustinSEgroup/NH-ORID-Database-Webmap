@@ -479,18 +479,7 @@ const debouncedUpdateFields = debounce(updateFields, 20);
             }
           }
         },
-        {
-          value: "Tent Site",
-          symbol: {
-            type: "simple-marker",
-            style: "circle",
-            color: "#F2B701",  // Color for Tent Site
-            size: 2,
-            outline: {
-              width: 0
-            }
-          }
-        },
+
         {
           value: "Cultural Attraction",
           symbol: {
@@ -515,18 +504,7 @@ const debouncedUpdateFields = debounce(updateFields, 20);
             }
           }
         },
-        {
-          value: "Recreation Facility",
-          symbol: {
-            type: "simple-marker",
-            style: "circle",
-            color: "#008695",  // Color for Recreation Facility
-            size: 4,
-            outline: {
-              width: 0
-            }
-          }
-        },
+
         {
           value: "Landmark",
           symbol: {
@@ -559,7 +537,7 @@ const debouncedUpdateFields = debounce(updateFields, 20);
               value: "Landmark",
               symbol: {
                   type: "picture-marker",  // symbol type
-                  url:  "URL_FOR_LANDMARK",
+                  url:  "https://raw.githubusercontent.com/AustinSEgroup/NHOE-RetailBusinesses/main/img/landmark.png",
                   width: 8,
                   height: 8
               }
@@ -568,7 +546,7 @@ const debouncedUpdateFields = debounce(updateFields, 20);
               value: "Scenic View",
               symbol: {
                   type: "picture-marker",  // symbol type
-                  url:  "URL_FOR_SCENIC_VIEW",
+                  url:  "https://raw.githubusercontent.com/AustinSEgroup/NHOE-RetailBusinesses/main/img/scenicview.png",
                   width: 8,
                   height: 8
               }
@@ -577,7 +555,7 @@ const debouncedUpdateFields = debounce(updateFields, 20);
               value: "Natural Attraction",
               symbol: {
                   type: "picture-marker",  // symbol type
-                  url:  "URL_FOR_NATURAL_ATTRACTION",
+                  url:  "https://raw.githubusercontent.com/AustinSEgroup/NHOE-RetailBusinesses/main/img/natural.png",
                   width: 8,
                   height: 8
               }
@@ -586,7 +564,7 @@ const debouncedUpdateFields = debounce(updateFields, 20);
               value: "Shelter",
               symbol: {
                   type: "picture-marker",  // symbol type
-                  url:  "URL_FOR_SHELTER",
+                  url:  "https://raw.githubusercontent.com/AustinSEgroup/NHOE-RetailBusinesses/main/img/shelter.png",
                   width: 8,
                   height: 8
               }
@@ -596,7 +574,7 @@ const debouncedUpdateFields = debounce(updateFields, 20);
               value: "Cultural Attraction",
               symbol: {
                   type: "picture-marker",  // symbol type
-                  url:  "URL_FOR_CULTURAL_ATTRACTION",
+                  url:  "https://raw.githubusercontent.com/AustinSEgroup/NHOE-RetailBusinesses/main/img/cultural.png",
                   width: 8,
                   height: 8
               }
@@ -605,29 +583,12 @@ const debouncedUpdateFields = debounce(updateFields, 20);
               value: "Hut/Lodge/Cabin",
               symbol: {
                   type: "picture-marker",  // symbol type
-                  url:  "URL_FOR_HUT_LODGE_CABIN",
+                  url:  "https://raw.githubusercontent.com/AustinSEgroup/NHOE-RetailBusinesses/main/img/cabin.png",
                   width: 8,
                   height: 8
               }
           },
-          {
-              value: "Recreation Facility",
-              symbol: {
-                  type: "picture-marker",  // symbol type
-                  url:  "URL_FOR_RECREATION_FACILITY",
-                  width: 8,
-                  height: 8
-              }
-          },
-          {
-              value: "Landmark",
-              symbol: {
-                  type: "picture-marker",  // symbol type
-                  url:  "URL_FOR_LANDMARK",
-                  width: 8,
-                  height: 8
-              }
-          }
+
       ]
   };
    /********************** SUPPLEMENTAL RECREATION LAYERS ****************/
@@ -1178,7 +1139,7 @@ attachLayerToggleEvents('toggleCounties', 'dropdownToggleCounties', function() {
     
   
     const filterFieldsRetBus = [
-      { fieldlabel: "Retail-Service Business Filters"},
+      { fieldlabel: "Retail-Service Business"},
       { id: 'filterNationalChain', field: 'National_Chain', displayName: '<br style="line-height: 10px" />National Chain' },
       { id: 'filterRegionalChain', field: 'Regional_Chain', displayName: 'Regional Chain' },
       { id: 'filterLocalBusiness', field: 'Local_Business', displayName: 'Local Business' },
@@ -1865,6 +1826,34 @@ view.ui.add(new Expand({
     expanded: true
 }), "top-left");
 
+const infoText = document.getElementById("infoText");
+const info = document.getElementById("info");
+const closeBtn = document.getElementById("closeBtn");
+
+const expandWidget = new Expand({
+  view: view,
+  content: infoText,
+  expandIcon: "information-f",
+  expanded: false
+});
+
+view.ui.add(expandWidget, "top-left");
+
+expandWidget.watch("expanded", function(expanded) {
+  if (expanded) {
+    info.style.display = "block"; // show the info window when the widget is expanded
+  } else {
+    info.style.display = "none"; // hide the info window when the widget is collapsed
+  }
+});
+
+closeBtn.addEventListener("click", function() {
+  info.style.display = "none";
+  expandWidget.collapse(); // also collapse the expand widget when close button is clicked
+});
+
+
+
 view.ui.add(new Expand({
     view: view,
     content: print,
@@ -1876,24 +1865,19 @@ view.ui.add(new Home({
     view: view
 }), "top-left");
 
-const legend = new Legend({
-  view: view,
-  layerInfos: [{
-    layer: layer,  // reference to your feature layer
-    title: "Business or Organization"  // Optional: Provide a title for your layer in the legend
-  }]
-});
+const customLegend = document.getElementById("customLegend");
 
 const legendExpand = new Expand({
   view: view,
-  content: legend,  // Embed the Legend inside the Expand widget
-  expanded: false,  // Start with the widget collapsed
-  group: "top-right",  // Optional: If you have other widgets in this corner, they can be grouped together
-  expandIconClass: "esri-icon-layer-list",  // Optional: Icon for the collapsed state
-  expandTooltip: "Show Legend"  // Optional: Tooltip for the collapsed state
+  content: customLegend,  // Use the custom legend container as the content for the Expand widget
+  expanded: false,  
+  group: "top-right",  
+  expandIconClass: "esri-icon-layer-list",  
+  expandTooltip: "Show Legend"
 });
 
 view.ui.add(legendExpand, 'bottom-right');
+
 const layerMap = {
   'NHconsvLandToggle': NHconsvLand,
   'NHrecAreasToggle': NHrecAreas,
@@ -1901,7 +1885,6 @@ const layerMap = {
   'NHrecPointsToggle' : NHrecPoints,
   'NHwaterAccessHeatToggle': NHwaterAccess, 
   'NHwaterAccessToggle': NHwaterAccess2, 
-  'NHstateLandsToggle': NHstateLands,
   'NHdncrstateLandsToggle': NHdncrstateLands
 };
 
@@ -2075,6 +2058,6 @@ closePopupButton.addEventListener('click', () => {
 
 
 
-view.ui.add(legend, 'bottom-right');
+
 
     });

@@ -39,8 +39,10 @@
         The New Hampshire Bureau of Economic Affairs is not responsible for the use or interpretation of this information by third parties. Not for legal use.</p>
       <button id="closePopup" class="btn btn-altdark">I accept this disclaimer</button>
     </div>
+    
 
 </div>
+
 
     <nav class="navbar-dark navbar-expand-xl navbar bg-altdark">
       <!-- Direct links for larger screens -->
@@ -82,10 +84,9 @@
     <button id="toggleClustering" class="toggle-clust1">
       <img src="./img/clustering.svg" width="30"> <span>Turn Point Clustering: ON</span>
   </button>
-  <img src="./img/arrow.svg" width="20" class="arrow-icon">
  
     <!-- Buttons for larger screens (lg and above) -->
-    <div class="navbar-nav d-none d-sm-block">     
+    <div class="navbar-nav d-none d-sm-block" id = "boundaries">     
         <button id="toggleCEDRregions" class="toggle-clust">CEDR Regions</button>
         <button id="toggleTourismRegions" class="toggle-clust">Tourism Regions</button>
         <button id="toggleCounties" class="toggle-clust">Counties</button>
@@ -109,6 +110,12 @@
     
   <div id="mapContainer">
 
+    <div id="customLegend">
+      <p>Cluster Size</p>
+      <img id="legendImage" src="./img/legend.png" alt="Custom Legend">
+
+  </div>
+
         <div id="viewDiv" class="sassytheme">
           <div id="loadingDiv" style="display: none;">
             <img id="spinner" src="./img/spinner2.gif" alt="Loading...">
@@ -117,15 +124,18 @@
           <div id="infoDiv2">
             <div id="layerToggleContainer">
               <br style="line-height: 8px" />
-              <h3>Other Recreational Layers</h3>
+              <h3>Recreation Data Layers</h3>
+              <br>
               <p4>Checkboxes expand to provide more options.</p4>
               <br>
-              <label><input type="checkbox" id="NHconsvLandToggle"> Conservation Public Lands</label>
+              <label><input type="checkbox" id="NHconsvLandToggle"> Public/Conserved Lands</label>
                 <div id="NHconsvLandAccessOptions" style="display:none; margin-left:20px;">
                   <p>Public Access</p>
                     <label><input type="checkbox" name="NHconsvLandAccess" value="1"> Allowed</label><br>
                     <label><input type="checkbox" name="NHconsvLandAccess" value="2"> Restricted to Certain Areas</label><br>
                 </div>
+              <br>
+              <label><input type="checkbox" id="NHdncrstateLandsToggle"> State Lands</label>
               <br>
               <label><input type="checkbox" id="NHrecAreasToggle"> Recreation Areas </label>
               <div id="NHrecAreasFilterContainer" style="display:none; margin-left:20px;">
@@ -208,10 +218,6 @@
                   <label for="Shelter">Shelter</label>
                 </div>
                 <div>
-                  <input type="checkbox" class="NHrecPointsFilter" name="TentSite" value="Tent Site" id="TentSite">
-                  <label for="TentSite">Tent Site</label>
-                </div>
-                <div>
                   <input type="checkbox" class="NHrecPointsFilter" name="CulturalAttraction" value="Cultural Attraction" id="CulturalAttraction">
                   <label for="CulturalAttraction">Cultural Attraction</label>
                 </div>
@@ -219,14 +225,7 @@
                   <input type="checkbox" class="NHrecPointsFilter" name="HutLodgeCabin" value="Hut/Lodge/Cabin" id="HutLodgeCabin">
                   <label for="HutLodgeCabin">Hut/Lodge/Cabin</label>
                 </div>
-                <div>
-                  <input type="checkbox" class="NHrecPointsFilter" name="RapidsFalls" value="Rapids/Falls" id="RapidsFalls">
-                  <label for="RapidsFalls">Rapids/Falls</label>
-                </div>
-                <div>
-                  <input type="checkbox" class="NHrecPointsFilter" name="RecreationFacility" value="Recreation Facility" id="RecreationFacility">
-                  <label for="RecreationFacility">Recreation Facility</label>
-                </div>
+
               </div>
                   <br>
 
@@ -281,12 +280,12 @@
                 
               
               <br>
-              <label><input type="checkbox" id="NHwaterAccessToggle"> Access Sites To Public Waters</label>
+              <label><input type="checkbox" id="NHwaterAccessToggle"> Public Access Sites to Water</label>
               <input type="checkbox" style="margin-left: 8px;" id="NHwaterAccessHeatToggle"> <p2> Heatmap</p2>
               <br>
-              <label><input type="checkbox" id="NHstateLandsToggle"> State Lands </label>
+             
               <br>
-              <label><input type="checkbox" id="NHdncrstateLandsToggle"> DCNR State Lands</label>
+             
           </div>
           </div>
 
@@ -298,7 +297,19 @@
       </div>
     </div> 
 
+    <div id="infoText" class="esri-widget"></div>
+      <div id="info">
+        <span id="closeBtn" style="cursor: pointer; float: right; margin-left: 10px;">&times;</span>
+        <br>
+      <h3>How to use</h3> <br>
+        This map viewer includes data on outdoor recreation businesses and non-profits, as well as public lands and recreational facilities.
 
+ 
+
+To interact with business and non-profit data, use the tabs and filters on the top of the screen. <br><br> <p>Using the Point Clustering Tool</p> In the top left corner, clicking the button with the <img src="./img/clustering.svg" width="20"> symbol, will show summary statistics for the number of businesses or organizations in different areas of the state. Point Clustering responds to any filter selections. <br><br> You can organize this data by CEDR Region, Tourism Region, County, or Municipality by clicking on the respective geography on the top of the page. Click the same geography again to turn off the layer and display generalized clustering.
+<br> <br> The <img src="./img/home.svg" width="20"> icon resets the view to New Hampshire. The <img src="./img/information.svg" width="20"> icon re-opens this info panel. The <img src="./img/print.svg" width="20"> icon opens a print prompt that exports the current extent. Toggle the visibilty of the legend in the bottom right corner.
+ 
+      </div>
   </div>
 </div>
 <script src="js/main.js"></script>

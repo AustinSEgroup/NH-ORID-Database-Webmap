@@ -69,11 +69,17 @@ body {
 .btn {
   border-radius: 0px;
   background-color: #13444b;
+  
 }
 
 .btn.active {
   border-radius: 0px;
   background-color: #6ea572 !important;
+}
+
+.button {
+  outline-color: #6fac96;
+  outline-width: 1px;
 }
 .button.active {
   border-radius: 0px;
@@ -114,7 +120,8 @@ body {
 }
 .dropdown {
   padding-left: 3px;
-  margin-right--: 5px;
+  margin-right: 5px;
+  transform: translateX(90px);
 }
 .dropdown-menu {
   margin-right: 30px;
@@ -197,8 +204,33 @@ color: #ffffff !important;
   padding: 20px;
   border: 1px solid #ccc;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  z-index: 1000;
+  z-index: 1001;
   transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+#info {
+
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: #13444b;
+  padding: 20px;
+  border: 1px solid #ccc;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+#closeBtn {
+  font-size: 20px;
+  font-weight: bold;
+  color: #fff;
+  background-color: #13444b; /* This is to ensure the button color matches the background */
+  transition: color 0.3s ease;
+}
+
+#closeBtn:hover {
+  color: #f00; /* red color on hover */
 }
 
 .popup-content {
@@ -283,19 +315,24 @@ color: #ffffff !important;
   border:#5c9d86;
   border-radius: 0px;
   color: white;
-
+  outline-color: #6fac96;
+  outline-width: 1px;
   justify-content: left;
   align-items: left;
-  transform: translateX(16px);
+  transform: translateX(90px);
   background-color: #207380 ;
   cursor: pointer;
   text-align: center;
   transition-duration: 0.4s;
-  margin-left: 0px;
+  margin-left: 5px;
 }
 
 
-
+#boundaries {
+  background-color: #448981;
+  padding: 5px;
+  padding-right: 110px;
+}
 .toggle-clust.active {
   /* Button Default State */
   background-color: #5c9d86;
@@ -378,9 +415,16 @@ color: #ffffff !important;
   z-index: 9;
 }
 
-#legend {
-  width: 268px;
+#customLegend {
+  width: 100%;
+  padding: 10px; 
+  background-color: #13444b;
 }
+
+#legendImage {
+  width: 150px; 
+}
+
 #layerToggleContainer {
   margin-left: 10px;
   height: 100vw;
@@ -463,7 +507,7 @@ h2 {
 h3 {
   font-size: 14pt;
   font-weight: bold;
-
+ position: absolute; left: 50%; transform: translate(-50%, -50%);
 }
 
 p4 {
