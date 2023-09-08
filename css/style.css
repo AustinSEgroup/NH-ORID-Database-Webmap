@@ -117,20 +117,64 @@ body {
 }
 .dropdown-nav {
   display: none;
+  margin-left: 50px;
 }
 .dropdown {
+ 
   padding-left: 3px;
   margin-right: 5px;
-  transform: translateX(90px);
+  
 }
 .dropdown-menu {
   margin-right: 30px;
-  margin-left: 3px;
+   
+}
+.btn-altdark2 {
+  transform: translateX(48px);
 }
 
+.dropdownMenuButton {
+  margin-left: 30px;
+  transform: translateX(48px);
+}
+#dropdownToggleCEDRregions{
+  outline: #5c9d86;
+  outline-width: 1px;
+  border: #ccc;
+  transform: translateX(12px) !important;
+  margin-right: 12px;
+  
+}
+
+#dropdownToggleTownships{
+  outline: #5c9d86;
+  outline-width: 1px;
+  border: #ccc;
+  transform: translateX(12px) !important;
+  margin-right: 12px;
+  
+}
+
+#dropdownToggleTourismRegions{
+  outline: #5c9d86;
+  outline-width: 1px;
+  border: #ccc;
+  transform: translateX(12px) !important;
+  margin-right: 12px;
+  
+}
+
+#dropdownToggleCounties{
+  outline: #5c9d86;
+  outline-width: 1px;
+  border: #ccc;
+  transform: translateX(12px) !important;
+  margin-right: 12px;
+  
+}
 .dropdown-menu.show {
   margin-right: 30px;
-
+  margin-left: 50px;
 }
 @media (max-width: 900px) {
   .navbar-brand img {
@@ -195,10 +239,12 @@ color: #ffffff !important;
 }
 
 .popup {
-
+  overflow-y: scroll;
+  max-height: 100vh;
   position: fixed;
   top: 50%;
   left: 50%;
+  width: 80%;
   transform: translate(-50%, -50%);
   background-color: #13444b;
   padding: 20px;
@@ -210,15 +256,15 @@ color: #ffffff !important;
 
 #info {
   overflow-y: scroll !important;
-  -webkit-overflow-scrolling: touch;
-  position: fixed;
+  position: absolute;
   top: 50%;
   left: 50%;
   width: 80%;  
+  max-height: 100vh;
   transform: translate(-50%, -50%);
   background-color: #13444b;
   padding: 20px;
-  border: 1px solid #ccc;
+  
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   transition: opacity 0.3s ease, transform 0.3s ease;
 }
@@ -237,6 +283,8 @@ color: #ffffff !important;
 
 .popup-content {
   text-align: center;
+  max-width: 100vh;
+
 }
 
 #closePopup {
@@ -320,21 +368,20 @@ color: #ffffff !important;
   outline-color: #6fac96;
   outline-width: 1px;
   justify-content: left;
-  align-items: left;
-  transform: translateX(90px);
+  align-items: c;
+  transform: translateX(48px);
   background-color: #207380 ;
   cursor: pointer;
   text-align: center;
   transition-duration: 0.4s;
   margin-left: 5px;
+  outline-color: #9bd2bb;
+  outline-style: solid;
+  outline-width: 1px;
 }
 
 
-#boundaries {
-  background-color: #448981;
-  padding: 5px;
-  padding-right: 110px;
-}
+
 .toggle-clust.active {
   /* Button Default State */
   background-color: #5c9d86;
@@ -364,7 +411,11 @@ color: #ffffff !important;
   transition-duration: 0.4s;
 }
 
-
+#button {
+  outline-color: #007bff;
+  outline-style: solid;
+  outline-width: 2px;
+}
 
 .toggle-clust1.active {
   /* Button Default State */
@@ -383,6 +434,9 @@ color: #ffffff !important;
    font-weight: 700;
    border:#5c9d86 !important;
    border-radius: 5px;
+   outline-color: #007bff;
+   outline-style: solid;
+   outline-width: 2px;
    color: white;
    background-color: #207380 !important;
    cursor: pointer;
@@ -409,12 +463,14 @@ color: #ffffff !important;
   width: 400px;
   z-index: 9;
   background-color:#207380;
+  height: 100%;
 
 }
 #infoDiv {
   width: 300px;
   padding: 5px;
   z-index: 9;
+  height: 100%;
 }
 
 #customLegend {
@@ -440,6 +496,8 @@ color: #ffffff !important;
 #legendDiv {
   background-color:  #13444b
   
+
+  
 }
 #viewDiv {
   z-index: 1;
@@ -457,6 +515,9 @@ color: #ffffff !important;
   position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
 }
 
+.esri-expand__container--expanded {
+  background-color:#207380 !important;
+}
 h1 {
   color:#13444b;
   font-size: 14pt;

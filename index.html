@@ -82,7 +82,7 @@
   
   <nav class="navbar navbar-expand-md top-bar">
     <button id="toggleClustering" class="toggle-clust1">
-      <img src="./img/clustering.svg" width="30"> <span>Turn Point Clustering: ON</span>
+      <img src="./img/clustering.svg" width="30"> <span>Point Clustering: OFF</span>
   </button>
  
     <!-- Buttons for larger screens (lg and above) -->
@@ -96,7 +96,7 @@
     <div class="d-sm-none">
         <div class="dropdown">
             <button class="btn btn-altdark2 dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-              Boundary Layers
+              Boundaries
             </button>
             <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                 <button id="dropdownToggleCEDRregions" class="toggle-clust">CEDR Regions</button>
@@ -289,6 +289,7 @@
               
               <br>
               <label><input type="checkbox" id="NHwaterAccessToggle"> Public Access Sites to Water</label>
+              <br>
               <input type="checkbox" style="margin-left: 8px;" id="NHwaterAccessHeatToggle"> <p2> Heatmap</p2>
               <br>
              
@@ -306,6 +307,7 @@
     </div> 
 
     <div id="infoText" class="esri-widget"></div>
+    <div>
       <div id="info">
         <span id="closeBtn" style="cursor: pointer; float: right; margin-left: 10px;">&times;</span>
         <br>
@@ -318,6 +320,7 @@ To interact with business and non-profit data, use the tabs and filters on the t
 <br> <br> The <img src="./img/home.svg" width="20"> icon resets the view to New Hampshire. The <img src="./img/information.svg" width="20"> icon re-opens this info panel. The <img src="./img/print.svg" width="20"> icon opens a print prompt that exports the current extent.
  
       </div>
+    </div>
   </div>
 </div>
 <script src="js/main.js"></script>

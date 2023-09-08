@@ -1783,7 +1783,7 @@ const selectedFieldIds = filterFieldsMap.filter(item => document.getElementById(
       const textSpan = this.querySelector('span');
       if (isClusteringEnabled && (tourismRegions.visible || cedrRegions.visible || newHampshireCounties.visible || newHampshireTownships.visible)) {
         console.log("Cluster toggled ON");
-        textSpan.innerText = "Turn Point Clustering: OFF";
+        textSpan.innerText = "Point Clustering: ON";
         
         applyPolygonClustering(selectedBoundaryLayer, layer, selectedField);
         this.classList.add('active');
@@ -1792,7 +1792,7 @@ const selectedFieldIds = filterFieldsMap.filter(item => document.getElementById(
   
       else if (isClusteringEnabled) {
           this.classList.add('active');
-          textSpan.innerText = "Turn Point Clustering: OFF";
+          textSpan.innerText = "Point Clustering: ON";
           layer.effect = "bloom(0, 0.1px, 15%)";
           pseudoClusterLayer.removeAll();
           let selectedFields = [];
@@ -1821,7 +1821,7 @@ const selectedFieldIds = filterFieldsMap.filter(item => document.getElementById(
           }
       } else {
           pseudoClusterLayer.removeAll();
-          textSpan.innerText = "Turn Point Clustering: ON";
+          textSpan.innerText = "Point Clustering: OFF";
           this.classList.remove('active');
           layer.featureReduction = null;
           layer.visible = true;
