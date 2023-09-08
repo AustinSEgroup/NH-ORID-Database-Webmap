@@ -209,10 +209,12 @@ color: #ffffff !important;
 }
 
 #info {
-
+  overflow-y: scroll !important;
+  -webkit-overflow-scrolling: touch;
   position: fixed;
   top: 50%;
   left: 50%;
+  width: 80%;  
   transform: translate(-50%, -50%);
   background-color: #13444b;
   padding: 20px;
@@ -399,7 +401,7 @@ color: #ffffff !important;
   width: 200px;
   padding-right: 20px;
   z-index: 9;
-  background-color:#207380;
+
   padding: 5px;
 }
 
@@ -407,7 +409,7 @@ color: #ffffff !important;
   width: 400px;
   z-index: 9;
   background-color:#207380;
-  padding: 5px;
+
 }
 #infoDiv {
   width: 300px;
@@ -513,4 +515,21 @@ h3 {
 p4 {
   font-size: 8pt;
   font-style: italic;
+}
+
+h4 {
+  font-size: 12pt;
+  font-weight: bold;
+}
+
+#clearRadio {
+  font-size: 12px;
+  border: 0;
+  color: #fff;
+  background-color: #3c8478; /* This is to ensure the button color matches the background */
+  transition: color 0.3s ease;
+}
+
+#clearRadio:hover {
+  color: rgb(220, 114, 114); /* red color on hover */
 }

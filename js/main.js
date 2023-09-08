@@ -694,10 +694,11 @@ const NHwaterAccess = new FeatureLayer({
 
   
   NHwaterAccess2.effect = "bloom(1, 2px, 15%)";
-  
+
+
   const NHconsvLandRenderer = {
     type: "unique-value",
-    field: "ACCESS",
+    field: "OWNERTYPE",
     uniqueValueInfos: [
         {
             value: "1",
@@ -709,7 +710,7 @@ const NHwaterAccess = new FeatureLayer({
                     width: 0
                 }
             },
-            label: "Allowed"
+            label: "Municipal"
         },
         {
             value: "2",
@@ -721,9 +722,57 @@ const NHwaterAccess = new FeatureLayer({
                     width: 0
                 }
             },
-            label: "Restricted to Certain Areas"
+            label: "Federal"
         },
-  
+        {
+          value: "3",
+          symbol: {
+              type: "simple-fill",
+              color: "rgba(252, 222, 106  , 0.7)", // Restricted to Certain Areas
+              outline: {
+                  color: "black",
+                  width: 0
+              }
+          },
+          label: "State"
+      },
+      {
+        value: "4",
+        symbol: {
+            type: "simple-fill",
+            color: "rgba(252, 222, 106  , 0.7)", // Restricted to Certain Areas
+            outline: {
+                color: "black",
+                width: 0
+            }
+        },
+        label: "Other Public"
+    },
+    {
+      value: "5",
+      symbol: {
+          type: "simple-fill",
+          color: "rgba(252, 222, 106  , 0.7)", // Restricted to Certain Areas
+          outline: {
+              color: "black",
+              width: 0
+          }
+      },
+      label: "Private"
+  },
+  {
+    value: "6",
+    symbol: {
+        type: "simple-fill",
+        color: "rgba(252, 222, 106  , 0.7)", // Restricted to Certain Areas
+        outline: {
+            color: "black",
+            width: 0
+        }
+    },
+    label: "County"
+},
+
     ]
 };
   
@@ -733,9 +782,6 @@ const NHwaterAccess = new FeatureLayer({
   //  labelingInfo: [stateLandsLabels],
     renderer: NHconsvLandRenderer,
   
-    popupTemplate: {
-      title: "{NAME}",
-    },
   
   });
   
@@ -880,12 +926,22 @@ const NHwaterAccess = new FeatureLayer({
 });
 
 
+const clearButton = document.getElementById("clearRadio");
 const radioButtons = document.querySelectorAll('[name="NHconsvLandAccess"]');
+
 radioButtons.forEach(function(radio) {
     radio.addEventListener('change', function() {
         const selectedValue = this.value;
-        NHconsvLand.definitionExpression = `ACCESS = ${selectedValue}`;
+        NHconsvLand.definitionExpression = `OWNERTYPE = ${selectedValue}`;
     });
+});
+
+// Add clear functionality
+clearButton.addEventListener("click", function() {
+    radioButtons.forEach(radio => {
+        radio.checked = false;
+    });
+    NHconsvLand.definitionExpression = ""; // Reset the definition expression
 });
   
   document.getElementById('NHrecPointsToggle').addEventListener('change', function() {
@@ -1134,6 +1190,7 @@ attachLayerToggleEvents('toggleCounties', 'dropdownToggleCounties', function() {
     },
     map: map
   });
+  NHconsvLand.effect = "bloom(1px, 0.1px, 1%)";
     NHstateLands.effect = "bloom(0.5px, 0.1px, 1%)";
     newHampshire.effect = "bloom(1, 0.1px, 15%)";
     
@@ -1715,15 +1772,7 @@ const selectedFieldIds = filterFieldsMap.filter(item => document.getElementById(
     }
   });
   
-  document.getElementById('NHrecPointsSymbolToggle').addEventListener('change', function() {
-    if (this.checked) {
-      NHrecPoints.renderer = picRenderer;
-      NHrecPoints.effect = null;
-    } else {
-      NHrecPoints.renderer = dotRenderer;
-      NHrecPoints.effect = "bloom(3, .3px, 15%)";
-    }
-  });
+
       
    
     /*************************** TOGGLE CLUSTERING  ***********************/
@@ -1865,7 +1914,7 @@ view.ui.add(new Home({
     view: view
 }), "top-left");
 
-const customLegend = document.getElementById("customLegend");
+/* const customLegend = document.getElementById("customLegend");
 
 const legendExpand = new Expand({
   view: view,
@@ -1877,7 +1926,7 @@ const legendExpand = new Expand({
 });
 
 view.ui.add(legendExpand, 'bottom-right');
-
+*/
 const layerMap = {
   'NHconsvLandToggle': NHconsvLand,
   'NHrecAreasToggle': NHrecAreas,

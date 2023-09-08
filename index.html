@@ -110,11 +110,7 @@
     
   <div id="mapContainer">
 
-    <div id="customLegend">
-      <p>Cluster Size</p>
-      <img id="legendImage" src="./img/legend.png" alt="Custom Legend">
 
-  </div>
 
         <div id="viewDiv" class="sassytheme">
           <div id="loadingDiv" style="display: none;">
@@ -124,15 +120,20 @@
           <div id="infoDiv2">
             <div id="layerToggleContainer">
               <br style="line-height: 8px" />
-              <h3>Recreation Data Layers</h3>
-              <br>
+              <h4>Recreation Data Layers</h4>
+            
               <p4>Checkboxes expand to provide more options.</p4>
               <br>
               <label><input type="checkbox" id="NHconsvLandToggle"> Public/Conserved Lands</label>
                 <div id="NHconsvLandAccessOptions" style="display:none; margin-left:20px;">
-                  <p>Public Access</p>
-                    <label><input type="checkbox" name="NHconsvLandAccess" value="1"> Allowed</label><br>
-                    <label><input type="checkbox" name="NHconsvLandAccess" value="2"> Restricted to Certain Areas</label><br>
+                  <p>Owner</p>
+                    <label><input type="radio" name="NHconsvLandAccess" value="1"> Municipal<br>
+                    <label><input type="radio" name="NHconsvLandAccess" value="2"> Federal</label><br>
+                    <label><input type="radio" name="NHconsvLandAccess" value="3"> State</label><br>
+                    <label><input type="radio" name="NHconsvLandAccess" value="4"> Other Public</label><br>
+                    <label><input type="radio" name="NHconsvLandAccess" value="5"> Private</label><br>
+                    <label><input type="radio" name="NHconsvLandAccess" value="6"> County</label><br>
+                    <button id="clearRadio" >Clear Selection</button>
                 </div>
               <br>
               <label><input type="checkbox" id="NHdncrstateLandsToggle"> State Lands</label>
@@ -195,33 +196,40 @@
               
              
               <div id="NHrecPointsFilterContainer" style="display:none; margin-left:20px;">
-                <input type="checkbox" id="NHrecPointsSymbolToggle" checked> <p2> Show Icons</p2>
+
                 <p>Type</p>
                 <div>
+                  <img src="./img/trailhead.png" width="12">
                   <input type="checkbox" class="NHrecPointsFilter" name="Trailhead" value="Trailhead" id="Trailhead">
                   <label for="Trailhead">Trailhead</label>
                 </div>
                 <div>
+                  <img src="./img/landmark.png" width="12">
                   <input type="checkbox" class="NHrecPointsFilter" name="Landmark" value="Landmark" id="Landmark">
                   <label for="Landmark">Landmark</label>
                 </div>
                 <div>
+                  <img src="./img/scenicview.png" width="12">
                   <input type="checkbox" class="NHrecPointsFilter" name="ScenicView" value="Scenic View" id="ScenicView">
                   <label for="ScenicView">Scenic View</label>
                 </div>
                 <div>
+                  <img src="./img/natural-01.png" width="12">
                   <input type="checkbox" class="NHrecPointsFilter" name="NaturalAttraction" value="Natural Attraction" id="NaturalAttraction">
                   <label for="NaturalAttraction">Natural Attraction</label>
                 </div>
                 <div>
+                  <img src="./img/shelter.png" width="12">
                   <input type="checkbox" class="NHrecPointsFilter" name="Shelter" value="Shelter" id="Shelter">
                   <label for="Shelter">Shelter</label>
                 </div>
                 <div>
+                  <img src="./img/cultural.png" width="12">
                   <input type="checkbox" class="NHrecPointsFilter" name="CulturalAttraction" value="Cultural Attraction" id="CulturalAttraction">
                   <label for="CulturalAttraction">Cultural Attraction</label>
                 </div>
                 <div>
+                  <img src="./img/cabin.png" width="12">
                   <input type="checkbox" class="NHrecPointsFilter" name="HutLodgeCabin" value="Hut/Lodge/Cabin" id="HutLodgeCabin">
                   <label for="HutLodgeCabin">Hut/Lodge/Cabin</label>
                 </div>
@@ -306,8 +314,8 @@
 
  
 
-To interact with business and non-profit data, use the tabs and filters on the top of the screen. <br><br> <p>Using the Point Clustering Tool</p> In the top left corner, clicking the button with the <img src="./img/clustering.svg" width="20"> symbol, will show summary statistics for the number of businesses or organizations in different areas of the state. Point Clustering responds to any filter selections. <br><br> You can organize this data by CEDR Region, Tourism Region, County, or Municipality by clicking on the respective geography on the top of the page. Click the same geography again to turn off the layer and display generalized clustering.
-<br> <br> The <img src="./img/home.svg" width="20"> icon resets the view to New Hampshire. The <img src="./img/information.svg" width="20"> icon re-opens this info panel. The <img src="./img/print.svg" width="20"> icon opens a print prompt that exports the current extent. Toggle the visibilty of the legend in the bottom right corner.
+To interact with business and non-profit data, use the tabs and filters on the top of the screen. <br><br> <p>Using the Point Clustering Tool</p> In the top left corner, clicking the button with the <img src="./img/clustering.svg" width="20"> symbol, will show summary statistics for the number of businesses or organizations in different areas of the state. Point Clustering responds to any filter selections. <br><br> You can organize this data by CEDR Region, Tourism Region, County, or Municipality by clicking on the respective geography on the top of the page. Click the same geography again to turn off the layer and display generic clustering.
+<br> <br> The <img src="./img/home.svg" width="20"> icon resets the view to New Hampshire. The <img src="./img/information.svg" width="20"> icon re-opens this info panel. The <img src="./img/print.svg" width="20"> icon opens a print prompt that exports the current extent.
  
       </div>
   </div>
