@@ -694,7 +694,7 @@ const NHwaterAccess = new FeatureLayer({
 
   
   NHwaterAccess2.effect = "bloom(1, 2px, 15%)";
-
+  
 
   const NHconsvLandRenderer = {
     type: "unique-value",
@@ -704,7 +704,7 @@ const NHwaterAccess = new FeatureLayer({
             value: "1",
             symbol: {
                 type: "simple-fill",
-                color: "rgba(173, 252, 106, 0.4)", // Allowed
+                color: "rgba(252, 222, 106  , 0.7)", // Allowed
                 outline: {
                     color: "black",
                     width: 0
@@ -1138,6 +1138,7 @@ attachLayerToggleEvents('toggleTownships', 'dropdownToggleTownships', function()
   pseudoClusterLayer.removeAll();
 
   toggleBoundaryActiveState(this, ['toggleCEDRregions', 'toggleTourismRegions', 'toggleCounties']);
+
   handleBoundaryLayerToggle(newHampshireTownships, [cedrRegions, tourismRegions, newHampshireCounties]);
 });
 

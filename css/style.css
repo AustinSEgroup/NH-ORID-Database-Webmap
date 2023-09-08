@@ -98,7 +98,7 @@ body {
   border:#5c9d86;
   border-radius: 0px;
   color: white;
-  outline-color: #6fac96;
+  outline-color: #5a8374;
   outline-width: 1px;
   outline-style: solid;
   left: 0;
@@ -130,7 +130,8 @@ body {
    
 }
 .btn-altdark2 {
-  transform: translateX(48px);
+  margin-left: 55px;
+ 
 }
 
 .dropdownMenuButton {
@@ -174,7 +175,7 @@ body {
 }
 .dropdown-menu.show {
   margin-right: 30px;
-  margin-left: 50px;
+  margin-left: 3px;
 }
 @media (max-width: 900px) {
   .navbar-brand img {
@@ -241,10 +242,12 @@ color: #ffffff !important;
 .popup {
   overflow-y: scroll;
   max-height: 100vh;
+  width: 80vw;
   position: fixed;
   top: 50%;
   left: 50%;
-  width: 80%;
+  align-content: center;
+  justify-content: center;
   transform: translate(-50%, -50%);
   background-color: #13444b;
   padding: 20px;
@@ -283,7 +286,9 @@ color: #ffffff !important;
 
 .popup-content {
   text-align: center;
-  max-width: 100vh;
+  width: 80vw;
+  align-content: center;
+  justify-content: center;
 
 }
 
@@ -365,7 +370,7 @@ color: #ffffff !important;
   border:#5c9d86;
   border-radius: 0px;
   color: white;
-  outline-color: #6fac96;
+  outline-color: #5b8475;
   outline-width: 1px;
   justify-content: left;
   align-items: c;
@@ -374,7 +379,7 @@ color: #ffffff !important;
   cursor: pointer;
   text-align: center;
   transition-duration: 0.4s;
-  margin-left: 5px;
+  margin-left: 8px;
   outline-color: #9bd2bb;
   outline-style: solid;
   outline-width: 1px;
@@ -471,6 +476,7 @@ color: #ffffff !important;
   padding: 5px;
   z-index: 9;
   height: 100%;
+  
 }
 
 #customLegend {
@@ -488,10 +494,12 @@ color: #ffffff !important;
   height: 100vw;
 }
 #filterDiv {
+  
   margin-left: 10px;
   padding-top: 15px;
   height: 100vw;
   z-index: 9;
+  overflow-y: auto;
 }
 #legendDiv {
   background-color:  #13444b
