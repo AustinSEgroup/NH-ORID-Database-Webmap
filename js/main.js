@@ -623,11 +623,6 @@ const debouncedUpdateFields = debounce(updateFields, 20);
     visible: false,
     renderer: picRenderer,
   
-    popupTemplate: {
-      title: "Name: {POINAME}",
-      content: "Notes: {NOTES}"
-    },
-  
        // No max scale limit
   });
   
