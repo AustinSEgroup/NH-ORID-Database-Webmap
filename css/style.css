@@ -125,6 +125,22 @@ body {
   margin-right: 5px;
   
 }
+
+@media (min-width: 800px) {
+  .dropdown {
+      /* Adjust the alignment or spacing as needed */
+      text-align: left; /* Example: Align text to the left */
+      padding: 0; /* Example: Remove padding */
+      /* Other potential adjustments based on your findings */
+  }
+}
+
+@media (min-width: 800px) {
+  .dropdown.show .dropdown-menu {
+    transform: translate(0, 0) !important; /* Reset the transform at 800px and above */
+  }
+}
+
 .dropdown-menu {
   margin-right: 30px;
    
@@ -173,49 +189,63 @@ body {
   margin-right: 12px;
   
 }
+/* General styles for the dropdown */
 .dropdown-menu.show {
   margin-right: 30px;
   margin-left: 3px;
 }
+
+/* Styles for the navbar containing the dropdown, buttons, and LOGO */
+.navbar-dark {
+  display: flex;
+  align-items: center; /* Vertically centers items in the navbar */
+  justify-content: flex-start; /* Aligns items from the start */
+  width: 100%; /* Full width of the navbar */
+  flex-wrap: wrap; /* Allows items to wrap to the next line if needed */
+}
+
+/* Grouped Dropdown and Clear Buttons Container */
+.dropdown-and-buttons {
+  display: flex;
+  align-items: center; /* Aligns dropdown and buttons vertically in the center */
+}
+
+/* Custom styles for 'Clear Filters' buttons */
+#clearFilters, #clearBoundaries {
+  margin-left: 10px; /* Consistent spacing between the dropdown and buttons */
+  display: block;
+}
+
+/* Adjust the logo */
+.LOGO {
+  margin-left: auto; /* Pushes the LOGO to the far right */
+  display: block;
+}
+
+.LOGO img {
+  display: block; /* Ensure the logo is displayed */
+  max-width: 100%; /* Responsive max-width for the logo */
+}
+
+/* Hide the LOGO for screens smaller than 800px */
+@media (max-width: 600px) {
+  .navbar-dark .LOGO {
+    display: none;
+  }
+}
+
+/* Resize LOGO for smaller screens */
 @media (max-width: 900px) {
   .navbar-brand img {
-      width: 150px;
+    width: 150px; /* Resize LOGO for smaller screens */
   }
 }
 
-
-@media (max-width: 1375px) {
-  /* Hide regular nav items */
-  .navbar-break {
-      display: none !important;
+/* Override Bootstrap's media query for the LOGO */
+@media (min-width: 600px) and (max-width: 800px) {
+  .navbar-dark .LOGO img.d-sm-block {
+    display: none !important; /* Ensures the LOGO is hidden in this range */
   }
-  
-  /* Show the dropdown */
-  .dropdown-nav {
-      display: block !important;
-  }
-}
-
-@media (min-width: 1201px) and (max-width: 1300px) {
-  /* Hide regular nav items */
-  .nav-items {
-      display: none;
-  }
-  
-  /* Show the dropdown */
-  .dropdown-nav {
-      display: block;
-  }
-}
-
-.navbar-toggler {
-color: #ffffff !important;
-
-}
-.logo {
-  margin-left: auto;
-  padding-right: 10px;
-
 }
 
 .horizontal-line {
@@ -237,6 +267,17 @@ color: #ffffff !important;
   background-color: rgba(202, 248, 246, 0.637); /* Semi-transparent black */
   z-index: 999; /* Place the overlay behind the popup */
   transition: opacity 0.3s ease;
+}
+.popup-header {
+  width: 100%;
+  overflow: hidden; /* Ensures the image fits in the container */
+}
+
+.popup-image {
+  width: 100%;
+  height: auto;
+  opacity: 0.8; /* Adjust for desired transparency */
+  margin-bottom: 10px;
 }
 
 .popup {
@@ -265,7 +306,7 @@ color: #ffffff !important;
   width: 80%;  
   max-height: 100vh;
   transform: translate(-50%, -50%);
-  background-color: #13444b;
+  background-color: #003333;
   padding: 20px;
   
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
@@ -304,6 +345,7 @@ color: #ffffff !important;
 }
 .dropdown {
   padding-right: 50px ;
+  display: block !important;
 }
 .navbar-nav-center {
       display: flex;
@@ -602,3 +644,31 @@ h4 {
 #clearRadio:hover {
   color: rgb(220, 114, 114); /* red color on hover */
 }
+
+#clearFilters {
+  font-size: 12px;
+  border: 0;
+  color: #fff;
+  background-color: #3c8478; /* This is to ensure the button color matches the background */
+  transition: color 0.3s ease;
+  margin-left: -50px;
+
+}
+
+#clearFilters:hover {
+  color: rgb(220, 114, 114); /* red color on hover */
+}
+
+#clearBoundaries {
+  font-size: 12px;
+  border: 0;
+  color: #fff;
+  background-color: #3c8478; /* This is to ensure the button color matches the background */
+  transition: color 0.3s ease;
+
+}
+
+#clearBoundaries:hover {
+  color: rgb(220, 114, 114); /* red color on hover */
+}
+

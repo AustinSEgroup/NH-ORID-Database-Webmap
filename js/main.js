@@ -7,6 +7,7 @@ require([
     "esri/widgets/Legend",
     "esri/widgets/Expand",
     "esri/widgets/Home",
+    "esri/widgets/Zoom",
     "esri/widgets/Print",
     "esri/symbols/SimpleLineSymbol",
     "esri/core/Collection",
@@ -18,7 +19,7 @@ require([
     "esri/widgets/LayerList",
     "esri/rest/support/Query",
     
-  ], (Map, FeatureLayer, GeoJSONLayer, WebTileLayer, MapView, Legend, Expand, Home, Print, SimpleLineSymbol, Collection, GraphicsLayer, Graphic, SimpleFillSymbol, LayerList, Query, SimpleMarkerSymbol, PictureMarkerSymbol) => {
+  ], (Map, FeatureLayer, GeoJSONLayer, WebTileLayer, MapView, Legend, Expand, Home, Zoom, Print, SimpleLineSymbol, Collection, GraphicsLayer, Graphic, SimpleFillSymbol, LayerList, Query, SimpleMarkerSymbol, PictureMarkerSymbol) => {
     let selectedField;
     let selectedTrailField;
     let clusterConfig;
@@ -931,7 +932,50 @@ radioButtons.forEach(function(radio) {
     });
 });
 
-// Add clear functionality
+// ADD CLEAR BUTTON FOR FILTERS
+
+function clearSelectedLayers() {
+  // Uncheck all checkboxes
+  filterFieldsMap.forEach(item => {
+      if (item.id) {
+          document.getElementById(item.id).checked = false;
+      }
+  });
+
+  // Reset the filters object
+  const filters = {};
+  setLayerDefinitionExpression(layer, filters);
+
+  // Call applyFilter to reevaluate the map display
+  applyFilter();
+}
+
+function clearBoundaryLayers() {
+  // Turn off all boundary layers
+  [cedrRegions, tourismRegions, newHampshireCounties, newHampshireTownships].forEach(layer => {
+      layer.visible = false;
+  });
+
+  // Deactivate all boundary buttons
+  boundaryBtns.forEach(id => {
+      const elem = document.getElementById(id);
+      elem.classList.remove('active');
+  });
+
+  // Reset the selected boundary layer
+  selectedBoundaryLayer = null;
+
+  // Call applyFilter to reevaluate the map display
+  applyFilter();
+
+  console.log("Boundary layers cleared");
+}
+
+// Attach event listeners for the clear buttons
+document.getElementById('clearFilters').addEventListener('click', clearSelectedLayers);
+document.getElementById('clearBoundaries').addEventListener('click', clearBoundaryLayers);
+
+// ADD CLEAR BUTTON FOR REC LAYERS
 clearButton.addEventListener("click", function() {
     radioButtons.forEach(radio => {
         radio.checked = false;
@@ -1010,157 +1054,76 @@ clearButton.addEventListener("click", function() {
   }
   
   /********************** MAIN LAYER TOGGLES *****************************/
-  let selectedBoundaryLayer = null;
-  
-  cedrRegions.visible = false;
-  tourismRegions.visible = false;
-  newHampshireCounties.visible = false;
-  newHampshireTownships.visible = false;
-  
+ let selectedBoundaryLayer = null;
 
-  // Toggle the active state of primary buttons
-  function togglePrimaryActiveState(clickedElement) {
-    // Deactivate all primary buttons
-    primaryBtns.forEach(id => {
-        const elem = document.getElementById(id);
-        elem.classList.remove('active');
+cedrRegions.visible = false;
+tourismRegions.visible = false;
+newHampshireCounties.visible = false;
+newHampshireTownships.visible = false;
+
+// Function to handle the boundary layer toggle
+function handleBoundaryLayerToggle(selectedButtonId, layerToToggle) {
+    abortOngoingTasks(); // Abort any ongoing tasks
+
+    // Deactivate all dropdown items
+    boundaryBtns.forEach(btnId => {
+        const btn = document.getElementById(btnId);
+        if (btn) {
+            btn.classList.remove('active');
+        }
     });
 
-    // Activate the clicked button
-    clickedElement.classList.add('active');
+    // Activate the selected dropdown item
+    const selectedButton = document.getElementById(selectedButtonId);
+    if (selectedButton) {
+        selectedButton.classList.add('active');
+    }
+
+    // Manage the visibility of the layers
+    selectedBoundaryLayer = layerToToggle.visible ? null : layerToToggle;
+    [cedrRegions, tourismRegions, newHampshireCounties, newHampshireTownships].forEach(layer => {
+        layer.visible = layer === layerToToggle;
+    });
+
+    applyMapUpdates();
 }
 
-// Toggle the active state of boundary buttons
-function toggleBoundaryActiveState(clickedElement, otherBtns) {
-  // If the clicked button is already active, deactivate it and return.
-  if (clickedElement.classList.contains('active')) {
-      clickedElement.classList.remove('active');
-      return; // exit the function early
-  }
-
-  // Deactivate all other boundary buttons
-  otherBtns.forEach(id => {
-      const elem = document.getElementById(id);
-      if (elem !== clickedElement) {
-          elem.classList.remove('active');
-      }
-  });
-
-  // Activate the clicked button
-  clickedElement.classList.add('active');
+function abortOngoingTasks() {
+    controller.abort();
+    pseudoClusterLayer.removeAll();
+    controller = new AbortController();
+    signal = controller.signal;
 }
-  // Toggle the active state of buttons
-  function toggleActiveState(currentBtn, category) {
-    // Determine which set of buttons to deactivate based on the category
-    const otherBtns = category === "primary" ? primaryBtns : boundaryBtns;
 
-    // If the clicked button is already active, deactivate it
-    if (currentBtn.classList.contains('active')) {
-        currentBtn.classList.remove('active');
-    } else {
-        // Otherwise, activate the clicked button and deactivate the other buttons in its category
-        currentBtn.classList.add('active');
-        otherBtns.forEach(btn => {
-            if (btn !== currentBtn) {
-                document.getElementById(btn).classList.remove('active');
+function applyMapUpdates() {
+    // ... existing logic ...
+}
+
+// Boundary dropdown button IDs
+const boundaryBtns = ['dropdownToggleCEDRregions', 'dropdownToggleTourismRegions', 'dropdownToggleCounties', 'dropdownToggleTownships'];
+
+// Attach event listeners to dropdown items
+boundaryBtns.forEach(btnId => {
+    const btn = document.getElementById(btnId);
+    if (btn) {
+        btn.addEventListener('click', function() {
+            switch (btnId) {
+                case 'dropdownToggleCEDRregions':
+                    handleBoundaryLayerToggle(btnId, cedrRegions);
+                    break;
+                case 'dropdownToggleTourismRegions':
+                    handleBoundaryLayerToggle(btnId, tourismRegions);
+                    break;
+                case 'dropdownToggleCounties':
+                    handleBoundaryLayerToggle(btnId, newHampshireCounties);
+                    break;
+                case 'dropdownToggleTownships':
+                    handleBoundaryLayerToggle(btnId, newHampshireTownships);
+                    break;
             }
         });
     }
-}
-
-// List of button IDs for each category
-const primaryBtns = ['retailLink', 'recProviderLink', 'b2bManufacturerLink', 'nonProfitLink'];
-const boundaryBtns = ['toggleCEDRregions', 'toggleTourismRegions', 'toggleCounties', 'toggleTownships'];
-  
-  // Helper function to attach the event listeners
-  function attachLayerToggleEvents(standardButtonId, dropdownButtonId, handlerFunction) {
-      document.getElementById(standardButtonId).addEventListener('click', handlerFunction);
-      document.getElementById(dropdownButtonId).addEventListener('click', handlerFunction);
-      console.log("attachLayerToggleEvents")
-  }
-  
-  
-  function handleBoundaryLayerToggle(layerToToggle, otherLayers, isSwitching = true) {
-    
-    pseudoClusterLayer.removeAll();
-    // Create a new instance of AbortController for subsequent operations
-    controller = new AbortController();
-    signal = controller.signal;
-
-    selectedBoundaryLayer = layerToToggle;
-
-    // If switching layers
-    if (isSwitching) {
-        if (layerToToggle.visible) {
-            layerToToggle.visible = false;
-        } else {
-            layerToToggle.visible = true;
-            // Hide all other boundary layers
-            for (let layer of otherLayers) {
-                layer.visible = false;
-            }
-        }
-    } else {
-        // If turning off the current layer
-        layerToToggle.visible = false;
-    }
-
-    if (isClusteringEnabled) {
-        if (selectedBoundaryLayer.visible) {
-            applyPolygonClustering(selectedBoundaryLayer, layer, selectedField);
-            layer.visible = false;
-        } else {
-            layer.visible = true;
-            drawCluster();
-        }
-    } else if (isClusteringEnabled) {
-        layer.effect = "bloom(0, 0.1px, 15%)";
-        layer.visible = true;
-        applyFilter();
-    }
-}
-function abortOngoingTasks() {
-  controller.abort();
-  pseudoClusterLayer.removeAll();
-
-  // Create a new instance of AbortController for subsequent operations
-  controller = new AbortController();
-  signal = controller.signal;
-}
-
-attachLayerToggleEvents('toggleTownships', 'dropdownToggleTownships', function() {
-  abortOngoingTasks(); // This stops any ongoing queries
-  pseudoClusterLayer.removeAll();
-
-  toggleBoundaryActiveState(this, ['toggleCEDRregions', 'toggleTourismRegions', 'toggleCounties']);
-
-  handleBoundaryLayerToggle(newHampshireTownships, [cedrRegions, tourismRegions, newHampshireCounties]);
 });
-
-attachLayerToggleEvents('toggleCEDRregions', 'dropdownToggleCEDRregions', function() {
-  abortOngoingTasks(); // This stops any ongoing queries
-  pseudoClusterLayer.removeAll();
-
-  toggleBoundaryActiveState(this, ['toggleTownships', 'toggleTourismRegions', 'toggleCounties']);
-  handleBoundaryLayerToggle(cedrRegions, [tourismRegions, newHampshireCounties, newHampshireTownships]);
-});
-
-attachLayerToggleEvents('toggleTourismRegions', 'dropdownToggleTourismRegions', function() {
-  abortOngoingTasks(); // This stops any ongoing queries
-  pseudoClusterLayer.removeAll();
-
-  toggleBoundaryActiveState(this, ['toggleCEDRregions', 'toggleTownships', 'toggleCounties']);
-  handleBoundaryLayerToggle(tourismRegions, [cedrRegions, newHampshireCounties, newHampshireTownships]);
-});
-
-attachLayerToggleEvents('toggleCounties', 'dropdownToggleCounties', function() {
-  abortOngoingTasks(); // This stops any ongoing queries
-  pseudoClusterLayer.removeAll();
-
-  toggleBoundaryActiveState(this, ['toggleCEDRregions', 'toggleTourismRegions', 'toggleTownships']);
-  handleBoundaryLayerToggle(newHampshireCounties, [cedrRegions, tourismRegions, newHampshireTownships]);
-});
-  
   
   /************************* MAP INITIALIZATION *************************/
   const nhExtent = {
@@ -1192,7 +1155,7 @@ attachLayerToggleEvents('toggleCounties', 'dropdownToggleCounties', function() {
     
   
     const filterFieldsRetBus = [
-      { fieldlabel: "Retail-Service Business"},
+      { fieldlabel: "Retail-Service Businesses"},
       { id: 'filterNationalChain', field: 'National_Chain', displayName: '<br style="line-height: 10px" />National Chain' },
       { id: 'filterRegionalChain', field: 'Regional_Chain', displayName: 'Regional Chain' },
       { id: 'filterLocalBusiness', field: 'Local_Business', displayName: 'Local Business' },
@@ -1909,6 +1872,11 @@ view.ui.add(new Expand({
 view.ui.add(new Home({
     view: view
 }), "top-left");
+
+var zoom = new Zoom({
+  view: view
+});
+view.ui.add(zoom, "top-left");
 
 /* const customLegend = document.getElementById("customLegend");
 

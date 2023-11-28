@@ -29,85 +29,89 @@
 
     </body>
     <div id="overlay" class="overlay"></div>
-    <div id="popupContainer" class="popup">
-      
-    <div class="popup-content">
-      <div class="horizontal-line"></div> <h2>Before entering the map viewer, please read this disclaimer.</h2> <div class="horizontal-line"></div>
-      <p>
-        The data present represents a "snapshot" of business activity as of 2022 and 2023. This data may not depict the most up-to-date 
-        information and may contain errors or omissions. Trail and recreation facility data is provided by the State of New Hampshire and may contain errors or omissions. 
-        The New Hampshire Department of Business and Economic Affairs is not responsible for the use or interpretation of this information by third parties. Not for legal use.</p>
-      <button id="closePopup" class="btn btn-altdark">I accept this disclaimer</button>
-    </div>
-    
 
+    <div id="popupContainer" class="popup">
+      <div class="popup-header">
+          <img src="./img/backgroundLOGO.jpg" alt="Landscape Image" class="popup-image"/>
+      </div>
+      <div class="popup-content">
+          <div class="horizontal-line"></div>
+          <h2>Before entering the map viewer, please read this disclaimer.</h2>
+          <div class="horizontal-line"></div>
+          <p>
+            The data present represents a "snapshot" of business activity as of 2022 and 2023. This data may not depict the most up-to-date 
+            information and may contain errors or omissions. Trail and recreation facility data is provided by the State of New Hampshire and may contain errors or omissions. 
+            The New Hampshire Department of Business and Economic Affairs is not responsible for the use or interpretation of this information by third parties. Not for legal use.
+          </p>
+          <button id="closePopup" class="btn btn-altdark">I accept this disclaimer</button>
+      </div>
+  </div>
+
+ 
 </div>
 
 
-    <nav class="navbar-dark navbar-expand-xl navbar bg-altdark">
-      <!-- Direct links for larger screens -->
-      <ul class="navbar-break navbar-nav flex-column flex-xl-row flex-wrap d-none d-xl-flex">
-          <li class="nav-item">
-              <a id="retailLink" class="nav-link btn btn-dark active">Retail-Service Businesses</a>
-          </li>
-          <li class="nav-item">
-              <a id="recProviderLink" class="nav-link btn btn-dark">Recreation Providers</a>
-          </li>
-          <li class="nav-item">
-              <a id="b2bManufacturerLink" class="nav-link btn btn-dark">Services and Manufacturers</a>
-          </li>
-          <li class="nav-item">
-              <a id="nonProfitLink" class="nav-link btn btn-dark">Non-Profit Organizations</a>
-          </li>
-      </ul>
-  
-      <!-- Dropdown for smaller screens -->
-      <div class="d-xl-none">
-          <div class="dropdown">
-              <button class="btn btn-altdark dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
-                  Select Database Category
-              </button>
-              <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                  <li><a id="retailDropdownLink" class="dropdown-item">Retail-Service Businesses</a></li>
-                  <li><a id="recProviderDropdownLink" class="dropdown-item">Recreation Providers</a></li>
-                  <li><a id="b2bManufacturerDropdownLink" class="dropdown-item">Services and Manufacturers</a></li>
-                  <li><a id="nonProfitDropdownLink" class="dropdown-item">Non-Profit</a></li>
-              </ul>
-          </div>
-      </div>
-      <div class="LOGO">
-          <img src="./img/LOGO.png" width="300px" class="d-none d-sm-block">
-      </div>
-  </nav>
-  
-  <nav class="navbar navbar-expand-md top-bar">
-    <button id="toggleClustering" class="toggle-clust1">
-      <img src="./img/clustering.svg" width="30"> <span>Point Clustering: OFF</span>
-  </button>
- 
-    <!-- Buttons for larger screens (lg and above) -->
-    <div class="navbar-nav d-none d-sm-block" id = "boundaries">     
-        <button id="toggleCEDRregions" class="toggle-clust">CEDR Regions</button>
-        <button id="toggleTourismRegions" class="toggle-clust">Tourism Regions</button>
-        <button id="toggleCounties" class="toggle-clust">Counties</button>
-        <button id="toggleTownships" class="toggle-clust">Municipalities</button>
-    </div>
 
-    <div class="d-sm-none">
-        <div class="dropdown">
-            <button class="btn btn-altdark2 dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-              Boundaries
-            </button>
-            <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                <button id="dropdownToggleCEDRregions" class="toggle-clust">CEDR Regions</button>
-                <button id="dropdownToggleTourismRegions" class="toggle-clust">Tourism Regions</button>
-                <button id="dropdownToggleCounties" class="toggle-clust">Counties</button>
-                <button id="dropdownToggleTownships" class="toggle-clust">Municipalities</button>
-            </ul>
-        </div>
-    </div>
+<nav class="navbar-dark navbar-expand-xl navbar bg-altdark">
+  <!-- Grouped Dropdown and Clear Buttons in a Container -->
+
+  <div class="dropdown-and-buttons">
+      <!-- Dropdown for Database Categories -->
+      <div class="dropdown">
+          <button class="btn btn-altdark dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
+              Select Database Category
+          </button>
+          <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+              <li><a id="retailDropdownLink" class="dropdown-item">Retail-Service Businesses</a></li>
+              <li><a id="recProviderDropdownLink" class="dropdown-item">Recreation Providers</a></li>
+              <li><a id="b2bManufacturerDropdownLink" class="dropdown-item">Services and Manufacturers</a></li>
+              <li><a id="nonProfitDropdownLink" class="dropdown-item">Non-Profit</a></li>
+          </ul>
+      </div>
+
+      <!-- Clear Filters Buttons -->
+      <button id="clearFilters">Clear Filters</button>
+      <button id="clearBoundaries">Clear Regions</button>
+  </div>
+
+  <!-- LOGO Image -->
+  <div class="LOGO">
+      <img src="./img/LOGO.png" width="300px" class="d-none d-sm-block">
+  </div>
+
+  <div style="display: none;">
+    <a id="retailLink"></a>
+    <a id="recProviderLink"></a>
+    <a id="b2bManufacturerLink"></a>
+    <a id="nonProfitLink"></a>
 </nav>
-    
+
+<nav class="navbar navbar-expand-md top-bar">
+  <button id="toggleClustering" class="toggle-clust1">
+    <img src="./img/clustering.svg" width="30"> <span>Point Clustering: OFF</span>
+  </button>
+
+  <!-- Dummy links for JavaScript functionality -->
+  <div style="display: none;">
+    <a id="toggleCEDRregions"></a>
+    <a id="toggleTourismRegions"></a>
+    <a id="toggleCounties"></a>
+    <a id="toggleTownships"></a>
+  </div>
+
+  <!-- Always visible Dropdown for Boundaries -->
+  <div class="dropdown">
+    <button class="btn btn-altdark2 dropdown-toggle" type="button" id="dropdownMenuButton2" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+      Select Regions
+    </button>
+    <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton2">
+      <button id="dropdownToggleCEDRregions" class="toggle-clust">CEDR Regions</button>
+      <button id="dropdownToggleTourismRegions" class="toggle-clust">Tourism Regions</button>
+      <button id="dropdownToggleCounties" class="toggle-clust">Counties</button>
+      <button id="dropdownToggleTownships" class="toggle-clust">Municipalities</button>
+    </ul>
+  </div>
+</nav>
   <div id="mapContainer">
 
 
@@ -316,8 +320,8 @@
 
  
 
-To interact with business and non-profit data, use the tabs and filters on the top of the screen. <br><br> MOBILE USERS: this tool is designed to be used on a desktop computer. Mobile users may experience decreased functionality. <br><br> <p>Using the Point Clustering Tool</p> In the top left corner, clicking the button with the <img src="./img/clustering.svg" width="20"> symbol, will show summary statistics for the number of businesses or organizations in different areas of the state. Point Clustering responds to any filter selections. <br><br> You can organize this data by CEDR Region, Tourism Region, County, or Municipality by clicking on the respective geography on the top of the page. Click the same geography again to turn off the layer and display generic clustering.
-<br> <br> The <img src="./img/home.svg" width="20"> icon resets the view to New Hampshire. The <img src="./img/information.svg" width="20"> icon re-opens this info panel. The <img src="./img/print.svg" width="20"> icon opens a print prompt that exports the current extent.
+To interact with business and non-profit data, use the dropdowns and buttons at the top left of the screen. <br> <br> <img src="./img/info2.jpg" alt="Information Image" style="width: 90%; max-width: 600px; display: block; margin: 0 auto;"><br> <p>Using the Point Clustering Tool</p> In the top left corner, clicking the button with the <img src="./img/clustering.svg" width="20"> symbol, will show summary statistics for the number of businesses or organizations in different areas of the state. Point Clustering responds to any filter or region selections. <br><br> You can organize this data by CEDR Region, Tourism Region, County, or Municipality by clicking on the respective geography on the top of the page. Click the same geography again to turn off the layer and display generic clustering.
+<br> <br> <img src="./img/info.jpg" alt="Information Image" style="width: 90%; max-width: 600px; display: block; margin: 0 auto;"> <br> The <img src="./img/home.svg" width="20"> icon resets the view to New Hampshire. The <img src="./img/information.svg" width="20"> icon re-opens this info panel. The <img src="./img/print.svg" width="20"> icon opens a print prompt that exports the current extent. <br><br> MOBILE USERS: this tool is designed to be used on a desktop computer. Mobile users may experience decreased functionality. <br> <br> <P>This map viewer was created by a team on consultants at SE Group, a planning, permitting, and design firm specializing in outdoor recreation.</P>
  
       </div>
     </div>
