@@ -1102,14 +1102,17 @@ function applyMapUpdates() {
       applyPolygonClustering(selectedBoundaryLayer, layer, selectedField);
       layer.visible = false;
   } else {
-      // If no boundary layer is selected, apply default clustering or other map updates
+      // If no boundary layer is selected, apply default clustering or show all points
       if (isClusteringEnabled) {
-          drawCluster(); // Default clustering method
+          drawCluster(); // Apply default clustering method
       } else {
-          // Logic for non-clustering scenarios
-          layer.visible = true;
-          // Other map updates as necessary
+          layer.visible = true; // Show all points if clustering is not enabled
       }
+  }
+
+  // Check if any field is selected (filter is active) and apply the filter
+  if (isAnyFieldSelected) {
+      applyFilter();
   }
 }
 // Boundary dropdown button IDs
