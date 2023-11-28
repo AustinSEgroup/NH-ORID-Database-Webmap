@@ -154,6 +154,10 @@ body {
   margin-left: 30px;
   transform: translateX(48px);
 }
+
+.dropdownMenuButton2 {
+  margin-top: 15px;
+}
 #dropdownToggleCEDRregions{
   outline: #5c9d86;
   outline-width: 1px;
@@ -306,7 +310,7 @@ body {
   width: 80%;  
   max-height: 100vh;
   transform: translate(-50%, -50%);
-  background-color: #003333;
+  background-color: #13444b;
   padding: 20px;
   
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);

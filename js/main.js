@@ -1096,9 +1096,22 @@ function abortOngoingTasks() {
 }
 
 function applyMapUpdates() {
-    // ... existing logic ...
+  // Check if a boundary layer is selected and visible
+  if (selectedBoundaryLayer && selectedBoundaryLayer.visible) {
+      // Apply advanced clustering for the selected boundary layer
+      applyPolygonClustering(selectedBoundaryLayer, layer, selectedField);
+      layer.visible = false;
+  } else {
+      // If no boundary layer is selected, apply default clustering or other map updates
+      if (isClusteringEnabled) {
+          drawCluster(); // Default clustering method
+      } else {
+          // Logic for non-clustering scenarios
+          layer.visible = true;
+          // Other map updates as necessary
+      }
+  }
 }
-
 // Boundary dropdown button IDs
 const boundaryBtns = ['dropdownToggleCEDRregions', 'dropdownToggleTourismRegions', 'dropdownToggleCounties', 'dropdownToggleTownships'];
 
