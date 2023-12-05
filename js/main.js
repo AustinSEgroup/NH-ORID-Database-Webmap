@@ -81,136 +81,148 @@ require([
 }
 
 
-  /************************ CHANGE DATA SOURCE ********************** */
+
+
+  /************************ POPULATE FILTER FIELDS AND CHANGE DATA SOURCE ********************** */
   
   let filterFieldsMap = [];
+  function populateFilterDiv(filterFields) {
+    filterDiv.innerHTML = '';
 
-  function handleExclusiveCheckboxes(selectedCheckbox) {
-    console.log("Called handleExclusiveCheckboxes with:", selectedCheckbox);
-    
-    const exclusiveCheckboxes = ['filterNationalChain', 'filterRegionalChain', 'filterLocalBusiness'];
+    // Create the Filter Mode toggle button and Clear Filters button
+    const filterModeButton = document.createElement('button');
+    filterModeButton.id = 'toggleFilterMode';
+    filterModeButton.textContent = 'Filter Mode: AND';
+    filterDiv.appendChild(filterModeButton);
 
-    if (exclusiveCheckboxes.includes(selectedCheckbox)) {
-        console.log("Inside exclusive checkboxes condition");
-        for (let checkbox of exclusiveCheckboxes) {
-            console.log("Checking checkbox:", checkbox);
-            if (checkbox !== selectedCheckbox) {
-                console.log("Unchecking checkbox:", checkbox);
-                let checkboxElement = document.getElementById(checkbox);
-                if (checkboxElement) {
-                    checkboxElement.checked = false;
-                } else {
-                    console.error("Checkbox with ID:", checkbox, "not found!");
-                }
+    const clearFiltersButton = document.createElement('button');
+    clearFiltersButton.id = 'clearFilters';
+    clearFiltersButton.textContent = 'Clear Filters';
+    clearFiltersButton.style.marginLeft = '10px';
+    filterDiv.appendChild(clearFiltersButton);
+
+    // Add a separator
+    const gap = document.createElement('div');
+    gap.style.marginTop = '10px';
+    filterDiv.appendChild(gap);
+
+    // Determine if exclusive checkboxes are present
+    const hasExclusiveCheckboxes = filterFields.some(item => item.exclusive);
+
+    // Add filter checkboxes
+    filterFields.forEach(item => {
+        const div = document.createElement('div');
+
+        if (item.label || item.fieldlabel) {
+            // For category title or other headers
+            div.innerHTML = `<strong>${item.label || item.fieldlabel}</strong>`;
+        } else {
+            // For checkboxes
+            const checkbox = document.createElement('input');
+            checkbox.type = 'checkbox';
+            checkbox.id = item.id;
+            div.appendChild(checkbox);
+
+            const label = document.createElement('label');
+            label.htmlFor = item.id;
+            label.textContent = item.displayName;
+            div.appendChild(label);
+
+            if (hasExclusiveCheckboxes && item.exclusive) {
+                checkbox.addEventListener('change', () => handleExclusiveCheckboxes(item.id));
+            } else {
+                checkbox.addEventListener('change', applyFilter);
             }
         }
-    }
+        filterDiv.appendChild(div);
+    });
 
-    // Log the state of checkboxes after they've been modified
-    for (let checkbox of exclusiveCheckboxes) {
-        let checkboxElement = document.getElementById(checkbox);
-        if (checkboxElement) {
-            console.log(checkbox, checkboxElement.checked);
-        } else {
-            console.error("Checkbox with ID:", checkbox, "not found!");
-        }
+    // Event listeners for the buttons
+    document.getElementById('toggleFilterMode').addEventListener('click', toggleFilterMode);
+    document.getElementById('clearFilters').addEventListener('click', clearSelectedLayers);
+}
+
+function handleExclusiveCheckboxes(selectedCheckboxId) {
+    console.log("Called handleExclusiveCheckboxes with:", selectedCheckboxId);
+    const exclusiveCheckboxes = ['filterNationalChain', 'filterRegionalChain', 'filterLocalBusiness'];
+
+    if (exclusiveCheckboxes.includes(selectedCheckboxId)) {
+        exclusiveCheckboxes.forEach(checkboxId => {
+            if (checkboxId !== selectedCheckboxId) {
+                document.getElementById(checkboxId).checked = false;
+            }
+        });
     }
+    applyFilter(); // Apply filter after updating exclusive checkboxes
 }
 
 
+function toggleFilterMode() {
+    filterMode = filterMode === 'AND' ? 'OR' : 'AND';
+    this.textContent = `Filter Mode: ${filterMode}`;
+    applyFilter();
+}
 
 function updateFields(datasetName) {
   console.log('[updateFields] Initialization started for:', datasetName);
+
+  // Set layer visibility to false and remove any existing clusters
   layer.visible = false;
   pseudoClusterLayer.removeAll();
-  console.log('[updateFields] Layer visibility set to false and pseudo clusters removed.');
 
-  const infoDivText = document.querySelector('#infoDiv p3');
+  let selectedCategoryTitle;
   switch (datasetName) {
       case 'retailBusiness':
-          console.log('[updateFields] Processing retailBusiness dataset.');
+          selectedCategoryTitle = "Retail-Service Businesses";
           filterFieldsMap = filterFieldsRetBus;
           currentLayerLink = retailBusinessesLink;
-          layer.url = currentLayerLink;
-          layer.visible = true;
           break;
       case 'recreationProviders':
-          console.log('[updateFields] Processing recreationProviders dataset.');
+          selectedCategoryTitle = "Recreation Providers";
           filterFieldsMap = filterFieldsRecProv;
           currentLayerLink = recreationProvidersLink;
-          layer.url = currentLayerLink;
-          layer.visible = true;
           break;
       case 'b2bManufacturers':
-          console.log('[updateFields] Processing b2bManufacturers dataset.');
+          selectedCategoryTitle = "Services and Manufacturers";
           filterFieldsMap = filterFieldsB2B;
           currentLayerLink = b2bManufacturersLink;
-          layer.url = currentLayerLink;
-          layer.visible = true;
           break;
       case 'nonProfits':
-          console.log('[updateFields] Processing nonProfits dataset.');
+          selectedCategoryTitle = "Non-Profit Organizations";
           filterFieldsMap = filterFieldsNonProfits;
           currentLayerLink = nonProfitsLink;
-          layer.url = currentLayerLink;
-          layer.visible = true;
           break;
+      default:
+          console.log('[updateFields] Unknown dataset:', datasetName);
+          return; // Exit the function for unknown dataset
   }
 
-  console.log('[updateFields] Removing layer from the map and updating its URL.');
-  map.layers.remove(layer);
+  // Update the layer URL and reload it
   layer.url = currentLayerLink;
-
-  console.log('[updateFields] Reloading layer and adding it back to the map.');
+  map.layers.remove(layer);
   layer.load().then(() => {
-      console.log('[updateFields] Layer loaded successfully.');
       map.layers.add(layer);
-  }).catch((error) => {
+  }).catch(error => {
       console.error("[updateFields] Error loading the layer:", error);
   });
 
-  console.log('[updateFields] Populating filter div with filter fields.');
-  filterDiv.innerHTML = '';
-  for (let item of filterFieldsMap) {
-      const div = document.createElement('div');
-      if (item.label) {
-          div.innerHTML = `<strong>${item.label}</strong>`;
-      } else if (item.fieldlabel) {
-          div.innerHTML = `<strong style="font-size: larger;">${item.fieldlabel}</strong>`;
-      } else {
-          div.innerHTML = `<input type='checkbox' id='${item.id}'><label for='${item.id}'>${item.displayName}</label>`;
-      }
-      filterDiv.appendChild(div);
-      if (item.id) {
-          document.getElementById(item.id).addEventListener('click', function() {
-              console.log('[updateFields] Checkbox clicked:', item.id);
-              handleExclusiveCheckboxes(item.id);
-          });
-          document.getElementById(item.id).addEventListener('change', function() {
-              console.log('[updateFields] Checkbox value changed:', item.id);
-              applyFilter();
-          });
-      }
-  }
+  // Populate the filter div with checkboxes, toggle button, and category title
+  populateFilterDiv(selectedCategoryTitle, filterFieldsMap);
 
-  console.log('[updateFields] Applying filters.');
+  // Apply filters based on the selected dataset
   applyFilter();
 
-  console.log('[updateFields] Checking clustering status and boundary layer visibility.');
+  // Check clustering status and boundary layer visibility
   if (isClusteringEnabled && (tourismRegions.visible || cedrRegions.visible || newHampshireCounties.visible || newHampshireTownships.visible)) {
       console.log('[updateFields] Applying polygon clustering.');
-      pseudoClusterLayer.removeAll();
       debouncedApplyPolygonClustering(selectedBoundaryLayer, layer, selectedField);
       layer.visible = false;
   } else if (isClusteringEnabled) {
       console.log('[updateFields] Drawing clusters.');
-      pseudoClusterLayer.removeAll();
-      layer.visible = true;
       drawCluster();
   } else {
-      console.log('[updateFields] Clustering is disabled. Removing pseudo clusters and applying filter.');
-      pseudoClusterLayer.removeAll();
-      layer.visible = true;
+      console.log('[updateFields] Clustering is disabled. Applying filter.');
+      layer.visible = true; // Ensure layer is visible when clustering is disabled
       applyFilter();
   }
 
@@ -219,15 +231,12 @@ function updateFields(datasetName) {
 
 const debouncedUpdateFields = debounce(updateFields, 20);
 
-  // Initial load to show 'retailBusiness' fields
-
-  window.onload = function() {
-      updateFields('retailBusiness');
-      drawCluster();
-      layer.featureReduction = null;
-      layer.effect = "bloom(3.5, 0.1px, 5%)";
-  }
-
+// Initial load to show 'retailBusiness' fields
+window.onload = function() {
+  updateFields('retailBusiness');
+  layer.featureReduction = null;
+  layer.effect = "bloom(3.5, 0.1px, 5%)";
+};
   /************************ LABEL CLASSES***************************/
   const trailsLabelClass = {
     // autocasts as new LabelClass()
@@ -932,8 +941,7 @@ radioButtons.forEach(function(radio) {
     });
 });
 
-// ADD CLEAR BUTTON FOR FILTERS
-
+// Clear Filters Function
 function clearSelectedLayers() {
   // Uncheck all checkboxes
   filterFieldsMap.forEach(item => {
@@ -948,8 +956,14 @@ function clearSelectedLayers() {
 
   // Call applyFilter to reevaluate the map display
   applyFilter();
+
+  // Reevaluate clustering and visibility
+  reevaluateClusteringAndVisibility();
+
+  console.log("Filters cleared");
 }
 
+// Clear Boundary Layers Function
 function clearBoundaryLayers() {
   // Turn off all boundary layers
   [cedrRegions, tourismRegions, newHampshireCounties, newHampshireTownships].forEach(layer => {
@@ -968,13 +982,26 @@ function clearBoundaryLayers() {
   // Call applyFilter to reevaluate the map display
   applyFilter();
 
+  // Reevaluate clustering and visibility
+  reevaluateClusteringAndVisibility();
+
   console.log("Boundary layers cleared");
 }
 
 // Attach event listeners for the clear buttons
-document.getElementById('clearFilters').addEventListener('click', clearSelectedLayers);
 document.getElementById('clearBoundaries').addEventListener('click', clearBoundaryLayers);
 
+// Function to Reevaluate Clustering and Visibility
+function reevaluateClusteringAndVisibility() {
+  if (selectedBoundaryLayer && selectedBoundaryLayer.visible) {
+      applyPolygonClustering(selectedBoundaryLayer, layer, selectedField);
+  } else if (isClusteringEnabled) {
+      drawCluster();
+  } else {
+      layer.visible = true;
+      layer.featureReduction = null;
+  }
+}
 // ADD CLEAR BUTTON FOR REC LAYERS
 clearButton.addEventListener("click", function() {
     radioButtons.forEach(radio => {
@@ -1065,48 +1092,69 @@ newHampshireTownships.visible = false;
 function handleBoundaryLayerToggle(selectedButtonId, layerToToggle) {
     abortOngoingTasks(); // Abort any ongoing tasks
 
-    // Deactivate all dropdown items
-    boundaryBtns.forEach(btnId => {
-        const btn = document.getElementById(btnId);
-        if (btn) {
-            btn.classList.remove('active');
-        }
-    });
+    // Toggle the visibility of the selected layer
+    layerToToggle.visible = !layerToToggle.visible;
+    selectedBoundaryLayer = layerToToggle.visible ? layerToToggle : null;
 
-    // Activate the selected dropdown item
-    const selectedButton = document.getElementById(selectedButtonId);
-    if (selectedButton) {
-        selectedButton.classList.add('active');
+    // Update the active state of the buttons
+    if (layerToToggle.visible) {
+        // Activate the selected button
+        document.getElementById(selectedButtonId).classList.add('active');
+    } else {
+        // Deactivate the button if the layer was turned off
+        document.getElementById(selectedButtonId).classList.remove('active');
     }
 
-    // Manage the visibility of the layers
-    selectedBoundaryLayer = layerToToggle.visible ? null : layerToToggle;
+    // Manage the visibility of other layers
     [cedrRegions, tourismRegions, newHampshireCounties, newHampshireTownships].forEach(layer => {
-        layer.visible = layer === layerToToggle;
+        if (layer !== layerToToggle) {
+            layer.visible = false;
+            const btnId = getDropdownButtonId(layer);
+            if (btnId) {
+                document.getElementById(btnId).classList.remove('active');
+            }
+        }
     });
 
     applyMapUpdates();
 }
 
+// Helper function to get the corresponding button ID for a layer
+function getDropdownButtonId(layer) {
+    if (layer === cedrRegions) return 'dropdownToggleCEDRregions';
+    if (layer === tourismRegions) return 'dropdownToggleTourismRegions';
+    if (layer === newHampshireCounties) return 'dropdownToggleCounties';
+    if (layer === newHampshireTownships) return 'dropdownToggleTownships';
+    return null;
+}
 function abortOngoingTasks() {
-    controller.abort();
-    pseudoClusterLayer.removeAll();
-    controller = new AbortController();
-    signal = controller.signal;
+  controller.abort();
+  pseudoClusterLayer.removeAll();
+  controller = new AbortController();
+  signal = controller.signal;
 }
 
 function applyMapUpdates() {
   // Check if a boundary layer is selected and visible
   if (selectedBoundaryLayer && selectedBoundaryLayer.visible) {
-      // Apply advanced clustering for the selected boundary layer
-      applyPolygonClustering(selectedBoundaryLayer, layer, selectedField);
-      layer.visible = false;
-  } else {
-      // If no boundary layer is selected, apply default clustering or show all points
       if (isClusteringEnabled) {
-          drawCluster(); // Apply default clustering method
+          // Apply advanced clustering for the selected boundary layer
+          applyPolygonClustering(selectedBoundaryLayer, layer, selectedField);
+          // Ensure the layer with point data is not visible when clustering is applied
+          layer.visible = false;
       } else {
-          layer.visible = true; // Show all points if clustering is not enabled
+          // Show the layer with point data if clustering is not enabled
+          layer.visible = true;
+      }
+  } else {
+      // If no boundary layer is selected
+      if (isClusteringEnabled) {
+          // Apply the default clustering method and hide the layer with point data
+          drawCluster();
+          layer.visible = false;
+      } else {
+          // Show the layer with point data if clustering is not enabled
+          layer.visible = true;
       }
   }
 
@@ -1115,6 +1163,7 @@ function applyMapUpdates() {
       applyFilter();
   }
 }
+
 // Boundary dropdown button IDs
 const boundaryBtns = ['dropdownToggleCEDRregions', 'dropdownToggleTourismRegions', 'dropdownToggleCounties', 'dropdownToggleTownships'];
 
@@ -1169,10 +1218,11 @@ boundaryBtns.forEach(btnId => {
     NHstateLands.effect = "bloom(0.5px, 0.1px, 1%)";
     newHampshire.effect = "bloom(1, 0.1px, 15%)";
     
-  
+ 
+
     const filterFieldsRetBus = [
       { fieldlabel: "Retail-Service Businesses"},
-      { id: 'filterNationalChain', field: 'National_Chain', displayName: '<br style="line-height: 10px" />National Chain' },
+      { id: 'filterNationalChain', field: 'National_Chain', displayName: 'National Chain' },
       { id: 'filterRegionalChain', field: 'Regional_Chain', displayName: 'Regional Chain' },
       { id: 'filterLocalBusiness', field: 'Local_Business', displayName: 'Local Business' },
       { label: "<br>Filter by Activity Type"},
@@ -1277,84 +1327,77 @@ boundaryBtns.forEach(btnId => {
     } else {
         layer.visible = true;
         
-    clusterConfig = {
-    
-    type: "cluster",
-  
-    popupTemplate: {
-      title: "{cluster_count} Features",
-      fieldInfos: [
-        {
-          fieldName: "cluster_count",
-          format: {
-            places: 0,
-            digitSeparator: true,
+        clusterConfig = {
+          type: "cluster",
+          // If there is a filter applied, use it in the cluster query
+          where: layer.definitionExpression ? layer.definitionExpression : "1=1",
+          popupTemplate: {
+              title: "{cluster_count} Features",
+              fieldInfos: [
+                  {
+                      fieldName: "cluster_count",
+                      format: {
+                          places: 0,
+                          digitSeparator: true,
+                      },
+                  },
+                  {
+                      fieldName: "cluster_size",
+                      format: {
+                          places: 0,
+                          digitSeparator: true,
+                      },
+                  },
+              ],
           },
-        },
-        {
-          fieldName: "cluster_size",
-          format: {
-            places: 0,
-            digitSeparator: true,
+          renderer: {
+              type: "simple",
+              symbol: {
+                  type: "simple-marker",
+                  style: "circle",
+                  color: "#83DBBB",
+                  size: 24,
+                  outline: {
+                      color: "#9BF1D2",
+                      width: 5
+                  }
+              },
+              visualVariables: [
+                  {
+                      type: "size",
+                      field: "cluster_count", 
+                      stops: [
+                          { value: 1, size: 5 },
+                          { value: 3, size: 15 },
+                          { value: 9, size: 27},
+                          { value: 16, size: 48 },
+                          { value: 24, size: 72 },
+                          { value: 32, size: 64 },
+                      ]
+                  }
+              ]
           },
-        },
-      ],
-    },
-    fields: [{
-      name: `${selectedField}`,
-      alias: `${selectedField}`,
-      onStatisticField: `${selectedField}`,
-      statisticType: "sum"
-    }],
-    renderer: {
-      type: "simple",
-      symbol: {
-        type: "simple-marker",
-        style: "circle",
-        color: "#83DBBB",
-        size: 24,
-        outline: {
-          color: "#9BF1D2",
-          width: 5
-        }
-      },
-      visualVariables: [
-        {
-          type: "size",
-          field: `${selectedField}`,
-          stops: [
-            { value: 1, size: 5 },
-            { value: 3, size: 15 },
-            { value: 9, size: 27},
-            { value: 16, size: 48 },
-            { value: 24, size: 72 },
-            { value: 32, size: 64 },
+          clusterRadius: "120px",
+          labelingInfo: [{
+              deconflictionStrategy: "none",
+              labelExpressionInfo: {
+                  expression: "Text($feature.cluster_count, '#,###')"
+              },
+              symbol: {
+                  type: "text",
+                  color: "#004a5d",
+                  font: {
+                      weight: "bold",
+                      family: "Noto Sans",
+                      size: "12px"
+                  }
+              },
+              labelPlacement: "center-center",
+          }]
+      };
   
-          ]
-        }
-      ]
-    },
-  
-    clusterRadius: "120px",
-  
-    labelingInfo: [{
-      deconflictionStrategy: "none",
-      labelExpressionInfo: {
-        expression: "Text($feature.cluster_count, '#,###')"
-      },
-      symbol: {
-        type: "text",
-        color: "#004a5d",
-        font: {
-          weight: "bold",
-          family: "Noto Sans",
-          size: "12px"
-        }
-      },
-      labelPlacement: "center-center",
-    }]
-  };
-  layer.featureReduction = clusterConfig;
+      // Apply the cluster configuration to the layer
+      layer.featureReduction = clusterConfig;
   }
 
   }
@@ -1388,7 +1431,7 @@ boundaryBtns.forEach(btnId => {
 
     showSpinner();
     pseudoClusterLayer.removeAll();
-
+    layer.visible = false;
     // Update the currentQueryId with a new unique identifier
     currentQueryId = Date.now();
     let queryIdAtTimeOfExecution = currentQueryId;
@@ -1446,97 +1489,101 @@ function processPolygon(polygon, layer, selectedField) {
   console.log('Processing polygon:', polygon);
   return new Promise((resolve, reject) => {
       let queryIdAtTimeOfExecution = currentQueryId;
-        let pointsQuery = layer.createQuery();
-        pointsQuery.geometry = polygon.geometry;
-        pointsQuery.spatialRelationship = "intersects";
-        pointsQuery.returnGeometry = true;
+      let pointsQuery = layer.createQuery();
+      pointsQuery.geometry = polygon.geometry;
+      pointsQuery.spatialRelationship = "intersects";
+      pointsQuery.returnGeometry = true;
 
-        if (isAnyFieldSelected) {
-            pointsQuery.where = `${selectedField} = 1`;
-        }
+      // Construct the filter query based on the selected fields and filter mode
+      let filterQuery = '';
+      const selectedFields = filterFieldsMap
+          .filter(item => item.id && document.getElementById(item.id).checked)
+          .map(item => item.field);
 
-        const countStatistic = {
-            onStatisticField: "1",
-            outStatisticFieldName: "countValue",
-            statisticType: "count",
-        };
+      if (selectedFields.length > 0) {
+          filterQuery = selectedFields.map(field => `${field} = 1`).join(filterMode === 'AND' ? ' AND ' : ' OR ');
+      }
+      pointsQuery.where = filterQuery;
 
-        pointsQuery.outStatistics = [countStatistic];
-        pointsQuery.signal = signal;
+      const countStatistic = {
+          onStatisticField: "1",
+          outStatisticFieldName: "countValue",
+          statisticType: "count",
+      };
 
-        layer.queryFeatures(pointsQuery)
-            .then(pointResults => {
+      pointsQuery.outStatistics = [countStatistic];
+      pointsQuery.signal = signal;
+
+      layer.queryFeatures(pointsQuery)
+          .then(pointResults => {
               if (currentQueryId !== queryIdAtTimeOfExecution) {
-                resolve();
-                return;
-            }
-                  const pointCount = pointResults.features[0].attributes.countValue;
-                  if (pointCount === 0) {
-                      resolve();
-                      return;
-                  }
-  
-                  let clusterSize = 5;
-                  let stops = clusterConfig.renderer.visualVariables[0].stops;
-  
-                  for (let i = 0; i < stops.length; i++) {
-                      if (pointCount >= stops[i].value && (i === stops.length - 1 || pointCount < stops[i + 1].value)) {
-                          clusterSize = stops[i].size;
-                          break;
-                      }
-                  }
-                  
-                  const clusterGraphic = new Graphic({
-                      geometry: polygon.geometry.centroid,
-                      symbol: {
-                          type: "simple-marker",
-                          style: "circle",
-                          color: "#83DBBB",
-                          size: clusterSize,
-                          outline: {
-                              color: "#9BF1D2",
-                              width: 5
-                          }
-                      },
-                      effect: "bloom(150%, 25%, 1%)"
-                  });
-                  clusterGraphic.effect = "bloom(1, 0.1px, 15%)";
-                  
-                  const labelGraphic = new Graphic({
-                      geometry: polygon.geometry.centroid,
-                      symbol: {
-                          type: "text",
-                          text: pointCount.toString(),
-                          color: "#004a5d",
-                          font: {
-                              weight: "bold",
-                              family: "Noto Sans",
-                              size: "12px"
-                          },
-                          verticalAlignment: "middle",
-                          horizontalAlignment: "center"
-                      }
-                  });
-                  console.log('Drawing clusters....');
-                  pseudoClusterLayer.addMany([clusterGraphic, labelGraphic]);
-                  
                   resolve();
-                })
-                .catch(error => {
-                    // Handle the abort error
-                    if (error.name === 'AbortError') {
-                        console.log('Query aborted');
-                        // Create a new instance of AbortController for subsequent operations
-                        controller = new AbortController();
-                        signal = controller.signal;
-                        resolve();
-                        return;
-                    }
-            
-                });
-        });
-        
-    }
+                  return;
+              }
+
+              const pointCount = pointResults.features[0].attributes.countValue;
+              if (pointCount === 0) {
+                  resolve();
+                  return;
+              }
+
+              let clusterSize = 5;
+              let stops = clusterConfig.renderer.visualVariables[0].stops;
+
+              for (let i = 0; i < stops.length; i++) {
+                  if (pointCount >= stops[i].value && (i === stops.length - 1 || pointCount < stops[i + 1].value)) {
+                      clusterSize = stops[i].size;
+                      break;
+                  }
+              }
+
+              const clusterGraphic = new Graphic({
+                  geometry: polygon.geometry.centroid,
+                  symbol: {
+                      type: "simple-marker",
+                      style: "circle",
+                      color: "#83DBBB",
+                      size: clusterSize,
+                      outline: {
+                          color: "#9BF1D2",
+                          width: 5
+                      }
+                  },
+                  effect: "bloom(150%, 25%, 1%)"
+              });
+
+              const labelGraphic = new Graphic({
+                  geometry: polygon.geometry.centroid,
+                  symbol: {
+                      type: "text",
+                      text: pointCount.toString(),
+                      color: "#004a5d",
+                      font: {
+                          weight: "bold",
+                          family: "Noto Sans",
+                          size: "12px"
+                      },
+                      verticalAlignment: "middle",
+                      horizontalAlignment: "center"
+                  }
+              });
+
+              console.log('Drawing clusters....');
+              pseudoClusterLayer.addMany([clusterGraphic, labelGraphic]);
+
+              resolve();
+          })
+          .catch(error => {
+              if (error.name === 'AbortError') {
+                  console.log('Query aborted');
+                  controller = new AbortController();
+                  signal = controller.signal;
+                  resolve();
+                  return;
+              }
+          });
+  });
+}
 
     const debouncedApplyPolygonClustering = debounce(applyPolygonClustering, 20);
 
@@ -1655,9 +1702,14 @@ const selectedFieldIds = filterFieldsMap.filter(item => document.getElementById(
     // Perform any other necessary cleanup here
 }
   
+
   /******************************** FILTER DATA BY SELECTED FIELD *****************/
-  NHtrailsLines.visible = false;
+
+
   
+  NHtrailsLines.visible = false;
+
+  let filterMode = 'AND'; // Possible values: 'AND', 'OR'
   const boundaryLayerVisible = tourismRegions.visible || cedrRegions.visible || newHampshireCounties.visible || newHampshireTownships.visible;
   
   
@@ -1675,49 +1727,57 @@ const selectedFieldIds = filterFieldsMap.filter(item => document.getElementById(
     return false;
   }
   
-  function setLayerDefinitionExpression(layer, filters) {
+function setLayerDefinitionExpression(layer, filters) {
     if (Object.keys(filters).length > 0) {
-        let definitionExpression = Object.keys(filters).map(field => `${field} = '1'`).join(" AND ");
+        let definitionExpression = Object.keys(filters).map(field => `${field} = '1'`);
+        definitionExpression = filterMode === 'AND' ? definitionExpression.join(" AND ") : definitionExpression.join(" OR ");
         layer.definitionExpression = definitionExpression;
         console.log(definitionExpression);
     } else {
         layer.definitionExpression = null;
     }
-  }
+}
   
-  window.applyFilter = function() {
-    console.log('Applying filter...');
-    const filters = {};
+window.applyFilter = function() {
+  console.log('Applying filter...');
+  const filters = {};
 
-    const selectedFields = filterFieldsMap
-        .filter(item => item.id && document.getElementById(item.id).checked)
-        .map(item => item.field);
+  const selectedFields = filterFieldsMap
+      .filter(item => item.id && document.getElementById(item.id).checked)
+      .map(item => item.field);
 
-    if (selectedFields.length) {
-        selectedFields.forEach(field => {
-            filters[field] = "1";
-        });
+  if (selectedFields.length) {
+      selectedFields.forEach(field => {
+          filters[field] = "1";
+      });
 
-        setLayerDefinitionExpression(layer, filters);
+      setLayerDefinitionExpression(layer, filters);
 
-        if (applyClusterIfNecessary(boundaryLayerVisible, layer, selectedField)) return;
+      if (applyClusterIfNecessary(boundaryLayerVisible, layer, selectedField)) return;
 
-        if (isClusteringEnabled) {
-            drawCluster();
-            return;
-        }
-    } else {
-        layer.definitionExpression = null; // Ensure all points are displayed when no fields are checked
+      if (isClusteringEnabled) {
+          if (selectedBoundaryLayer && selectedBoundaryLayer.visible) {
+              applyPolygonClustering(selectedBoundaryLayer, layer, selectedField);
+              layer.visible = false; // Hide the raw points layer when using advanced clustering
+          } else {
+              drawCluster();
+              layer.visible = true; // Show the raw points layer when not using advanced clustering
+          }
+      }
+  } else {
+      layer.definitionExpression = null; // Ensure all points are displayed when no fields are checked
 
-        if (applyClusterIfNecessary(boundaryLayerVisible, layer, selectedField)) return;
+      if (applyClusterIfNecessary(boundaryLayerVisible, layer, selectedField)) return;
 
-        if (isClusteringEnabled) {
-            drawSimpleCluster();
-            return;
-        }
-    }
-    console.log('Selected fields for filtering:', selectedFields);
-    console.log('Final layer visibility after applyFilter:', layer.visible);
+      if (isClusteringEnabled) {
+          drawSimpleCluster();
+          layer.visible = true; // Show the raw points layer when not using advanced clustering
+      } else {
+          layer.visible = true; // Show the raw points layer when clustering is disabled
+      }
+  }
+  console.log('Selected fields for filtering:', selectedFields);
+  console.log('Final layer visibility after applyFilter:', layer.visible);
 }
 
   // DEBOUNCE VERSION
@@ -1866,8 +1926,10 @@ view.ui.add(expandWidget, "top-left");
 expandWidget.watch("expanded", function(expanded) {
   if (expanded) {
     info.style.display = "block"; // show the info window when the widget is expanded
+    showOverlay();
   } else {
     info.style.display = "none"; // hide the info window when the widget is collapsed
+    hideOverlay();
   }
 });
 
@@ -1893,6 +1955,11 @@ var zoom = new Zoom({
   view: view
 });
 view.ui.add(zoom, "top-left");
+
+document.querySelectorAll('.esri-widget--button svg').forEach(svg => {
+  svg.style.width = '35px';
+  svg.style.height = '35px';
+});
 
 /* const customLegend = document.getElementById("customLegend");
 
@@ -2067,24 +2134,42 @@ function setNewHampshireRenderer() {
 /**************************************** PAGE MASK ********************************************/
 
 
-// Show the popup and overlay with a fade-in animation when the page loads
-window.addEventListener('load', () => {
-  overlay.style.opacity = '1';
-  popupContainer.style.opacity = '1';
-  popupContainer.style.transform = 'translate(-50%, -50%) scale(1)';
-});
 
-// Close the popup and overlay with a fade-out animation when the "Close" button is clicked
-closePopupButton.addEventListener('click', () => {
+// Elements for the second popup
+const infoPopup = document.getElementById('info');
+const closeInfoButton = document.getElementById('closeBtn');
+
+function showOverlay() {
+  overlay.style.display = 'block';
+  overlay.style.opacity = '1';
+}
+
+function hideOverlay() {
   overlay.style.opacity = '0';
-  popupContainer.style.opacity = '0';
-  popupContainer.style.transform = 'translate(-50%, -50%) scale(0.8)';
   setTimeout(() => {
     overlay.style.display = 'none';
-    popupContainer.style.display = 'none';
-  }, 300); // Wait for the animation to complete (300ms)
+  }, 300); // Match this delay with your CSS transition
+}
+
+// Show the first popup and overlay when the page loads
+window.addEventListener('load', () => {
+  popupContainer.style.display = 'block';
+  showOverlay();
+  infoPopup.style.display = 'none'; // Initially hide the second popup
 });
 
+// Transition from the first to the second popup
+closePopupButton.addEventListener('click', () => {
+  popupContainer.style.display = 'none';
+  infoPopup.style.display = 'block';
+  showOverlay(); // Show overlay with the second popup
+});
+
+// Close the second popup and hide the overlay
+closeInfoButton.addEventListener('click', () => {
+  infoPopup.style.display = 'none';
+  hideOverlay();
+});
 
 
 

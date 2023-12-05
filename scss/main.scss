@@ -1,6 +1,12 @@
 //custom.scss
 
-
+$grid-breakpoints: (
+  xs: 0,
+  sm: 0px,
+  md: 0px,
+  lg: 2000px,
+  xl: 2000px
+);
 
 $surface-bg: #13444b;
 
