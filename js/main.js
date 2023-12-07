@@ -89,63 +89,75 @@ require([
   function populateFilterDiv(filterFields) {
     filterDiv.innerHTML = '';
 
-    // Create the Filter Mode toggle button and Clear Filters button
-    const filterModeButton = document.createElement('button');
-    filterModeButton.id = 'toggleFilterMode';
-    filterModeButton.textContent = 'Filter Mode: AND';
-    filterDiv.appendChild(filterModeButton);
+    // Create a container for the category title and buttons
+    const headerContainer = document.createElement('div');
+    headerContainer.className = 'header-container';
+    filterDiv.appendChild(headerContainer);
 
-    const clearFiltersButton = document.createElement('button');
-    clearFiltersButton.id = 'clearFilters';
-    clearFiltersButton.textContent = 'Clear Filters';
-    clearFiltersButton.style.marginLeft = '10px';
-    filterDiv.appendChild(clearFiltersButton);
+    // Initialize variable for the category title
+    let categoryTitleElement = null;
 
-    // Add a separator
-    const gap = document.createElement('div');
-    gap.style.marginTop = '10px';
-    filterDiv.appendChild(gap);
-
-    // Determine if exclusive checkboxes are present
-    const hasExclusiveCheckboxes = filterFields.some(item => item.exclusive);
-
-    // Add filter checkboxes
+    // Handle filterFields items
     filterFields.forEach(item => {
-        const div = document.createElement('div');
-
-        if (item.label || item.fieldlabel) {
-            // For category title or other headers
-            div.innerHTML = `<strong>${item.label || item.fieldlabel}</strong>`;
+        if (item.fieldlabel) {
+            // Create category title element
+            categoryTitleElement = document.createElement('h3');
+            categoryTitleElement.className = 'category-title';
+            categoryTitleElement.textContent = item.fieldlabel;
+        } else if (item.label) {
+            // Handle additional text as separate elements
+            const textElement = document.createElement('p');
+            textElement.innerHTML = item.label;
+            filterDiv.appendChild(textElement);
         } else {
-            // For checkboxes
+            // Handle checkbox creation
+            const div = document.createElement('div');
+            div.className = 'checkbox-container'; // Assign class to the container
+            
+            // Create checkbox
             const checkbox = document.createElement('input');
             checkbox.type = 'checkbox';
             checkbox.id = item.id;
+            checkbox.className = 'checkbox-style'; // Assign class to the checkbox
             div.appendChild(checkbox);
-
+            
+            // Create label
             const label = document.createElement('label');
             label.htmlFor = item.id;
             label.textContent = item.displayName;
+            label.className = 'checkbox-label'; // Assign class to the label
             div.appendChild(label);
-
-            if (hasExclusiveCheckboxes && item.exclusive) {
-                checkbox.addEventListener('change', () => handleExclusiveCheckboxes(item.id));
-            } else {
-                checkbox.addEventListener('change', applyFilter);
-            }
+            
+            filterDiv.appendChild(div);
         }
-        filterDiv.appendChild(div);
     });
 
-    // Event listeners for the buttons
+    // Add category title to the header container
+    if (categoryTitleElement) {
+        headerContainer.appendChild(categoryTitleElement);
+    }
+
+    // Create the Filter Mode toggle button
+    const filterModeButton = document.createElement('button');
+    filterModeButton.id = 'toggleFilterMode';
+    filterModeButton.textContent = 'Filter Mode: AND';
+    headerContainer.appendChild(filterModeButton);
+    
+    // Create the Clear Filters button
+    const clearFiltersButton = document.createElement('button');
+    clearFiltersButton.id = 'clearFilters';
+    clearFiltersButton.textContent = 'Clear Filters';
+    headerContainer.appendChild(clearFiltersButton);
+
+    // Attach event listeners to buttons
     document.getElementById('toggleFilterMode').addEventListener('click', toggleFilterMode);
     document.getElementById('clearFilters').addEventListener('click', clearSelectedLayers);
 }
 
 function handleExclusiveCheckboxes(selectedCheckboxId) {
     console.log("Called handleExclusiveCheckboxes with:", selectedCheckboxId);
-    const exclusiveCheckboxes = ['filterNationalChain', 'filterRegionalChain', 'filterLocalBusiness'];
 
+    const exclusiveCheckboxes = ['filterNationalChain', 'filterRegionalChain', 'filterLocalBusiness'];
     if (exclusiveCheckboxes.includes(selectedCheckboxId)) {
         exclusiveCheckboxes.forEach(checkboxId => {
             if (checkboxId !== selectedCheckboxId) {
@@ -153,9 +165,7 @@ function handleExclusiveCheckboxes(selectedCheckboxId) {
             }
         });
     }
-    applyFilter(); // Apply filter after updating exclusive checkboxes
 }
-
 
 function toggleFilterMode() {
     filterMode = filterMode === 'AND' ? 'OR' : 'AND';
@@ -198,16 +208,14 @@ function updateFields(datasetName) {
   }
 
   // Update the layer URL and reload it
-  layer.url = currentLayerLink;
-  map.layers.remove(layer);
   layer.load().then(() => {
-      map.layers.add(layer);
-  }).catch(error => {
-      console.error("[updateFields] Error loading the layer:", error);
-  });
-
+    map.layers.add(layer);
+    layer.visible = true; // Make sure the layer is visible
+}).catch(error => {
+    console.error("[updateFields] Error loading the layer:", error);
+});
   // Populate the filter div with checkboxes, toggle button, and category title
-  populateFilterDiv(selectedCategoryTitle, filterFieldsMap);
+  populateFilterDiv(filterFieldsMap);
 
   // Apply filters based on the selected dataset
   applyFilter();
@@ -1794,7 +1802,8 @@ const selectedFieldIds = filterFieldsMap.filter(item => document.getElementById(
   
    NHtrailsLines.effect = "bloom(1, 5px, 15%)";
         
-   document.getElementById('NHtrailsBloomToggle').addEventListener('change', function() {
+   document.getElementById('NHtrailsBloomToggle').addEventListener
+   ('change', function() {
     if (this.checked) {
       NHtrailsLines.effect = "bloom(.7, 3px, 15%)";
       NHtrailsLines.renderer.symbol.color = "#FFC1AD";

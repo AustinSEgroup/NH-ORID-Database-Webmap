@@ -502,22 +502,65 @@ body {
   height: calc(100vh - (90px));
 }
 
+/* Styles for the header container */
+.header-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: nowrap;
+  margin-bottom: 10px;
+}
+
+/* Styles for the category title */
+.category-title {
+  display: block;
+  width: 100%;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  flex-shrink: 0;
+  flex: 1 0 auto;
+  margin-right: 10px;
+  margin-bottom: 10px;
+  padding-bottom: 20px;
+  align-items: left;
+  text-align: left;
+  margin-left: 17px;
+}
+
+/* Adjust padding, margins, or borders as needed */
+.header-container {
+  padding: 10px;
+  /* Other styles as needed */
+}
+
+
 #infoDiv3 {
   width: 200px;
   padding-right: 20px;
   z-index: 9;
   height: 100vh;
   padding: 5px;
+
 }
 
 #infoDiv, #infoDiv2 {
   background-color:#207380;
-  width: 300px;
+  width: 350px;
   padding: 5px;
   z-index: 9;
   height: 100vh;
   overflow-y: auto;
+  margin-top: -20px;
   
+  
+}
+
+.esri-component.esri-widget--button {
+  position: absolute;
+  top: 50%; /* Adjust as needed */
+  left: 50%; /* Adjust as needed */
+  transform: translate(-50%, -50%);
 }
 
 /* Positioning expand icons at the left and right edges */
@@ -551,7 +594,7 @@ body {
 
 
 #filterDiv {
-  
+  margin-top: 10px;
   margin-left: 10px;
   padding-top: 15px;
   height: 100vh;
@@ -660,6 +703,7 @@ p2 {
 
 #checkbox {
   margin: 10px;
+  transform: (0px, 1px);
 }
 
 p3 {
@@ -692,9 +736,8 @@ p4 {
   font-style: italic;
 }
 
-h4 {
-  font-size: 24pt;
-  font-weight: bold;
+h5 {
+  font-size: 1.2em;
 }
 
 #clearRadio {
@@ -716,7 +759,8 @@ h4 {
   color: #fff;
   background-color: #3c8478; /* This is to ensure the button color matches the background */
   transition: color 0.3s ease;
-  margin-left: 75px;
+  margin-left: 87px;
+  margin-top: 5px;
 
 }
 
@@ -724,3 +768,95 @@ h4 {
   color: rgb(220, 114, 114); /* red color on hover */
 }
 
+.header-container button {
+  padding: 5px 10px; /* Adjust padding */
+  margin-left: 5px; /* Space between buttons */
+  background-color: #3c8478; /* Button background color */
+  color: white; /* Text color */
+  border: none; /* Remove border */
+  border-radius: 4px; /* Rounded corners */
+  cursor: pointer; /* Cursor change on hover */
+  font-size: 14px; /* Font size */
+  line-height: 1.5; /* Line height */
+}
+
+/* Specific style for the filter mode button */
+#toggleFilterMode {
+  transform: translate(-20px, 0px);
+}
+
+/* Specific style for the clear filters button */
+#clearFilters {
+  /* Add specific styles for the clear filters button here if needed */
+  transform: translate(-62px, 0px);
+}
+
+/* Button hover effect */
+.header-container button:hover {
+  background-color: #0056b3; /* Darker shade on hover */
+}
+
+/* Adjust the container of the checkbox and label for better alignment */
+.checkbox-container {
+  display: flex;
+  align-items: center; /* This will vertically align the checkbox and label */
+}
+
+.checkbox-container:hover {
+  background-color: #649184; /* Light grey background on hover, change as needed */
+}
+
+.checkbox-label:hover { /* Example effect for the label */
+}
+
+input[type='checkbox']:hover {
+  background-color: #649184;
+}
+
+input[type='checkbox']:checked + .checkbox-label {
+  display: block; /* Makes the label take the full width of its container */
+  width: 100%; /* Ensures the label stretches across the entire width */
+  background-color: #b1dfd1; /* Slightly darker background on hover */
+  color: #000000; /* Dark text color */
+  /* Other styles as needed */
+}
+/* Style the checkbox */
+input[type='checkbox'] {
+  margin-top: -5px;
+  vertical-align: middle; /* Adjust this as needed */
+  margin-right: 2px;
+  appearance: none; /* Hide the default checkbox */
+  background-color: GG#cbbdbd; /* Background color of the custom checkbox */
+  border: 1px solid #ccc; /* Border for the custom checkbox */
+  width: 15px; /* Width of the custom checkbox */
+  height: 15px; /* Height of the custom checkbox */
+  cursor: pointer;
+
+}
+
+input[type='checkbox']:checked {
+  background-color: rgb(30, 79, 60);/* Background color when checked */
+  border: 3px solid #e8ff9d;
+  /* Add other styles for checked state, like a custom icon */
+}
+
+/* Style the label */
+.checkbox-label {
+  cursor: pointer;
+}
+
+side-container {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 100px; /* Adjust as needed */
+  background-color: rgb(30, 79, 60); /* Your chosen color */
+}
+
+.side-container.left {
+  left: 0;
+}
+
+.side-container.right {
+  right: 0;
+}
