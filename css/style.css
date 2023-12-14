@@ -649,12 +649,7 @@ margin-top: -15px;
 
   .instructions-container::before,
   .instructions-container::after {
-      content: '';
-      position: absolute;
-      top: 0;
-      bottom: 0;
-      width: 1px;
-      background-color: #ccc;
+   
   }
 
   .instructions-container::before {
