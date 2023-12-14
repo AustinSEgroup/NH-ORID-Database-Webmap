@@ -799,7 +799,7 @@ p6 {
     text-overflow: ellipsis; /* Add an ellipsis to signify clipped text */
   
   font-weight: 400;
-  font-size: 14px;
+  font-size: 16px;
   border: 0;
   padding:4px;
   padding-right: 10px;
