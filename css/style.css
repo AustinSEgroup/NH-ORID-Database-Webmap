@@ -646,10 +646,15 @@ margin-top: -15px;
       grid-template-columns: repeat(3, 1fr);
       column-gap: 30px;
   }
-
-  .instructions-container::before,
+}
+  /* .instructions-container::before,
   .instructions-container::after {
-   
+      content: '';
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      width: 1px;
+      background-color: #ccc;
   }
 
   .instructions-container::before {
@@ -660,7 +665,7 @@ margin-top: -15px;
       left: calc(66.666% + 30px);
   }
 }
-
+*/
 /* Medium screens */
 @media (max-width: 1023px) and (min-width: 768px) {
   .instructions-container {

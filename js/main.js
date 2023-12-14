@@ -1273,27 +1273,24 @@ const NHwaterAccess = new FeatureLayer({
 
 // Clear Filters Function
 function clearSelectedLayers() {
-  // Uncheck all checkboxes
+  // Uncheck all checkboxes and reset filters
+  const filters = {};
   filterFieldsMap.forEach(item => {
       if (item.id) {
           document.getElementById(item.id).checked = false;
       }
   });
-
-  // Reset the filters object
-  const filters = {};
   setLayerDefinitionExpression(layer, filters);
 
-  // Call applyFilter to reevaluate the map display
-  applyFilter();
-
-  // Reevaluate clustering and visibility
-  reevaluateClusteringAndVisibility();
+  // Wait for the filters to be applied, then reevaluate clustering
+  setTimeout(() => {
+      applyFilter();  // Ensures filters are applied
+      reevaluateClusteringAndVisibility();
+  }, 0);  // Using setTimeout to allow UI and other processes to complete
 
   console.log("Filters cleared");
 }
 
-// Clear Boundary Layers Function
 function clearBoundaryLayers() {
   // Turn off all boundary layers
   [cedrRegions, tourismRegions, newHampshireCounties, newHampshireTownships].forEach(layer => {
@@ -1309,14 +1306,11 @@ function clearBoundaryLayers() {
   // Reset the selected boundary layer
   selectedBoundaryLayer = null;
 
-  // Call applyFilter to reevaluate the map display
-  applyFilter();
-
-  // Reevaluate clustering and visibility
-  reevaluateClusteringAndVisibility();
-
+  // Immediately reevaluate filters and clustering
+  applyFilter();  // This will handle filter reapplication and clustering logic
   console.log("Boundary layers cleared");
 }
+
 
 // Attach event listeners for the clear buttons
 document.getElementById('clearBoundaries').addEventListener('click', clearBoundaryLayers);
@@ -1324,12 +1318,16 @@ document.getElementById('clearBoundaries').addEventListener('click', clearBounda
 // Function to Reevaluate Clustering and Visibility
 function reevaluateClusteringAndVisibility() {
   if (selectedBoundaryLayer && selectedBoundaryLayer.visible) {
-      applyPolygonClustering(selectedBoundaryLayer, layer, selectedField);
+      if (!layer.visible || layer.featureReduction === null) {
+          applyPolygonClustering(selectedBoundaryLayer, layer, selectedField);
+      }
   } else if (isClusteringEnabled) {
       drawCluster();
   } else {
-      layer.visible = true;
-      layer.featureReduction = null;
+      if (layer.visible === false || layer.featureReduction !== null) {
+          layer.visible = true;
+          layer.featureReduction = null;
+      }
   }
 }
 // ADD CLEAR BUTTON FOR REC LAYERS
@@ -1788,6 +1786,8 @@ boundaryBtns.forEach(btnId => {
   map.add(pseudoClusterLayer);
   
  function applyPolygonClustering(selectedBoundaryLayer, layer, selectedField) {
+
+  
   console.log('Attempting to apply polygon clustering...');
     if (isTaskRunning) {
         console.log('Task already running. Exiting applyPolygonClustering.');
@@ -2113,58 +2113,33 @@ function setLayerDefinitionExpression(layer, filters) {
 window.applyFilter = function() {
     console.log('Applying filter...');
     const filters = {};
+    let areAnyFiltersSelected = false;
 
-    // Build the filter based on selected checkboxes
-    const selectedFields = filterFieldsMap
-        .filter(item => item.id && document.getElementById(item.id).checked)
-        .map(item => item.field);
+    // Build the filter based on selected checkboxes and check if any filter is selected
+    filterFieldsMap.forEach(item => {
+        if (item.id && document.getElementById(item.id).checked) {
+            filters[item.field] = "1";
+            areAnyFiltersSelected = true;
+        }
+    });
 
-    if (selectedFields.length) {
-        selectedFields.forEach(field => {
-            filters[field] = "1";
-        });
+    if (areAnyFiltersSelected) {
         setLayerDefinitionExpression(layer, filters);
     } else {
         layer.definitionExpression = null; // Clear the definition expression
     }
+
+    // Apply polygon clustering or reevaluate clustering and visibility
     if (boundaryLayerVisible && isClusteringEnabled) {
-      applyPolygonClustering(selectedBoundaryLayer, layer, selectedField);
-      layer.visible = false;
-      return; 
-    }
-    
-    // Check if advanced clustering should be applied
-    if (applyClusterIfNecessary(boundaryLayerVisible, layer, selectedField)) {
-        if (selectedBoundaryLayer && selectedBoundaryLayer.visible) {
-            applyPolygonClustering(selectedBoundaryLayer, layer, selectedField);
-            layer.visible = false;
-        } else {
-            drawCluster();
-            layer.visible = true;
-        }
-        return; // Exit the function after applying advanced clustering
-    }
-
-    // The following condition checks are for when advanced clustering is not applied
-    if (isClusteringEnabled) {
-        if (!selectedFields.length) {
-            // If no fields are selected, apply simple clustering
-            drawSimpleCluster();
-        } else {
-            // If fields are selected, apply standard clustering
-            drawCluster();
-        }
+        applyPolygonClustering(selectedBoundaryLayer, layer, selectedField);
+        layer.visible = false;
     } else {
-        layer.visible = true; // Ensure layer visibility when clustering is disabled
+        reevaluateClusteringAndVisibility();
     }
 
-    console.log('Selected fields for filtering:', selectedFields);
     console.log('Final layer visibility after applyFilter:', layer.visible);
 }
 
-  // DEBOUNCE VERSION
-
-  const debounceApplyFilter = debounce(applyFilter, 20);
 
   Object.keys(filterFieldsMap).forEach(id => {
     document.getElementById(id).addEventListener('change', function() {
