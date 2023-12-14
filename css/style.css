@@ -968,7 +968,6 @@ h3 {
   /* Custom styles specific to labels in filterDiv */
   /* Example styling: */
   cursor: pointer;
-  margin-top: 4px;
   padding: 5px;
   margin-left: 15px;
 }
@@ -1041,7 +1040,7 @@ h3 {
 
 .checkbox-label {
   cursor: pointer;
-  padding: 4px;
+  padding: 5px;
   margin-left: 13px;
   flex-grow: 1;
  
@@ -1057,9 +1056,9 @@ h3 {
   /* Custom styles specific to labels in infoDiv2 */
   /* Example styling: */
   cursor: pointer;
-  margin-top: 4px;
+  margin-top: 6px;
   transform: translateY(-2px);
-  margin-left: 4px; /* Different margin for demonstration */
+  margin-left: 5px; /* Different margin for demonstration */
 }
 
 
@@ -1068,7 +1067,7 @@ h3 {
   /* Example styling: */
   cursor: pointer;
   margin-top: 5px;
-  transform: translateY(-10px);
+  transform: translateY(-2px);
   margin-left: 2px; /* Different margin for demonstration */
 }
 
