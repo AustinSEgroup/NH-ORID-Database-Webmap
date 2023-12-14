@@ -62,7 +62,7 @@
       <a href="https://segroup.com/" target="_blank">
         <img src="./img/se_credit.svg" class="logo-bottom" alt="SE Group logo">
       </a>
-      
+
       <a href="https://www.nh.gov/" target="_blank">
         <img src="./img/NH_1.svg" class="logo-bottom" alt="NH State logo">
       </a>
@@ -79,10 +79,10 @@
   <div class="dropdown-and-buttons">
       <!-- Dropdown for Database Categories -->
       <div class="dropdown">
-          <button class="btn btn-altdark dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        <button class="btn btn-altdark dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
               Select Database Category
           </button>
-          <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+          <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
               <button id="retailDropdownLink" class="dropdown-item">Retail-Service Businesses</button>
               <button id="recProviderDropdownLink" class="dropdown-item">Recreation Providers</button>
               <button id="b2bManufacturerDropdownLink" class="dropdown-item">Services and Manufacturers</button>
@@ -90,17 +90,18 @@
           </ul>
       </div>
 
-      <div class="dropdown">
-        <button class="btn btn-altdark dropdown-toggle" type="button" id="dropdownMenuButton2" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-          Select Regions
-        </button>
-        <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton2">
-          <button id="dropdownToggleCEDRregions" class="toggle-clust">CEDR Regions</button>
-          <button id="dropdownToggleTourismRegions" class="toggle-clust">Tourism Regions</button>
-          <button id="dropdownToggleCounties" class="toggle-clust">Counties</button>
-          <button id="dropdownToggleTownships" class="toggle-clust">Municipalities</button>
-        </ul>
-      </div>
+<!-- Second Dropdown -->
+<div class="dropdown">
+  <button class="btn btn-altdark dropdown-toggle" type="button" id="dropdownMenuButton2" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+    Select Regions
+  </button>
+  <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton2">
+    <button id="dropdownToggleCEDRregions" class="dropdown-item">CEDR Regions</button>
+    <button id="dropdownToggleTourismRegions" class="dropdown-item">Tourism Regions</button>
+    <button id="dropdownToggleCounties" class="dropdown-item">Counties</button>
+    <button id="dropdownToggleTownships" class="dropdown-item">Municipalities</button>
+  </ul>
+</div>
 
       <!-- Clear Filters Buttons -->
      
@@ -122,7 +123,7 @@
 
 <nav class="navbar navbar-expand-md top-bar">
   <button id="toggleClustering" class="toggle-clust1">
-    <img src="./img/clustering.svg" width="30"> <span>Point Clustering: OFF</span>
+    <img src="./img/clustering.svg" width="30"> <span id="clustLabel">Point Clustering: OFF</span>
   </button>
 
   <!-- Dummy links for JavaScript functionality -->
@@ -148,7 +149,7 @@
           
           <div id="infoDiv2">
             <div id="infoDivHeader">
-            <h5>Recreation Data Layers</h5>
+            <h5 id ="recLayerTitle">Recreation Data Layers</h5>
             <button id="clearAllButton">Clear Layers</button>
           </div>
             <div id="layerToggleContainer">
@@ -175,12 +176,12 @@
                   <label for="Private">Private</label><br>
                   <input type="checkbox" class="NHrecAreasFilter" value="6" id="County">
                   <label for="County">County</label><br>
-                  <br>
+              
                 </div>
              
                 <div class="checkbox-container">
                   <input type="checkbox" class="NHrecAreasFilter" id="NHdncrstateLandsToggle">
-                  <label for="NHdncrstateLandsToggle">State Lands</label>
+                  <label for="NHdncrstateLandsToggle">All State Lands</label>
                 </div>
                 <div class="checkbox-container">
                   <input type="checkbox" id="NHrecAreasToggle">
@@ -380,7 +381,7 @@
         <br>
         
           <h2>Using the Point Clustering Tool</h2> In the top left corner, clicking the button with the <img src="./img/clustering.svg" width="20"> 
-        symbol, will show summary statistics for the number of businesses or organizations in different areas of the state. Point Clustering responds to any filter or region selections.<br>
+        symbol, will show summary statistics for the number of businesses or organizations in different areas of the state. Point Clustering responds to any filter or region selections. For instance, turning on County boundaries displays a summary cluster at the center of each county. <br>
         <!-- Instruction Images Container -->
         <br>
 

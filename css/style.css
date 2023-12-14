@@ -92,7 +92,7 @@ body {
 }
 
 .btn-altdark2 {
-  margin-left: 10%;
+
   font-size: 14px;
   font-weight: 400;
   border:#5c9d86;
@@ -108,97 +108,80 @@ body {
   cursor: pointer;
   text-align: center;
   transition-duration: 0.4s;
-  margin-left: 15px;
+  
   transform: translateY(-4px);
 }
 
 .navnbar {
   padding-right: 50px;
 }
-.dropdown-nav {
-  display: none;
-  margin-left: 50px;
+.dropdown-and-buttons {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start; /* Align to the start */
+  flex-wrap: wrap; /* Allow wrapping on smaller screens */
+}
+
+.btn.dropdown-toggle {
+  /* Adjustments for dropdown buttons */
+  background-color: #13444b;
+  color: white; /* Assuming you want white text */
+  margin: 0;
+}
+
+.btn.dropdown-toggle.active {
+  background-color: #6ea572; /* Darker or different color for active state */
+  color: white; /* Adjust text color if needed */
+
+}
+
+.btn.dropdown-toggle:hover {
+  background-color: #5c9d8675; /* Lighter shade for hover, adjust as needed */
+  color: white; /* Adjust text color if needed */
+  /* Add any other hover styles as required */
 }
 .dropdown {
-  font-size: 12px;
-  padding-left: 3px;
-  margin-right: 5px;
-  padding-right: 5px;
-  
+  padding: 0;
+  position: relative; /* Needed for absolute positioning of child elements */
 }
 
-@media (min-width: 800px) {
-  .dropdown {
-      /* Adjust the alignment or spacing as needed */
-      text-align: left; /* Example: Align text to the left */
-      padding: 0; /* Example: Remove padding */
-      /* Other potential adjustments based on your findings */
-  }
+.dropdown .dropdown-menu {
+  position: absolute; /* Position absolutely within the relative parent */
+  width: 100%; /* Set width to match the parent .dropdown width */
+  left: 0; /* Align to the left edge of the parent */
+  top: 100%; /* Position just below the dropdown button */
+  font-size: 12pt;
+  margin: 0;
+  border: 0;
 }
 
-@media (min-width: 800px) {
-  .dropdown.show .dropdown-menu {
-    transform: translate(0, 0) !important; /* Reset the transform at 800px and above */
-  }
+.dropdown-item, .toggle-clust {
+  display: block;
+  width: 100%;
+  /* Adjust padding for consistent spacing */
+  background-color: transparent; /* Default background */
+  border: none; 
+  font-size: 16px;
+  font-weight: 400;
+  border:#5c9d86;
+  margin-left: -4px;
+  color: white;
+  justify-content: left;
+  background-color: #207380 ;
+  cursor: pointer;
+  text-align: left;
+  transition-duration: 0.4s;
 }
 
-.dropdown-menu {
-   font-size: 14px;
-
-   
-}
-.btn-altdark2 {
-  margin-left: 55px;
- 
+.dropdown-item:hover, .toggle-clust:hover {
+  background-color: #5c9d8675; /* Adjust hover background color */
+  /* Other hover styles as needed */
 }
 
-.dropdownMenuButton {
-  margin-left: 30px;
-  transform: translateX(48px);
-}
-
-.dropdownMenuButton2 {
-  margin-left: -50px;
-  transform: translateX(-200px);
-}
-#dropdownToggleCEDRregions{
-  outline: #5c9d86;
-  outline-width: 1px;
-  border: #ccc;
-  transform: translateX(12px) !important;
-  margin-right: 12px;
-  
-}
-
-#dropdownToggleTownships{
-  outline: #5c9d86;
-  outline-width: 1px;
-  border: #ccc;
-  transform: translateX(12px) !important;
-  margin-right: 12px;
-  
-}
-
-#dropdownToggleTourismRegions{
-  outline: #5c9d86;
-  outline-width: 1px;
-  border: #ccc;
-  transform: translateX(12px) !important;
-  margin-right: 12px;
-  
-}
-
-#dropdownToggleCounties{
-  outline: #5c9d86;
-  outline-width: 1px;
-  border: #ccc;
-  transform: translateX(12px) !important;
-  margin-right: 12px;
-  
-}
-/* General styles for the dropdown */
-.dropdown-menu.show {
-  margin-right: 100px;
+.dropdown-item.active, .toggle-clust.active {
+  background-color: #5c9d86; /* Active state background */
+  color: white; /* Active state text color */
+  /* Other active state styles */
 }
 
 /* Styles for the navbar containing the dropdown, buttons, and LOGO */
@@ -300,7 +283,6 @@ body {
   top: 2vw; /* Adjust as needed */
   left: 50%;
   transform: translateX(-50%);
-  width: 100px; /* Adjust as needed */
   height: auto;
 }
 
@@ -401,20 +383,7 @@ body {
 #closePopupButton:hover {
   background-color: rgb(134, 98, 98);
 }
-.navbar-nav .nav-link {
-  color: white; /* Change to your desired color */
-  display: flex;
-  align-content: flex-start;
-  margin-left: 13px;
-}
 
-.navbar-nav-center {
-      display: flex;
-      padding-left: 300px;
-      margin-left: auto;
-      transform: translateX(-150px);
-      
-    }
 
 .top-bar {
   background-color: #207380; /* Change the background color as desired */
@@ -447,6 +416,12 @@ body {
 
 }
 
+#clustLabel {
+  margin-left: 4px;
+  vertical-align: middle;
+  font-size: 12pt;
+}
+
 
 @keyframes blink{
   0%{color:rgb(216, 233, 168);}
@@ -454,70 +429,31 @@ body {
   100%{color:rgb(209, 219, 182)}
 }
 
-.toggle-clust:hover {
-  background-color: #5c9d8666;
-  outline-color: #6fac96;
-  outline-width: 1px;
-  outline-style: solid;
+.toggle-clust1 img {
+  margin-left: 0px;
 }
-.toggle-clust {
-  /* Button Default State */
-  font-size: 14px;
-  font-weight: 400;
-  border:#5c9d86;
-  border-radius: 0px;
-  color: white;
-  outline-color: #5b8475;
-  outline-width: 1px;
-  justify-content: left;
-  align-items: c;
-  transform: translateX(48px);
-  background-color: #207380 ;
-  cursor: pointer;
-  text-align: center;
-  transition-duration: 0.4s;
-  margin-left: 8px;
-  outline-color: #9bd2bb;
-  outline-style: solid;
-  outline-width: 1px;
-}
-
-
-
-.toggle-clust.active {
-  /* Button Default State */
-  background-color: #5c9d86;
-  color: white;
-  animation-name:blink;
-  animation-duration:2s;
-  animation-timing-function:ease-in;
-  animation-iteration-count:Infinite;
-}
-
 .toggle-clust1:hover {
   background-color: #5c9d8666;
 }
 .toggle-clust1 {
   /* Button Default State */
   position: absolute;
+  display: block;
   font-size: 14px;
   font-weight: bold;
   border:#5c9d86;
   border-radius: 0px;
   color: white;
   margin-left: 15px;
-  margin-right: auto;
+ 
+  padding-right: 4px;
   background-color: #20807b ;
   cursor: pointer;
   text-align: center;
   transition-duration: 0.4s;
 }
 
-#button {
-  outline-color: #007bff;
-  outline-style: solid;
-  outline-width: 2px;
-}
+
 
 .toggle-clust1.active {
   /* Button Default State */
@@ -555,10 +491,11 @@ body {
 
 /* Styles for the header container */
 .header-container {
+  width: 100%;
 
   align-items: center;
   justify-content: space-between;
-  margin-right: 55px;
+ 
   margin-bottom: 10px;
 }
 
@@ -841,8 +778,10 @@ p6 {
 }
 
 #clearAllButton {
-  font-size: 12px;
+  margin-top: -3px;
+  font-size: 16px;
   border: 0;
+  font-weight: 400;
   color: #fff;
   background-color: #3c8478;
   transition: color 0.3s ease;
@@ -858,15 +797,16 @@ p6 {
   transition: color 0.3s ease;
 }
 #clearBoundaries {
+  font-weight: 400;
   font-size: 16px;
   border: 0;
-  padding:5px;
+  padding:4px;
   padding-right: 10px;
   padding-left: 10px;
   color: #fff;
   background-color: #3c8478; /* This is to ensure the button color matches the background */
   transition: color 0.3s ease;
-  margin-left: 87px;
+  margin-left: 83px;
 
 
 }
@@ -891,7 +831,7 @@ p6 {
 /* Styles for #infoDiv */
 #infoDiv {
   background-color: #13444b;
-  width: 350px;
+  width: 315px;
   padding: 5px;
   height: calc(100vh - 100px);
   z-index: 9;
@@ -911,7 +851,9 @@ p6 {
 .category-title {
   margin-bottom: 10px;
 }
-
+#recLayerTitle {
+  margin-top: 1.5px;
+}
 h3 {
   font-size: 14pt;
   font-weight: bold;
@@ -967,13 +909,16 @@ h3 {
 /* Specific style for the filter mode button */
 #toggleFilterMode {
   font-size: 16px;
-  transform: translate(-5px, 0px);
-  
+  transform: translate(-6px, 0px);
+  font-weight: 400;
 }
 
 /* Specific style for the clear filters button */
 #clearFilters {
   font-size: 16px;
+  font-weight: 400;
+  padding-right: 20px;
+  margin-left: 7px;
   /* Add specific styles for the clear filters button here if needed */
 
 }
@@ -987,9 +932,7 @@ h3 {
   background-color: #649184;
 }
 /* Button hover effect */
-.header-container button:hover {
-  background-color: #0056b3; /* Darker shade on hover */
-}
+
 
 /* Adjust the container of the checkbox and label for better alignment */
 .checkbox-container {
@@ -1025,6 +968,7 @@ h3 {
   /* Custom styles specific to labels in filterDiv */
   /* Example styling: */
   cursor: pointer;
+  margin-top: 4px;
   padding: 5px;
   margin-left: 15px;
 }
@@ -1097,7 +1041,7 @@ h3 {
 
 .checkbox-label {
   cursor: pointer;
-  padding: 5px;
+  padding: 4px;
   margin-left: 13px;
   flex-grow: 1;
  
@@ -1113,9 +1057,9 @@ h3 {
   /* Custom styles specific to labels in infoDiv2 */
   /* Example styling: */
   cursor: pointer;
-  margin-top: 6px;
+  margin-top: 4px;
   transform: translateY(-2px);
-  margin-left: 5px; /* Different margin for demonstration */
+  margin-left: 4px; /* Different margin for demonstration */
 }
 
 
@@ -1124,7 +1068,7 @@ h3 {
   /* Example styling: */
   cursor: pointer;
   margin-top: 5px;
-  transform: translateY(-2px);
+  transform: translateY(-10px);
   margin-left: 2px; /* Different margin for demonstration */
 }
 

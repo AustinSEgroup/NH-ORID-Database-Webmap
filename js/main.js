@@ -1534,6 +1534,36 @@ function applyMapUpdates() {
   }
 }
 
+
+const dropdownToggles = document.querySelectorAll('.btn.dropdown-toggle');
+
+dropdownToggles.forEach(toggle => {
+  toggle.addEventListener('click', function() {
+    // Close other dropdowns when one is opened
+    dropdownToggles.forEach(otherToggle => {
+      if (otherToggle !== this && otherToggle.classList.contains('active')) {
+        otherToggle.classList.remove('active');
+      }
+    });
+
+    // Toggle active class on the clicked dropdown
+    this.classList.toggle('active');
+  });
+});
+// Example: Toggling the 'active' class on a dropdown-toggle button
+// Example of toggling active class between dropdowns
+const dropdownButtons = document.querySelectorAll('.btn.dropdown-toggle');
+
+dropdownButtons.forEach(button => {
+  button.addEventListener('click', function() {
+    // Remove 'active' from all other dropdown buttons
+    dropdownButtons.forEach(btn => {
+      if (btn !== this) btn.classList.remove('active');
+    });
+    // Toggle 'active' on this button
+    this.classList.toggle('active');
+  });
+});
 // Boundary dropdown button IDs
 const boundaryBtns = ['dropdownToggleCEDRregions', 'dropdownToggleTourismRegions', 'dropdownToggleCounties', 'dropdownToggleTownships'];
 
