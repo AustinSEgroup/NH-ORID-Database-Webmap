@@ -774,6 +774,7 @@ p6 {
 
 #clearAllButton {
   margin-top: -3px;
+ 
   font-size: 16px;
   border: 0;
   font-weight: 400;
@@ -792,8 +793,13 @@ p6 {
   transition: color 0.3s ease;
 }
 #clearBoundaries {
+  
+    white-space: nowrap; /* Prevent text wrapping */
+    overflow: hidden; /* Hide overflow */
+    text-overflow: ellipsis; /* Add an ellipsis to signify clipped text */
+  
   font-weight: 400;
-  font-size: 16px;
+  font-size: 14px;
   border: 0;
   padding:4px;
   padding-right: 10px;
@@ -804,6 +810,27 @@ p6 {
   margin-left: 83px;
 
 
+}
+
+
+@media (max-width: 550px) { /* Adjust the max-width as needed */
+  #clearAllButton {
+    font-size: 12px; /* Smaller font size */
+    padding: 2px 5px; /* Smaller padding */
+  }
+}
+@media (max-width: 550px) { /* Adjust the max-width as needed */
+  #clearBoundaries {
+    font-size: 12px; /* Smaller font size */
+    padding: 2px 5px; /* Smaller padding */
+  }
+}
+
+@media (max-width: 800px) { /* Adjust the max-width as needed */
+  #clearBoundaries {
+
+    transform: translateY(-2px);
+  }
 }
 
 #clearBoundaries:hover {
@@ -838,7 +865,7 @@ p6 {
   margin-top: 10px;
   margin-left: 10px;
   padding-top: 15px;
-  max-height: calc(100vh - 100px);
+  max-height: calc(100vh - 120px);
   overflow-y: auto;
 }
 
@@ -848,6 +875,7 @@ p6 {
 }
 #recLayerTitle {
   margin-top: 1.5px;
+  
 }
 h3 {
   font-size: 14pt;
@@ -898,7 +926,7 @@ h3 {
 }
 
 #infoDiv2 #clearAllButton {
-  float: right;
+ margin-left: 5px;
   margin-right: 5px;
 }
 /* Specific style for the filter mode button */
@@ -912,7 +940,7 @@ h3 {
 #clearFilters {
   font-size: 16px;
   font-weight: 400;
-  padding-right: 20px;
+
   margin-left: 7px;
   /* Add specific styles for the clear filters button here if needed */
 

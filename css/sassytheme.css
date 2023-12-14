@@ -79,3 +79,10 @@ background-color: #207380;
 .sassy-theme .esri-feature-content {
   background-color: #13444b; /* Your desired color */
 }
+
+.sassy-theme .esri-expand__container{
+  background-color: #13444b; /* Your desired color */
+}
+.sassy-theme  .esri-expand__container--expanded{
+  background-color: #13444b !important;
+}

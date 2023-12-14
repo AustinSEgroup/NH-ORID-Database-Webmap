@@ -1357,9 +1357,13 @@ document.getElementById('clearAllButton').addEventListener('click', function() {
       NHrecPoints.definitionExpression = '';
       NHrecPoints.visible = false; // Hide the layer
   }
-  if (NHstateLands) {
-    NHstateLands.definitionExpression = '';
-    NHstateLands.visible = false; // Hide the layer
+  if (NHdncrstateLands) {
+    NHdncrstateLands.definitionExpression = '';
+    NHdncrstateLands.visible = false; // Hide the layer
+}
+if (NHtrailsLines) {
+  NHtrailsLines.definitionExpression = '';
+  NHtrailsLines.visible = false; // Hide the layer
 }
 if (NHwaterAccess) {
   NHwaterAccess.definitionExpression = '';
@@ -1367,7 +1371,7 @@ if (NHwaterAccess) {
 }
 if (NHwaterAccess2) {
   NHwaterAccess2.definitionExpression = '';
-  NHwaterAccess.visible = false; // Hide the layer
+  NHwaterAccess2.visible = false; // Hide the layer
 }
   // Repeat similar steps for other layers as necessary
 });
@@ -2339,11 +2343,6 @@ view.ui.add(new Expand({
 
 
 
-var zoom = new Zoom({
-  view: view
-});
-view.ui.add(zoom, "top-left");
-
 document.querySelectorAll('.esri-widget--button svg').forEach(svg => {
   svg.style.width = '35px';
   svg.style.height = '35px';
@@ -2391,6 +2390,11 @@ view.ui.add(new Expand({
     expandIcon: "collection",
     expanded: true
 }), "top-right");
+
+var zoom = new Zoom({
+  view: view
+});
+view.ui.add(zoom, "top-right");
 
 document.getElementById("retailLink").addEventListener('click', function() {
   console.log("Button clicked!");
