@@ -297,7 +297,7 @@ body {
 /* Logo above the popup */
 .logo-top {
   position: absolute;
-  top: 5vw; /* Adjust as needed */
+  top: 2vw; /* Adjust as needed */
   left: 50%;
   transform: translateX(-50%);
   width: 100px; /* Adjust as needed */
@@ -307,7 +307,7 @@ body {
 /* Container for logos below the popup */
 .logo-bottom-container {
   position: absolute;
-  bottom: 2vw; /* Adjust as needed */
+  bottom: 1vw; /* Adjust as needed */
   left: 50%;
   transform: translateX(-50%);
   width: 100%;
