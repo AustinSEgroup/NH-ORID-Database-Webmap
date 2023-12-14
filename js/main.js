@@ -2325,19 +2325,19 @@ closeBtn.addEventListener("click", function() {
   info.style.display = "none";
   expandWidget.collapse(); // also collapse the expand widget when close button is clicked
 });
-
+view.ui.add(new Home({
+  view: view
+}), "top-left");
 
 
 view.ui.add(new Expand({
-    view: view,
-    content: print,
-    expandIcon: "print",
-    expanded: false
+  view: view,
+  content: print,
+  expandIcon: "print",
+  expanded: false
 }), "top-left");
 
-view.ui.add(new Home({
-    view: view
-}), "top-left");
+
 
 var zoom = new Zoom({
   view: view
