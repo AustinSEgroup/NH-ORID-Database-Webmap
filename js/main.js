@@ -1349,10 +1349,10 @@ document.getElementById('clearAllButton').addEventListener('click', function() {
       NHconsvLand.definitionExpression = '';
       NHconsvLand.visible = false; // Hide the layer
   }
-  if (NHrecAreas) {
+ /* if (NHrecAreas) {
       NHrecAreas.definitionExpression = '';
       NHrecAreas.visible = false; // Hide the layer
-  }
+  } */
   if (NHrecPoints) {
       NHrecPoints.definitionExpression = '';
       NHrecPoints.visible = false; // Hide the layer
@@ -1360,11 +1360,11 @@ document.getElementById('clearAllButton').addEventListener('click', function() {
   if (NHdncrstateLands) {
     NHdncrstateLands.definitionExpression = '';
     NHdncrstateLands.visible = false; // Hide the layer
-}
-if (NHtrailsLines) {
+  }
+  if (NHtrailsLines) {
   NHtrailsLines.definitionExpression = '';
   NHtrailsLines.visible = false; // Hide the layer
-}
+  }
 if (NHwaterAccess) {
   NHwaterAccess.definitionExpression = '';
   NHwaterAccess.visible = false; // Hide the layer
@@ -1376,14 +1376,8 @@ if (NHwaterAccess2) {
   // Repeat similar steps for other layers as necessary
 });
 
-//***  CLEAR FOR PROTECTED LANDS 
-/* clearButton.addEventListener("click", function() {
-    radioButtons.forEach(radio => {
-        radio.checked = false;
-    });
-    NHconsvLand.definitionExpression = ""; // Reset the definition expression
-});
-*/
+
+
   document.getElementById('NHrecPointsToggle').addEventListener('change', function() {
     const filterContainer = document.getElementById('NHrecPointsFilterContainer');
     if (this.checked) {
@@ -1399,7 +1393,9 @@ if (NHwaterAccess2) {
     }
   });
   
-  document.getElementById('NHrecAreasToggle').addEventListener('change', function() {
+ /****** CODE FOR REC AREAS LAYER COMMENTED OUT (UNCOMMENT IF REIMPLEMENTED IN HTML)
+ 
+ document.getElementById('NHrecAreasToggle').addEventListener('change', function() {
     const filterContainer = document.getElementById('NHrecAreasFilterContainer');
     if (this.checked) {
       filterContainer.style.display = 'block';
@@ -1412,7 +1408,7 @@ if (NHwaterAccess2) {
         filter.checked = false;
       });
     }
-  });
+  }); */
   
   document.querySelectorAll('.NHrecPointsFilter, .NHrecAreasFilter').forEach(checkbox => {
     checkbox.addEventListener('change', function() {
@@ -2363,7 +2359,7 @@ view.ui.add(legendExpand, 'bottom-right');
 */
 const layerMap = {
   'NHconsvLandToggle': NHconsvLand,
-  'NHrecAreasToggle': NHrecAreas,
+  // 'NHrecAreasToggle': NHrecAreas,
   'NHtrailsLinesToggle': NHtrailsLines,
   'NHrecPointsToggle' : NHrecPoints,
   'NHwaterAccessHeatToggle': NHwaterAccess, 
