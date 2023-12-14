@@ -1,0 +1,102 @@
+checkbox-container {
+    display: flex;
+    align-items: center;
+    position: relative; /* This will vertically align the checkbox and label */
+  }
+  
+  .checkbox-container:hover {
+    background-color: #425f57; /* Light grey background on hover, change as needed */
+  }
+  
+  /* Style the checkbox */
+  input[type='checkbox'] {
+    vertical-align: middle; /* Adjust this as needed */
+    margin-right: 2px;
+    appearance: none; /* Hide the default checkbox */
+    background-color: #375b5b; /* Background color of the custom checkbox */
+    border: 2px solid #ccc; /* Border for the custom checkbox */
+    width: 15px; /* Width of the custom checkbox */
+    height: 15px; /* Height of the custom checkbox */
+    cursor: pointer;
+    box-sizing: border-box; /* Include padding and border in width and height */
+    position: absolute; /* Position it absolutely within the container */
+    top: 50%;
+    transform: translateY(-50%);
+    transition: all 0.1s ease;
+  }
+  
+  input[type='checkbox']:hover {
+    background-color: #4f6f66;
+  }
+  
+  input[type='checkbox']:checked {
+    background-color: #e8ff9d;  /* Background color when checked */
+    border: 1px solid #e8ff9d; /* Border for checked state */
+    /* Compensate for the thicker border on checked state */
+  
+    top: 0; /* Align to the top of the container */
+    height: 100%; /* Stretch to the full height of the container */
+    transform: translateY(0); /* Reset the transform */
+  }
+  
+  input[type='checkbox']:checked + .checkbox-label {
+    background-color: #649184;
+    display: block; /* Makes the label take the full width of its container */
+    width: 100%; /* Ensures the label stretches across the entire width */
+  
+  }
+  
+  /* Style the label */
+  .checkbox-label {
+    cursor: pointer;
+    padding: 5px;
+    margin-left: 13px;
+    
+    flex-grow: 1;
+  
+  }
+  
+  INFODIV CONTAINERS
+  
+  #infoDiv, #infoDiv2 {
+    background-color:#13444b;
+    width: 350px;
+    padding: 5px;
+    z-index: 9;
+    height: calc(100vh - 100px);
+    overflow-y: auto;
+    margin-top: -20px;
+    
+    
+  }
+  
+  FILTERDIV STYLING
+  
+  #filterDiv {
+    margin-top: 10px;
+    margin-left: 10px;
+    padding-top: 15px;
+    max-height: calc(100vh - 100px);
+    z-index: 9;
+    overflow-y: auto;
+  }
+  
+  .category-title {
+    margin-bottom: 10px; /* Adjust as needed */
+  }
+  
+  #filterDiv h3 {
+    margin-top: 10px; /* Adjust space above the title */
+    margin-bottom: 10px; /* Adjust space below the title */
+    font-size: 1.2em; /* Adjust font size */
+    /* Remove or adjust position: absolute if it's causing issues */
+  }
+  
+  #legendDiv {
+    background-color:  #13444b
+    
+  }
+  
+  #filterDiv {
+      max-height: calc(100vh - 100px); /* Adjust 100px to account for headers, footers, or other fixed elements */
+  }

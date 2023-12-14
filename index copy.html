@@ -26,49 +26,31 @@
   </head>
   
   <body class = "sassy-theme">
-  </body>
+
+    </body>
     <div id="overlay" class="overlay"></div>
-    <div class="popupContainer" id="popupContainer" style="background-image: url('./img/splash.jpg'); background-size: cover; background-position: center;">
 
-    
-
-
-      <a href="https://www.nheconomy.com/office-of-outdoor-recreation" target="_blank">
-        <img src="./img/beaORID.svg" class="logo-top" alt="BEA and ORID logo">
-      </a>
-
-    <div class="popup" id="popup">
-      <div class ="introheader"> 
-        <h4>New Hampshire Outdoor Industry Inventory Map Tool</h4>
+    <div id="popupContainer" class="popup">
+      <div class="popup-header">
+          <img src="./img/backgroundLOGO.png" alt="Landscape Image" class="popup-image"/>
       </div>
-        <div class="popup-content" id = "popup-content">     
-            <p5>
-              This interactive mapping tool provides information on New Hampshire's diverse outdoor recreation business mix. 
-              The map presents a snapshot of outdoor recreation business locations and types as of summer 2023. 
-              Map data can be filtered and adjusted to show how different sectors of the outdoor recreation economy are present in different regions of the state. 
-              The map also includes information on trails on other recreational facilities across the state.
-            </p5>
-            <hr class="dotted">
-            <p2>This data may not depict the most up-to-date business information and may contain errors or omissions.
-               Trail and recreation facility data is provided by the State of New Hampshire; 
-               this data is not intended to be used for navigational purpose and does not include all public trails in the state. 
-               The New Hampshire Department of Business and Economic Affairs is not responsible for the use or interpretation of this information by third parties. Not for legal use.</p2>
-              <br>
-            <button id="closePopupButton">I accept this disclaimer</button>
-        </div>
-    </div>
-    >
-    <div class="logo-bottom-container">
-      <a href="https://segroup.com/" target="_blank">
-        <img src="./img/SE_credit.svg" class="logo-bottom" alt="SE Group logo">
-      </a>
-      <a href="https://www.nh.gov/" target="_blank">
-        <img src="./img/NH_1.svg" class="logo-bottom" alt="NH State logo">
-      </a>
-  </div>
-  
-</div>
+      <div class="popup-content">
+         
+          <h4>New Hampshire Outdoor Industry Inventory Map Tool</h4>
+          
+          <p>
+            This interactive mapping tool provides information on New Hampshire's diverse outdoor recreation business mix. The map presents a snapshot of outdoor recreation business locations and types as of summer 2023. Map data can be filtered and adjusted to show how different sectors of the outdoor recreation economy are present in different regions of the state. The map also includes information on trails on other recreational facilities across the state.
+          </p>
 
+          <p2>This data may not depict the most up-to-date business information and may contain errors or omissions. Trail and recreation facility data is provided by the State of New Hampshire; this data is not intended to be used for navigational purpose and does not include all public trails in the state. The New Hampshire Department of Business and Economic Affairs is not responsible for the use or interpretation of this information by third parties. Not for legal use.</p2>
+          
+          <br>
+          <button id="closePopup" class="btn btn-altdark"><h3>I accept this disclaimer</h3></button>
+      </div>
+  </div>
+
+ 
+</div>
 
 
 
@@ -136,55 +118,45 @@
   <!-- Always visible Dropdown for Boundaries -->
 
 </nav>
+<div class="map-wrapper">
   <div id="mapContainer">
 
-
+    <div id="toggleButtonsContainer">
+      <button id="toggleFilterMenu">Toggle Filter Menu</button>
+      <button id="toggleLayerMenu">Toggle Layer Menu</button>
+  </div>
 
         <div id="viewDiv" class="sassytheme">
           <div id="loadingDiv" style="display: none;">
             <img id="spinner" src="./img/spinner2.gif" alt="Loading...">
         </div>
           
+        <div id="infoDiv" class="esri-widget">
+          <div id="filterDiv"></div>
+      </div>
+      
           <div id="infoDiv2">
-            <div id="infoDivHeader">
-            <h5>Recreation Data Layers</h5>
-            <button id="clearAllButton">Clear Layers</button>
-          </div>
             <div id="layerToggleContainer">
-              
-             
+              <br style="line-height: 8px" />
+              <h5>Recreation Data Layers</h5>
+            
               <p4>Checkboxes expand to provide more options.</p4>
-             
-              <div class="checkbox-container">
-              
-                <input type="checkbox" id="NHconsvLandToggle">
-              <label for="NHconsvLandToggle">Public/Conserved Lands</label>
-              </div>
+              <br>
+              <label><input type="checkbox" id="NHconsvLandToggle"> Public/Conserved Lands</label>
                 <div id="NHconsvLandAccessOptions" style="display:none; margin-left:20px;">
                   <p>Owner</p>
-                  <input type="checkbox" class="NHrecAreasFilter" value="1" id="Municipal">
-                  <label for="Municipal">Municipal</label><br>
-                  <input type="checkbox" class="NHrecAreasFilter" value="2" id="Federal">
-                  <label for="Federal">Federal</label><br>
-                  <input type="checkbox" class="NHrecAreasFilter" value="3" id="State">
-                  <label for="State">State</label><br>
-                  <input type="checkbox" class="NHrecAreasFilter" value="4" id="OtherPublic">
-                  <label for="OtherPublic">Other Public</label><br>
-                  <input type="checkbox" class="NHrecAreasFilter" value="5" id="Private">
-                  <label for="Private">Private</label><br>
-                  <input type="checkbox" class="NHrecAreasFilter" value="6" id="County">
-                  <label for="County">County</label><br>
-                  <br>
+                    <label><input type="radio" name="NHconsvLandAccess" value="1"> Municipal<br>
+                    <label><input type="radio" name="NHconsvLandAccess" value="2"> Federal</label><br>
+                    <label><input type="radio" name="NHconsvLandAccess" value="3"> State</label><br>
+                    <label><input type="radio" name="NHconsvLandAccess" value="4"> Other Public</label><br>
+                    <label><input type="radio" name="NHconsvLandAccess" value="5"> Private</label><br>
+                    <label><input type="radio" name="NHconsvLandAccess" value="6"> County</label><br>
+                    <button id="clearRadio" >Clear Selection</button>
                 </div>
-             
-                <div class="checkbox-container">
-                  <input type="checkbox" class="NHrecAreasFilter" id="NHdncrstateLandsToggle">
-                  <label for="NHdncrstateLandsToggle">State Lands</label>
-                </div>
-                <div class="checkbox-container">
-                  <input type="checkbox" id="NHrecAreasToggle">
-                  <label for="NHrecAreasToggle">Recreation Areas</label>
-                </div>
+              <br>
+              <label><input type="checkbox" id="NHdncrstateLandsToggle"> State Lands</label>
+              <br>
+              <label><input type="checkbox" id="NHrecAreasToggle"> Recreation Areas </label>
               <div id="NHrecAreasFilterContainer" style="display:none; margin-left:20px;">
                 <div id="legendCheckboxes">
                     <p>Primary Use</p>
@@ -237,11 +209,8 @@
                       <label for="Historic">Historic</label>
                     </div>  
                   </div>
-                          
-                  <div class="checkbox-container">
-                    <input type="checkbox" id="NHrecPointsToggle">
-                    <label for="NHrecPointsToggle">Recreational Sites</label>
-                  </div>
+                          <br>
+              <label><input type="checkbox" id="NHrecPointsToggle"> Recreational Sites</label>
               
              
               <div id="NHrecPointsFilterContainer" style="display:none; margin-left:20px;">
@@ -284,12 +253,9 @@
                 </div>
 
               </div>
-                
+                  <br>
 
-              <div class="checkbox-container">
-                <input type="checkbox" id="NHtrailsLinesToggle">
-                <label for="NHtrailsLinesToggle">Recreational Trails</label>
-              </div>
+              <label><input type="checkbox" id="NHtrailsLinesToggle"> Recreational Trails </label>
               
               <div id="NHtrailsFilterContainer" style="display: none;margin-left:20px;">
                 <input type="checkbox"  id="NHtrailsBloomToggle" checked> <p2> Highlight Trails</p2>
@@ -339,23 +305,18 @@
                 </div>
                 
               
-            
-                <div class="checkbox-container">
-                  <input type="checkbox" id="NHwaterAccessToggle">
-                  <label for="NHwaterAccessToggle">Public Access Sites to Water</label>
-                </div>
+              <br>
+              <label><input type="checkbox" id="NHwaterAccessToggle"> Public Access Sites to Water</label>
+              <br>
+              <input type="checkbox" style="margin-left: 8px;" id="NHwaterAccessHeatToggle"> <p2> Heatmap (access sites)</p2>
+              <br>
              
-                <div class="checkbox-container">
-                  <input type="checkbox" style="margin-left: 25px;" id="NHwaterAccessHeatToggle">
-                  <label for="NHwaterAccessHeatToggle">Toggle Heatmap (access sites)</label>
-                </div>
-             </div>
-         
+              <br>
+             
+          </div>
           </div>
 
-
-          <div id="infoDiv" class="esri-widget">
-            <div id="filterDiv">
+            
            
             
       </div>
@@ -364,37 +325,20 @@
     <div id="infoText" class="esri-widget"></div>
     <div>
       <div id="info">
-        <button id="xBtn">&times;</button>
-        <h6>How to Use This Map Viewer
-        </h6>
-
+        <span id="closeBtn" style="cursor: pointer; float: right; margin-left: 10px;">&times;</span>
         <br>
+      <h3>How to Use</h3> <br>
+        This map viewer includes data on outdoor recreation businesses and non-profits, as well as public lands and recreational facilities.
 
-        <p>This map viewer includes data on outdoor recreation businesses and non-profits, as well as public lands and recreational facilities. To interact with business and non-profit data, use the dropdowns and buttons at the top left of the screen. </p>
-        <br>
-        
-        
+ 
 
-        <h2>Using the Point Clustering Tool</h2> In the top left corner, clicking the button with the <img src="./img/clustering.svg" width="20"> 
-        symbol, will show summary statistics for the number of businesses or organizations in different areas of the state. Point Clustering responds to any filter or region selections. <br>
-        <!-- Instruction Images Container -->
-        <br>
-        <div class="instructions-container">
-          <img src="./img/info1.png" alt="Instruction 1">
-          <img src="./img/info4.png" alt="Instruction 4">
-          <img src="./img/info7.png" alt="Instruction 7">
-          <img src="./img/info2.png" alt="Instruction 2">
-          <img src="./img/info5.png" alt="Instruction 5">
-          <img src="./img/info8.png" alt="Instruction 8">
-          <img src="./img/info3.png" alt="Instruction 3">
-          <img src="./img/info6.png" alt="Instruction 6">
-          <img src="./img/info9.png" alt="Instruction 9">
-        </div>
-        <br> MOBILE USERS: this tool is designed to be used on a desktop computer. Mobile users may experience decreased functionality. <br> <br> <P>This map viewer was created by a team on consultants at SE Group, a planning, permitting, and design firm specializing in outdoor recreation.</P>
-        <!-- Your existing content -->
-    </div>
+To interact with business and non-profit data, use the dropdowns and buttons at the top left of the screen. <br> <br> <img src="./img/info2.png" alt="Information Image" style="width: 90%; max-width: 600px; display: block; margin: 0 auto;"><br> <p>Using the Point Clustering Tool</p> In the top left corner, clicking the button with the <img src="./img/clustering.svg" width="20"> symbol, will show summary statistics for the number of businesses or organizations in different areas of the state. Point Clustering responds to any filter or region selections. <br><br> You can organize this data by CEDR Region, Tourism Region, County, or Municipality by clicking on the respective geography within the "Select Region" dropdown. Click the "Clear Regions" button to remove all visible boundaries.
+<br> <br> <img src="./img/info.png" alt="Information Image" style="width: 90%; max-width: 600px; display: block; margin: 0 auto;"> <br> The <img src="./img/home.svg" width="20"> icon resets the view to New Hampshire. The <img src="./img/information.svg" width="20"> icon re-opens this info panel. The <img src="./img/print.svg" width="20"> icon opens a print prompt that exports the current extent. <br><br> MOBILE USERS: this tool is designed to be used on a desktop computer. Mobile users may experience decreased functionality. <br> <br> <P>This map viewer was created by a team on consultants at SE Group, a planning, permitting, and design firm specializing in outdoor recreation.</P>
+ 
+      </div>
     </div>
   </div>
+</div>
 </div>
 <script src="js/main.js"></script>
   </body>

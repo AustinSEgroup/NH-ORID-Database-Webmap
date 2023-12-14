@@ -3,20 +3,49 @@ body,
 
 .sassy-theme .esri-widget,
 .sassy-theme .esri-widget--button,
-.sassy-theme .esri-menu,
-.sassy-theme .esri-popup__main-container,
+.sassy-theme .esri-menu {
+  background-color: #13444b;
+  color: #fff;
+}
+.sassy-theme .esri-popup__main-container {
+  background-color: #13444b;
+  color: #fff;
+
+}.sassy-theme .esri-popup .esri-popup__feature-menu {
+  background-color: #13444b;
+  color: #fff;
+}
+
+.sassy-theme .esri-popup .esri-popup__feature-menu-button {
+background-color: #13444b;
+color: #fff;
+}
+.sassy-theme .esri-popup .esri-popup__feature-menu-item {
+  background-color: #13444b;
+  color: #fff;
+}
+
 .sassy-theme .esri-popup .esri-popup__pointer-direction,
 .sassy-theme .esri-popup .esri-popup__button,
 .sassy-theme .esri-button,
 .sassy-theme .esri-input,
 .sassy-theme .esri-widget a {
-  background-color: #207380;
+  background-color: #13444b;
   color: #fff;
 }
 
-.sassy-theme .esri-widget--button:focus,
-.sassy-theme .esri-widget--button:hover,
-.sassy-theme .esri-menu li:focus,
+.sassy-theme .esri-widget--button:focus{
+  background-color: #13444b;
+  color: #fff;
+}
+.sassy-theme .esri-widget--button:hover{
+  background-color: #13444b;
+  color: #fff;
+}
+.sassy-theme .esri-menu li:focus {
+  background-color: #207380;
+  color: #fff;
+}
 .sassy-theme .esri-menu li:hover {
   background-color: rgb(80, 128, 128);
   color: #fff;
@@ -29,14 +58,24 @@ body,
 
 .sassy-theme .esri-search__input::-moz-placeholder {
 background-color: #207380;
-  color: #ccc;
+  color: #fff;
   opacity: 1;
 }
 .sassy-theme .esri-search__input:-ms-input-placeholder {
     background-color: #207380;
-  color: #ccc;
+    color: #fff;
 }
 .sassy-theme .esri-search__input::-webkit-input-placeholder {
     background-color: #207380;
-  color: #ccc;
+    color: #fff;
+}
+
+
+.sassy-theme .esri-feature__content-node {
+  background-color: #13444b; /* Your desired color */
+}
+
+
+.sassy-theme .esri-feature-content {
+  background-color: #13444b; /* Your desired color */
 }

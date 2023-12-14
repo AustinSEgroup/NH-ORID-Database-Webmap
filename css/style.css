@@ -217,10 +217,7 @@ body {
 }
 
 /* Custom styles for 'Clear Filters' buttons */
- #clearBoundaries {
-  margin-left: 10px; /* Consistent spacing between the dropdown and buttons */
-  display: block;
-}
+ 
 
 /* Adjust the logo */
 .LOGO {
@@ -254,96 +251,156 @@ body {
   }
 }
 
+
 .horizontal-line {
   top: 48%;
   left: 48%;
-  
   height: 1px;
   background-color: #ccc; /* Adjust the color as needed */
   margin: 10px auto; /* Center the line horizontally */
 }
 
 .overlay {
-
   position: fixed;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: rgba(214, 231, 230, 0.89); /* Semi-transparent black */
-  z-index: 999; /* Place the overlay behind the popup */
-  transition: opacity 0.3s ease;
-}
-.popup-header {
-  width: 100%;
-  overflow: hidden; /* Ensures the image fits in the container */
+  background-color: rgba(214, 231, 230, 0.89);
+  z-index: 999;
 }
 
-.popup-image {
-  width: 100%;
-  height: auto;
-  margin-bottom: 10px;
-}
-
-.popup {
-  overflow-y: scroll;
-  max-height: 100vh;
-
+/* Container for the popup and logos */
+.popupContainer {
   position: fixed;
-  top: 50%;
-  left: 50%;
-  align-content: center;
-  justify-content: center;
-  transform: translate(-50%, -50%);
-  background-color: #13444b;
-  padding: 20px;
-  border: 1px solid #ccc;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  z-index: 1001;
-  transition: opacity 0.3s ease, transform 0.3s ease;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1000;
 }
 
-#info {
-  overflow-y: scroll !important;
+/* Style for the popup */
+.popup {
   position: absolute;
   top: 50%;
   left: 50%;
-  width: 80%;  
-  max-height: 100vh;
   transform: translate(-50%, -50%);
+  width: 90%; /* Adjust as needed */
+  max-width: 600px; /* Adjust as needed */
   background-color: #13444b;
   padding: 20px;
-  
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
   z-index: 1001;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  transition: opacity 0.3s ease, transform 0.3s ease;
 }
 
-#closeBtn {
+/* Logo above the popup */
+.logo-top {
+  position: absolute;
+  top: 5vw; /* Adjust as needed */
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100px; /* Adjust as needed */
+  height: auto;
+}
+
+/* Container for logos below the popup */
+.logo-bottom-container {
+  position: absolute;
+  bottom: 2vw; /* Adjust as needed */
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100%;
+  text-align: center;
+}
+
+/* Logos below the popup */
+.logo-bottom {
+  display: inline-block;
+  height: auto;
+  margin: 0 10px; /* Space between logos */
+}
+
+@media (max-width: 750px) {
+  .popup {
+    max-width: 1200px; /* Larger size for larger screens */
+  }
+
+  .logo-top {
+    display: none;
+  }
+  .logo-bottom {
+    display: none; /* Larger logos for larger screens */
+  }
+}
+@media screen and (min-width: 750px) {
+  .popup {
+    max-width: 1200px; /* Larger size for larger screens */
+  }
+
+  .logo-top {
+    width: 600px;
+  }
+  .logo-bottom {
+    width: 200px; /* Larger logos for larger screens */
+  }
+}
+
+/* Style for the content within the popup */
+.popup-content {
+  margin: 0 auto;
+  margin: 1vw;
+}
+
+.introheader {
+  padding: 1vh;
+  padding-top: 20px;
+  max-width: 1200px;
+  background-color: #3c8478;
+  z-index: 1003;
+  text-align: center; /* Ensures text is centered horizontally */
+  vertical-align: middle; /* Helps with vertical alignment if the button is inline */
+}
+
+#xBtn {
+  color: #fff; /* White text */
+  border: none;
+  background-color: #207380;
+  padding: 5px 10px;
+  cursor: pointer;
+  font-size: 30px;
+  position: absolute;
+  top: 10px;
+  right: 10px;
+}
+
+
+
+#xBtn:hover {
+  color: #f00;
+  background-color: rgb(134, 98, 98);
+}
+/* Button styles */
+#closePopupButton {
+  position: relative;
+  padding: 5px 25px;
   font-size: 20px;
   font-weight: bold;
   color: #fff;
-  background-color: #13444b; /* This is to ensure the button color matches the background */
-  transition: color 0.3s ease;
-}
-
-#closeBtn:hover {
-  color: #f00; /* red color on hover */
-}
-
-.popup-content {
-  text-align: center;
-  width: 80vw;
-  align-content: center;
-  justify-content: center;
-
-}
-
-#closePopup {
+  background-color: #3c8478;
+  border: 0;
   margin-top: 10px;
-  background-color: #207380;
+  margin-bottom: 10px;
+  transition: color 0.3s ease, background-color 0.3s ease;
+  cursor: pointer;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, 0);
 }
 
+#closePopupButton:hover {
+  background-color: rgb(134, 98, 98);
+}
 .navbar-nav .nav-link {
   color: white; /* Change to your desired color */
   display: flex;
@@ -374,12 +431,6 @@ body {
   top: 2%; 
   left: 50%;
   transform: translateX(-50%);
-}
-.arrow-icon {
-  margin-left: 95px;         /* Spacing between the button and the arrow */
-  
-  vertical-align: middle;   /* Align it with the button and boundary layers */
-  filter: invert(0%);    
 }
 #toggleClustering {
   justify-content: left;
@@ -504,57 +555,20 @@ body {
 
 /* Styles for the header container */
 .header-container {
-  display: flex;
+
   align-items: center;
   justify-content: space-between;
-  flex-wrap: nowrap;
+  margin-right: 55px;
   margin-bottom: 10px;
 }
 
 /* Styles for the category title */
 .category-title {
-  display: block;
-  width: 100%;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  flex-shrink: 0;
-  flex: 1 0 auto;
-  margin-right: 10px;
-  margin-bottom: 10px;
-  padding-bottom: 20px;
-  align-items: left;
-  text-align: left;
-  margin-left: 17px;
+
+margin-top: -15px;
 }
 
 /* Adjust padding, margins, or borders as needed */
-.header-container {
-  padding: 10px;
-  /* Other styles as needed */
-}
-
-
-#infoDiv3 {
-  width: 200px;
-  padding-right: 20px;
-  z-index: 9;
-  height: 100vh;
-  padding: 5px;
-
-}
-
-#infoDiv, #infoDiv2 {
-  background-color:#207380;
-  width: 350px;
-  padding: 5px;
-  z-index: 9;
-  height: 100vh;
-  overflow-y: auto;
-  margin-top: -20px;
-  
-  
-}
 
 .esri-component.esri-widget--button {
   position: absolute;
@@ -587,48 +601,107 @@ body {
   width: 150px; 
 }
 
-#layerToggleContainer {
-  margin-left: 10px;
-  height: 100vw;
-}
-
-
-#filterDiv {
-  margin-top: 10px;
-  margin-left: 10px;
-  padding-top: 15px;
-  height: 100vh;
-  z-index: 9;
-  overflow-y: auto;
-}
-
-.category-title {
-  margin-bottom: 10px; /* Adjust as needed */
-}
-
-#filterDiv h3 {
-  margin-top: 10px; /* Adjust space above the title */
-  margin-bottom: 10px; /* Adjust space below the title */
-  font-size: 1.2em; /* Adjust font size */
-  /* Remove or adjust position: absolute if it's causing issues */
-}
 
 #legendDiv {
   background-color:  #13444b
   
 }
-
-  #filterDiv, #infoDiv {
-    max-height: calc(100vh - 100px); /* Adjust 100px to account for headers, footers, or other fixed elements */
+#info {
+  overflow-y: scroll !important;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 80%;
+  max-height: 100vh;
+  transform: translate(-50%, -50%);
+  background-color: #13444b;
+  padding: 20px;
+  z-index: 1001;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  transition: opacity 0.3s ease, transform 0.3s ease;
+  text-align: center;
+  color: #fff; /* For better readability */
 }
 
-  
+.instructions-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+  gap: 10px;
+  align-items: start;
+  grid-auto-flow: dense; /* Adjust for better item placement */
+  position: relative;
+}
 
+.instructions-container img {
+  width: 100%;
+  max-width: 350px;
+  height: auto;
+  display: block;
+  margin: 0 auto;
+}
+
+/* Larger Screens */
+@media (min-width: 1024px) {
+  .instructions-container {
+      grid-template-columns: repeat(3, 1fr);
+      column-gap: 30px;
+  }
+
+  .instructions-container::before,
+  .instructions-container::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      width: 1px;
+      background-color: #ccc;
+  }
+
+  .instructions-container::before {
+      left: calc(33.333% + 15px);
+  }
+
+  .instructions-container::after {
+      left: calc(66.666% + 30px);
+  }
+}
+
+/* Medium screens */
+@media (max-width: 1023px) and (min-width: 768px) {
+  .instructions-container {
+      grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+/* Small screens */
+@media (max-width: 767px) {
+  .instructions-container {
+      grid-template-columns: 1fr;
+  }
+}
+#legendDiv {
+  background-color: #13444b;
+}
+
+/* Preserved styles for #viewDiv and #loadingDiv */
 #viewDiv {
   z-index: 1;
-  height: calc(100vh - (90px));
-
+  height: calc(100vh - 90px);
 }
+
+#loadingDiv {
+  background: #e3fff5;
+  border-radius: 100%;
+  padding: 15px;
+  border: #5c9d86;
+  border-width: 80px;
+  z-index: 1000;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
 
 #loadingDiv {
   background: #e3fff5;
@@ -675,17 +748,26 @@ h1 {
   position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
 }
 
-
 p {
+  font-weight: 500;
+  font-size: 12pt;
+  margin-top: 8px;
+  margin-bottom: 2px;
+}
+p5 {
   color: white;
-  font-size: 11pt;
-  font-weight: 600;
-  margin-top: 5px;
-  margin-bottom: 5px;
+  font-size: 1rem;
+font-size: clamp(1rem, 0.95rem + 0.25vw, 1.25rem);
+  font-weight: 400;
+
+  
 }
 
 p2 {
   font-style: italic;
+  font-size: 1rem;
+  font-size: clamp(1rem, 0.95rem + 0.25vw, 1.25rem);
+  font-weight: 400;
 }
 #selArea {
 
@@ -701,10 +783,7 @@ p2 {
   transform: translateY(+12px) !important;
 }
 
-#checkbox {
-  margin: 10px;
-  transform: (0px, 1px);
-}
+
 
 p3 {
   color: white;
@@ -721,15 +800,12 @@ h2 {
   font-style: italic;
 }
 
-h3 {
-  font-size: 14pt;
-  font-weight: bold;
- position: absolute; left: 50%; transform: translate(-50%, -50%);
-}
 
 h4 {
-  font-size: 12pt;
-  font-weight: bold;
+  font-size: 1.5rem;
+  font-size: clamp(1.5rem, 0.95rem + 0.25vw, 1.25rem);
+  font-weight: 700;
+
 }
 p4 {
   font-size: 8pt;
@@ -740,6 +816,17 @@ h5 {
   font-size: 1.2em;
 }
 
+h6 {
+  font-size: 18pt;
+  font-weight: 600;
+  text-align: center;
+ 
+}
+
+p6 {
+  font-weight: 500;
+  font-size: 12pt;
+}
 #clearRadio {
   font-size: 12px;
   border: 0;
@@ -749,23 +836,44 @@ h5 {
 }
 
 #clearRadio:hover {
-  color: rgb(220, 114, 114); /* red color on hover */
+  background-color: rgb(134, 98, 98); /* red color on hover */
+  transition: color 0.3s ease;
+}
+
+#clearAllButton {
+  font-size: 12px;
+  border: 0;
+  color: #fff;
+  background-color: #3c8478;
+  transition: color 0.3s ease;
+  line-height: normal; /* Adjust as needed, 'normal' or specific value in px */
+  display: inline-block; /* This ensures the padding and line-height are applied correctly */
+  text-align: center; /* Ensures text is centered horizontally */
+  vertical-align: middle; /* Helps with vertical alignment if the button is inline */
 }
 
 
+#clearAllButton:hover {
+  background-color: rgb(134, 98, 98); /* red color on hover */
+  transition: color 0.3s ease;
+}
 #clearBoundaries {
-  font-size: 14px;
+  font-size: 16px;
   border: 0;
+  padding:5px;
+  padding-right: 10px;
+  padding-left: 10px;
   color: #fff;
   background-color: #3c8478; /* This is to ensure the button color matches the background */
   transition: color 0.3s ease;
   margin-left: 87px;
-  margin-top: 5px;
+
 
 }
 
 #clearBoundaries:hover {
-  color: rgb(220, 114, 114); /* red color on hover */
+  background-color: rgb(134, 98, 98); /* red color on hover */
+  transition: color 0.3s ease; /* red color on hover */
 }
 
 .header-container button {
@@ -774,23 +882,110 @@ h5 {
   background-color: #3c8478; /* Button background color */
   color: white; /* Text color */
   border: none; /* Remove border */
-  border-radius: 4px; /* Rounded corners */
+  /* Rounded corners */
   cursor: pointer; /* Cursor change on hover */
   font-size: 14px; /* Font size */
   line-height: 1.5; /* Line height */
 }
 
+/* Styles for #infoDiv */
+#infoDiv {
+  background-color: #13444b;
+  width: 350px;
+  padding: 5px;
+  height: calc(100vh - 100px);
+  z-index: 9;
+  margin-top: -20px;
+}
+
+/* Styles for #filterDiv */
+#filterDiv {
+  margin-top: 10px;
+  margin-left: 10px;
+  padding-top: 15px;
+  max-height: calc(100vh - 100px);
+  overflow-y: auto;
+}
+
+/* Styles for category titles in #filterDiv */
+.category-title {
+  margin-bottom: 10px;
+}
+
+h3 {
+  font-size: 14pt;
+  font-weight: bold;
+
+}
+
+#filterDiv h3 {
+
+  font-size: 1.2em;
+}
+
+#legendDiv {
+  background-color: #13444b;
+}
+/* Styles for #infoDiv2 */
+#infoDiv2 {
+  margin-top: -20px;
+  background-color: #13444b;
+  width: 300px; /* Adjust width as needed */
+  overflow-y: auto; /* Vertical scroll for overflow */
+  height: calc(100vh - 100px);
+  overflow: none;
+}
+
+#infoDivHeader {
+  margin-top: 15px;
+  margin-left: 10px;
+  margin-bottom: -100px;
+
+  
+}
+
+#layerToggleContainer {
+  margin-left: 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  width: 95%; /* Ensure full width to prevent horizontal overflow */
+  overflow: none;
+}
+
+
+#infoDiv2 h5 {
+  float: left;
+ 
+
+}
+
+#infoDiv2 #clearAllButton {
+  float: right;
+  margin-right: 5px;
+}
 /* Specific style for the filter mode button */
 #toggleFilterMode {
-  transform: translate(-20px, 0px);
+  font-size: 16px;
+  transform: translate(-5px, 0px);
+  
 }
 
 /* Specific style for the clear filters button */
 #clearFilters {
+  font-size: 16px;
   /* Add specific styles for the clear filters button here if needed */
-  transform: translate(-62px, 0px);
+
 }
 
+#clearFilters:hover {
+  background-color: rgb(134, 98, 98); /* red color on hover */
+  transition: color 0.3s ease;
+}
+
+#toggleFilterMode:hover {
+  background-color: #649184;
+}
 /* Button hover effect */
 .header-container button:hover {
   background-color: #0056b3; /* Darker shade on hover */
@@ -799,64 +994,210 @@ h5 {
 /* Adjust the container of the checkbox and label for better alignment */
 .checkbox-container {
   display: flex;
-  align-items: center; /* This will vertically align the checkbox and label */
+  align-items: center;
+  width: 100%;
+  position: relative; /* This will vertically align the checkbox and label */
+  
 }
 
 .checkbox-container:hover {
-  background-color: #649184; /* Light grey background on hover, change as needed */
+  background-color: #425f57; /* Light grey background on hover, change as needed */
 }
 
-.checkbox-label:hover { /* Example effect for the label */
-}
-
-input[type='checkbox']:hover {
-  background-color: #649184;
-}
-
-input[type='checkbox']:checked + .checkbox-label {
-  display: block; /* Makes the label take the full width of its container */
-  width: 100%; /* Ensures the label stretches across the entire width */
-  background-color: #b1dfd1; /* Slightly darker background on hover */
-  color: #000000; /* Dark text color */
-  /* Other styles as needed */
-}
 /* Style the checkbox */
-input[type='checkbox'] {
-  margin-top: -5px;
+#filterDiv input[type='checkbox'] {
   vertical-align: middle; /* Adjust this as needed */
   margin-right: 2px;
   appearance: none; /* Hide the default checkbox */
-  background-color: GG#cbbdbd; /* Background color of the custom checkbox */
-  border: 1px solid #ccc; /* Border for the custom checkbox */
+  background-color: #375b5b; /* Background color of the custom checkbox */
+  border: 2px solid #ccc; /* Border for the custom checkbox */
   width: 15px; /* Width of the custom checkbox */
   height: 15px; /* Height of the custom checkbox */
   cursor: pointer;
+  box-sizing: border-box; /* Include padding and border in width and height */
+  position: absolute; /* Position it absolutely within the container */
+  top: 50%;
+  transform: translateY(-50%);
+  transition: all 0.1s ease;
+}
+
+#filterDiv label {
+  /* Custom styles specific to labels in filterDiv */
+  /* Example styling: */
+  cursor: pointer;
+  padding: 5px;
+  margin-left: 15px;
+}
+
+#filterDiv input[type='checkbox'] {
+  vertical-align: middle; /* Adjust this as needed */
+  margin-right: 2px;
+  appearance: none; /* Hide the default checkbox */
+  background-color: #375b5b; /* Background color of the custom checkbox */
+  border: 2px solid #ccc; /* Border for the custom checkbox */
+  width: 15px; /* Width of the custom checkbox */
+  height: 15px; /* Height of the custom checkbox */
+  cursor: pointer;
+  box-sizing: border-box; /* Include padding and border in width and height */
+  position: absolute; /* Position it absolutely within the container */
+  top: 50%;
+  transform: translateY(-50%);
+  transition: all 0.1s ease;
+}
+/* Hover and Checked Styles for filterDiv checkboxes */
+#filterDiv input[type='checkbox']:hover {
+  background-color: #4f6f66;
+}
+
+#filterDiv input[type='checkbox']:checked {
+  background-color: #e8ff9d;  /* Background color when checked */
+    border: 1px solid #e8ff9d; /* Border for checked state */
+    top: 0; /* Align to the top of the container */
+    height: 100%; /* Stretch to the full height of the container */
+    transform: translateY(0); /* Reset the transform */
+}
+
+#filterDiv input[type='checkbox']:checked + label {
+  background-color: #649184;
+  display: block; /* Makes the label take the full width of its container */
+  width: 100%; /* Ensures the label stretches across the entire width */
+}
+
+
+
+#infoDiv2 input[type='checkbox'] {
+
+
+  appearance: none; /* Hide the default checkbox */
+  background-color: #375b5b; /* Background color of the custom checkbox */
+  border: 2px solid #ccc; /* Border for the custom checkbox */
+  width: 15px; /* Width of the custom checkbox */
+  height: 15px; /* Height of the custom checkbox */
+  cursor: pointer;
+  transition: all 0.1s ease;
 
 }
 
-input[type='checkbox']:checked {
-  background-color: rgb(30, 79, 60);/* Background color when checked */
-  border: 3px solid #e8ff9d;
-  /* Add other styles for checked state, like a custom icon */
+/* Hover and Checked Styles for infoDiv2 checkboxes */
+#infoDiv2 input[type='checkbox']:hover {
+ 
 }
 
-/* Style the label */
+#infoDiv2 input[type='checkbox']:checked {
+  background-color: #e8ff9d;  /* Background color when checked */
+  border: 1px solid #e8ff9d; /* Border for checked state */
+    
+}
+
+#infoDiv2 input[type='checkbox']:checked + label {
+  font-weight: 800;
+  color: #e8ff9d;
+}
+
+
 .checkbox-label {
   cursor: pointer;
+  padding: 5px;
+  margin-left: 13px;
+  flex-grow: 1;
+ 
 }
 
-side-container {
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  width: 100px; /* Adjust as needed */
-  background-color: rgb(30, 79, 60); /* Your chosen color */
+
+
+/* Additional styles... */
+#infoDiv2 img {
+  transform: translateY(-5px);
+}
+#infoDiv2 label {
+  /* Custom styles specific to labels in infoDiv2 */
+  /* Example styling: */
+  cursor: pointer;
+  margin-top: 6px;
+  transform: translateY(-2px);
+  margin-left: 5px; /* Different margin for demonstration */
 }
 
-.side-container.left {
-  left: 0;
+
+#toggleLayerContainer label {
+  /* Custom styles specific to labels in infoDiv2 */
+  /* Example styling: */
+  cursor: pointer;
+  margin-top: 5px;
+  transform: translateY(-2px);
+  margin-left: 2px; /* Different margin for demonstration */
 }
 
-.side-container.right {
-  right: 0;
+
+#infoDiv2 input[type='radio'] {
+
+  margin-right: 2px;
+  appearance: none; /* Hide the default checkbox */
+  background-color: #375b5b; /* Background color of the custom checkbox */
+  border: 2px solid #ccc; /* Border for the custom checkbox */
+  width: 15px; /* Width of the custom checkbox */
+  height: 15px; /* Height of the custom checkbox */
+  cursor: pointer;
+  transition: all 0.1s ease;
+
+}
+
+/* Hover and Checked Styles for infoDiv2 checkboxes */
+#infoDiv2 input[type='radio']:hover {
+  background-color: #abcdef; /* Different hover color */
+}
+
+#infoDiv2 input[type='radio']:checked {
+  background-color: #e8ff9d;  /* Background color when checked */
+    border: 1px solid #e8ff9d; /* Border for checked state */
+}
+
+#infoDiv2 input[type='radio']:checked + label {
+  font-weight: 800;
+  color: #e8ff9d;
+}
+
+/* Scrollbar styling for Webkit browsers (Chrome, Safari) */
+#info::-webkit-scrollbar, #filterDiv::-webkit-scrollbar, #infoDiv2::-webkit-scrollbar, .popup-content::-webkit-scrollbar, #popupContainer::-webkit-scrollbar {
+  width:6px; /* Width of the vertical scrollbar */
+}
+
+#info::-webkit-scrollbar-track, #filterDiv::-webkit-scrollbar-track, #infoDiv2::-webkit-scrollbar-track, .popup-content::-webkit-scrollbar-track, #popupContainer::-webkit-scrollbar-track {
+  background: rgb(9, 58, 60); /* Track color */
+}
+
+#info::-webkit-scrollbar-thumb, #filterDiv::-webkit-scrollbar-thumb, #infoDiv2::-webkit-scrollbar-thumb, .popup-content::-webkit-scrollbar-thumb, #popupContainer::-webkit-scrollbar-thumb {
+  background: #888; /* Handle color */
+  border-radius: 6px; /* Rounded corners for the handle */
+}
+
+#info::-webkit-scrollbar-thumb:hover, #filterDiv::-webkit-scrollbar-thumb:hover, #infoDiv2::-webkit-scrollbar-thumb:hover, .popup-content::-webkit-scrollbar-thumb:hover, #popupContainer::-webkit-scrollbar-thumb:hover {
+  background: #555; /* Handle color on hover */
+}
+
+/* Scrollbar styling for Firefox */
+#info, #filterDiv, #infoDiv2, .popup-content, #popupContainer {
+  overflow: auto;
+  scrollbar-width: thin;
+  scrollbar-color: #888 #f1f1f1; /* Handle color and track color */
+}
+
+/* For Firefox */
+#info scrollbar, #filterDiv scrollbar, .popup-content scrollbar, #filterDiv scrollbar, #infoDiv2 scrollbar {
+  width: thin;
+  color: #888; /* Scrollbar color */
+}
+
+#info, #popupContainer {
+  
+  display: none;
+  /* Other styles... */
+}
+
+.esri-feature__content-node {
+  background-color: #13444b; /* Your desired color */
+}
+
+.esri-feature-content {
+  background-color: #13444b; /* Your desired color */
 }

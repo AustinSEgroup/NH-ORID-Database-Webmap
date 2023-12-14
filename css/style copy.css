@@ -1,0 +1,946 @@
+html,
+body {
+  padding: 0;
+  margin: 0;
+  background: #13444b;
+}
+
+#bottomButton {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  margin: 20px;
+  padding: 10px 20px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  z-index: 10001;
+}
+
+#loadingOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(255, 255, 255, 0.7);
+  z-index: 9999;
+  display: none;
+  align-items: center;
+  justify-content: center;
+}
+
+.filterOption {
+  cursor: pointer;
+  display: inline-block;
+  user-select: none;
+  outline-color: #6fac96;
+  padding-left: 15px ;
+  padding-right: 15px;
+  outline-offset: 2px;
+  border-radius: px;
+  margin: 3px;
+
+}
+
+.filterOption.active {
+  background-color: #5c9d86;  /* or any color of your choice */
+  color: white;
+}
+
+.filterOption:hover {
+  background-color: #5c9d86bd;  /* or any color of your choice */
+  color: white;
+}
+
+
+.navbar {
+  height: 50px;
+}
+.flex-column {
+
+  width: 100% !important;
+  align-items: flex-end;
+  padding-right: 15px;
+}
+
+.btn {
+  border-radius: 0px;
+  background-color: #13444b;
+  
+}
+
+.btn.active {
+  border-radius: 0px;
+  background-color: #6ea572 !important;
+}
+
+.button {
+  outline-color: #6fac96;
+  outline-width: 1px;
+}
+.button.active {
+  border-radius: 0px;
+  background-color: #6ea572 !;
+}
+
+.btn:hover {
+  border-radius: 0px;
+  background-color: #5c9d8675;
+}
+
+.btn-altdark2 {
+  margin-left: 10%;
+  font-size: 14px;
+  font-weight: 400;
+  border:#5c9d86;
+  border-radius: 0px;
+  color: white;
+  outline-color: #5a8374;
+  outline-width: 1px;
+  outline-style: solid;
+  left: 0;
+  justify-content: left;
+  align-items: left;
+  background-color: #207380 ;
+  cursor: pointer;
+  text-align: center;
+  transition-duration: 0.4s;
+  margin-left: 15px;
+  transform: translateY(-4px);
+}
+
+.navnbar {
+  padding-right: 50px;
+}
+.dropdown-nav {
+  display: none;
+  margin-left: 50px;
+}
+.dropdown {
+  font-size: 12px;
+  padding-left: 3px;
+  margin-right: 5px;
+  padding-right: 5px;
+  
+}
+
+@media (min-width: 800px) {
+  .dropdown {
+      /* Adjust the alignment or spacing as needed */
+      text-align: left; /* Example: Align text to the left */
+      padding: 0; /* Example: Remove padding */
+      /* Other potential adjustments based on your findings */
+  }
+}
+
+@media (min-width: 800px) {
+  .dropdown.show .dropdown-menu {
+    transform: translate(0, 0) !important; /* Reset the transform at 800px and above */
+  }
+}
+
+.dropdown-menu {
+   font-size: 14px;
+
+   
+}
+.btn-altdark2 {
+  margin-left: 55px;
+ 
+}
+
+.dropdownMenuButton {
+  margin-left: 30px;
+  transform: translateX(48px);
+}
+
+.dropdownMenuButton2 {
+  margin-left: -50px;
+  transform: translateX(-200px);
+}
+#dropdownToggleCEDRregions{
+  outline: #5c9d86;
+  outline-width: 1px;
+  border: #ccc;
+  transform: translateX(12px) !important;
+  margin-right: 12px;
+  
+}
+
+#dropdownToggleTownships{
+  outline: #5c9d86;
+  outline-width: 1px;
+  border: #ccc;
+  transform: translateX(12px) !important;
+  margin-right: 12px;
+  
+}
+
+#dropdownToggleTourismRegions{
+  outline: #5c9d86;
+  outline-width: 1px;
+  border: #ccc;
+  transform: translateX(12px) !important;
+  margin-right: 12px;
+  
+}
+
+#dropdownToggleCounties{
+  outline: #5c9d86;
+  outline-width: 1px;
+  border: #ccc;
+  transform: translateX(12px) !important;
+  margin-right: 12px;
+  
+}
+/* General styles for the dropdown */
+.dropdown-menu.show {
+  margin-right: 100px;
+}
+
+/* Styles for the navbar containing the dropdown, buttons, and LOGO */
+.navbar-dark {
+  display: flex;
+  align-items: center; /* Vertically centers items in the navbar */
+  justify-content: flex-start; /* Aligns items from the start */
+  width: 100%; /* Full width of the navbar */
+  flex-wrap: wrap; /* Allows items to wrap to the next line if needed */
+}
+
+/* Grouped Dropdown and Clear Buttons Container */
+.dropdown-and-buttons {
+  display: flex;
+  align-items: center; /* Aligns dropdown and buttons vertically in the center */
+}
+
+/* Custom styles for 'Clear Filters' buttons */
+
+/* Adjust the logo */
+.LOGO {
+  margin-left: auto; /* Pushes the LOGO to the far right */
+  display: block;
+}
+
+.LOGO img {
+  display: block; /* Ensure the logo is displayed */
+  max-width: 100%; /* Responsive max-width for the logo */
+}
+
+/* Hide the LOGO for screens smaller than 800px */
+@media (max-width: 600px) {
+  .navbar-dark .LOGO {
+    display: none;
+  }
+}
+
+/* Resize LOGO for smaller screens */
+@media (max-width: 900px) {
+  .navbar-brand img {
+    width: 150px; /* Resize LOGO for smaller screens */
+  }
+}
+
+/* Override Bootstrap's media query for the LOGO */
+@media (min-width: 600px) and (max-width: 800px) {
+  .navbar-dark .LOGO img.d-sm-block {
+    display: none !important; /* Ensures the LOGO is hidden in this range */
+  }
+}
+
+.horizontal-line {
+  top: 48%;
+  left: 48%;
+  
+  height: 1px;
+  background-color: #ccc; /* Adjust the color as needed */
+  margin: 10px auto; /* Center the line horizontally */
+}
+
+.overlay {
+
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(214, 231, 230, 0.89); /* Semi-transparent black */
+  z-index: 999; /* Place the overlay behind the popup */
+  transition: opacity 0.3s ease;
+}
+.popup-header {
+  width: 100%;
+  overflow: hidden; /* Ensures the image fits in the container */
+}
+
+.popup-image {
+  width: 100%;
+  height: auto;
+  margin-bottom: 10px;
+}
+
+.popup {
+  overflow-y: scroll;
+  max-height: 100vh;
+
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  align-content: center;
+  justify-content: center;
+  transform: translate(-50%, -50%);
+  background-color: #13444b;
+  padding: 20px;
+  border: 1px solid #ccc;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  z-index: 1001;
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+#info {
+  overflow-y: scroll !important;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 80%;  
+  max-height: 100vh;
+  transform: translate(-50%, -50%);
+  background-color: #13444b;
+  padding: 20px;
+  
+  z-index: 1001;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+#closeBtn {
+  font-size: 20px;
+  font-weight: bold;
+  color: #fff;
+  background-color: #13444b; /* This is to ensure the button color matches the background */
+  transition: color 0.3s ease;
+}
+
+#closeBtn:hover {
+  color: #f00; /* red color on hover */
+}
+
+.popup-content {
+  text-align: center;
+  width: 80vw;
+  align-content: center;
+  justify-content: center;
+
+}
+
+#closePopup {
+  margin-top: 10px;
+  background-color: #207380;
+}
+
+.navbar-nav .nav-link {
+  color: white; /* Change to your desired color */
+  display: flex;
+  align-content: flex-start;
+  margin-left: 13px;
+}
+
+.navbar-nav-center {
+      display: flex;
+      padding-left: 300px;
+      margin-left: auto;
+      transform: translateX(-150px);
+      
+    }
+
+.top-bar {
+  background-color: #207380; /* Change the background color as desired */
+  display: flex;
+  flex-direction: row;
+  padding-left: 150px;
+  padding-right: 50px ;
+  height: 40px;
+ 
+}
+
+.center-top-btn {
+  position: absolute;
+  top: 2%; 
+  left: 50%;
+  transform: translateX(-50%);
+}
+.arrow-icon {
+  margin-left: 95px;         /* Spacing between the button and the arrow */
+  
+  vertical-align: middle;   /* Align it with the button and boundary layers */
+  filter: invert(0%);    
+}
+#toggleClustering {
+  justify-content: left;
+  align-items: left !important;
+  left: 0 !important;
+  outline-color: #6fac96;
+  outline-width: 3px;
+  outline-style: solid;
+  font-weight: bold;
+  animation-name:blink;
+  animation-duration:2s;
+  animation-timing-function:ease-in;
+  animation-iteration-count:Infinite;
+
+}
+
+
+@keyframes blink{
+  0%{color:rgb(216, 233, 168);}
+  50%{color:white;}
+  100%{color:rgb(209, 219, 182)}
+}
+
+.toggle-clust:hover {
+  background-color: #5c9d8666;
+  outline-color: #6fac96;
+  outline-width: 1px;
+  outline-style: solid;
+}
+.toggle-clust {
+  /* Button Default State */
+  font-size: 14px;
+  font-weight: 400;
+  border:#5c9d86;
+  border-radius: 0px;
+  color: white;
+  outline-color: #5b8475;
+  outline-width: 1px;
+  justify-content: left;
+  align-items: c;
+  transform: translateX(48px);
+  background-color: #207380 ;
+  cursor: pointer;
+  text-align: center;
+  transition-duration: 0.4s;
+  margin-left: 8px;
+  outline-color: #9bd2bb;
+  outline-style: solid;
+  outline-width: 1px;
+}
+
+
+
+.toggle-clust.active {
+  /* Button Default State */
+  background-color: #5c9d86;
+  color: white;
+  animation-name:blink;
+  animation-duration:2s;
+  animation-timing-function:ease-in;
+  animation-iteration-count:Infinite;
+}
+
+.toggle-clust1:hover {
+  background-color: #5c9d8666;
+}
+.toggle-clust1 {
+  /* Button Default State */
+  position: absolute;
+  font-size: 14px;
+  font-weight: bold;
+  border:#5c9d86;
+  border-radius: 0px;
+  color: white;
+  margin-left: 15px;
+  margin-right: auto;
+  background-color: #20807b ;
+  cursor: pointer;
+  text-align: center;
+  transition-duration: 0.4s;
+}
+
+#button {
+  outline-color: #007bff;
+  outline-style: solid;
+  outline-width: 2px;
+}
+
+.toggle-clust1.active {
+  /* Button Default State */
+  background-color: #5c9d86;
+  color: white;
+  outline-color: #13444b;
+  outline-width: 4px;
+  outline-style: solid;
+
+}
+.navbar-nav.btn {
+   /* Button Default State */
+   left: 16px;
+   right: 80%;
+   font-size: 14px;
+   font-weight: 700;
+   border:#5c9d86 !important;
+   border-radius: 5px;
+   outline-color: #007bff;
+   outline-style: solid;
+   outline-width: 2px;
+   color: white;
+   background-color: #207380 !important;
+   cursor: pointer;
+   text-align: center;
+   transition-duration: 0.4s;
+ }
+
+#mapRow {
+  z-index: 1;
+}
+#mapContainer {
+  height: calc(100vh - (90px));
+}
+
+/* Styles for the header container */
+.header-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: nowrap;
+  margin-bottom: 10px;
+}
+
+/* Styles for the category title */
+.category-title {
+  display: block;
+  width: 100%;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  flex-shrink: 0;
+  flex: 1 0 auto;
+  margin-right: 10px;
+  margin-bottom: 10px;
+  padding-bottom: 20px;
+  align-items: left;
+  text-align: left;
+  margin-left: 17px;
+}
+
+/* Adjust padding, margins, or borders as needed */
+.header-container {
+  padding: 10px;
+  /* Other styles as needed */
+}
+
+
+.esri-component.esri-widget--button {
+  position: absolute;
+  top: 50%; /* Adjust as needed */
+  left: 50%; /* Adjust as needed */
+  transform: translate(-50%, -50%);
+}
+
+/* Positioning expand icons at the left and right edges */
+.left-expand-icon, .right-expand-icon {
+  position: absolute;
+  bottom: 10px; /* Adjust as needed */
+}
+
+.left-expand-icon {
+  left: 0; /* Left edge */
+}
+
+.right-expand-icon {
+  right: 0; /* Right edge */
+}
+
+#customLegend {
+  width: 100%;
+  padding: 10px; 
+  background-color: #13444b;
+}
+
+#legendImage {
+  width: 150px; 
+}
+
+#layerToggleContainer {
+  margin-left: 10px;
+  height: 100vw;
+}
+
+
+#filterDiv {
+  margin-top: 10px;
+  margin-left: 10px;
+  padding-top: 15px;
+  height: 100vh;
+  z-index: 9;
+  overflow-y: auto;
+}
+
+.category-title {
+  margin-bottom: 10px; /* Adjust as needed */
+}
+
+#filterDiv h3 {
+  margin-top: 10px; /* Adjust space above the title */
+  margin-bottom: 10px; /* Adjust space below the title */
+  font-size: 1.2em; /* Adjust font size */
+  /* Remove or adjust position: absolute if it's causing issues */
+}
+
+#legendDiv {
+  background-color:  #13444b
+  
+}
+
+  #filterDiv {
+    max-height: calc(100vh - 100px); /* Adjust 100px to account for headers, footers, or other fixed elements */
+}
+
+  
+
+
+
+#loadingDiv {
+  background: #e3fff5;
+  border-radius: 100%;
+  padding:15px;
+  border: #5c9d86;
+  border-width: 80px;
+  z-index: 1000;
+  position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+}
+
+
+calcite-icon {
+  width: 24px; /* Adjust as needed */
+  height: 24px; /* Adjust as needed */
+}
+.esri-widget--button {
+  width: 36px;
+  height: 36px;
+}
+
+
+.expand-button .esri-icon {
+  width: 34px; /* Adjust the width as needed */
+  height: 34px; /* Adjust the height as needed */
+}
+
+
+.esri-expand__container--expanded {
+  background-color:#207380 !important;
+}
+
+.esri-home.esri-widget--button.esri-widget {
+  width: 36px;
+  height: 36px;
+}
+
+.esri-icon.esri-icon-home {
+  font-size: 24px;
+}
+h1 {
+  color:#13444b;
+  font-size: 14pt;
+  position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+}
+
+
+p {
+  color: white;
+  font-size: 11pt;
+  font-weight: 600;
+  margin-top: 5px;
+  margin-bottom: 5px;
+}
+
+p2 {
+  font-style: italic;
+}
+#selArea {
+
+  position: absolute;
+  left: 17%;
+  font-size: 14px;
+}
+
+.styled-text {
+  color: rgb(255, 255, 255);
+  font-weight: bold;
+  font-size: 12pt;
+  transform: translateY(+12px) !important;
+}
+
+#checkbox {
+  margin: 10px;
+  transform: (0px, 1px);
+}
+
+p3 {
+  color: white;
+  font-size: 12pt;
+  font-weight: bold;
+  transform: translateY(-15px) !important;
+  margin-top: 50x;
+  margin-bottom: 24px !important;
+  margin-left: 8px;
+}
+
+h2 {
+  font-size: 14pt;
+  font-style: italic;
+}
+
+h3 {
+  font-size: 14pt;
+  font-weight: bold;
+ position: absolute; left: 50%; transform: translate(-50%, -50%);
+}
+
+h4 {
+  font-size: 12pt;
+  font-weight: bold;
+}
+p4 {
+  font-size: 8pt;
+  font-style: italic;
+}
+
+h5 {
+  font-size: 1.2em;
+}
+
+#clearRadio {
+  font-size: 12px;
+  border: 0;
+  color: #fff;
+  background-color: #3c8478; /* This is to ensure the button color matches the background */
+  transition: color 0.3s ease;
+}
+
+#clearRadio:hover {
+  background-color: rgb(134, 98, 98); /* red color on hover */
+  transition: color 0.3s ease;
+}
+
+
+#clearBoundaries {
+  font-size: 14px;
+  border: 0;
+  color: #fff;
+  background-color: #3c8478; /* This is to ensure the button color matches the background */
+  transition: color 0.3s ease;
+  margin-left: 87px;
+  align-items: center; 
+
+}
+
+#closePopup {
+    background-color: #007bff; /* Primary color */
+    color: white; /* Text color */
+    padding: 10px 20px; /* Padding for size */
+    border: none; /* Remove default border */
+    border-radius: 5px; /* Rounded corners */
+    cursor: pointer; /* Change cursor on hover */
+    transition: background-color 0.3s; /* Smooth transition for color change */
+}
+
+#closePopup:hover {
+    background-color: #0056b3; /* Darker shade for hover */
+}
+#clearBoundaries:hover {
+  background-color: rgb(134, 98, 98); /* red color on hover */
+  transition: color 0.3s ease;
+}
+
+.header-container button {
+  padding: 5px 10px; /* Adjust padding */
+  margin-left: 5px; /* Space between buttons */
+  background-color: #3c8478; /* Button background color */
+  color: white; /* Text color */
+  border: none; /* Remove border */
+  border-radius: 4px; /* Rounded corners */
+  cursor: pointer; /* Cursor change on hover */
+  font-size: 14px; /* Font size */
+  line-height: 1.5; /* Line height */
+}
+
+#toggleFilterMenu {
+
+}
+/* Specific style for the filter mode button */
+#toggleFilterMode {
+  transform: translate(-20px, 0px);
+}
+
+/* Specific style for the clear filters button */
+#clearFilters {
+  /* Add specific styles for the clear filters button here if needed */
+  transform: translate(-30px, 0px);
+}
+
+#clearFilters:hover {
+  background-color: rgb(134, 98, 98); /* red color on hover */
+  transition: color 0.3s ease;
+}
+
+#toggleFilterMode:hover {
+  background-color: #649184;
+}
+/* Button hover effect */
+.header-container button:hover {
+  background-color: #0056b3; /* Darker shade on hover */
+}
+
+/* Adjust the container of the checkbox and label for better alignment */
+.checkbox-container {
+  display: flex;
+  align-items: center; /* This will vertically align the checkbox and label */
+}
+
+.checkbox-container:hover {
+  background-color: #649184; /* Light grey background on hover, change as needed */
+}
+
+.checkbox-label:hover { /* Example effect for the label */
+}
+
+input[type='checkbox']:hover {
+  background-color: #649184;
+}
+
+input[type='checkbox']:checked + .checkbox-label {
+  display: block; /* Makes the label take the full width of its container */
+  width: 100%; /* Ensures the label stretches across the entire width */
+  background-color: #b1dfd1; /* Slightly darker background on hover */
+  color: #000000; /* Dark text color */
+  /* Other styles as needed */
+}
+/* Style the checkbox */
+input[type='checkbox'] {
+  margin-top: -5px;
+  vertical-align: middle; /* Adjust this as needed */
+  margin-right: 2px;
+  appearance: none; /* Hide the default checkbox */
+  background-color: GG#cbbdbd; /* Background color of the custom checkbox */
+  border: 1px solid #ccc; /* Border for the custom checkbox */
+  width: 15px; /* Width of the custom checkbox */
+  height: 15px; /* Height of the custom checkbox */
+  cursor: pointer;
+
+}
+
+input[type='checkbox']:checked {
+  background-color: rgb(30, 79, 60);/* Background color when checked */
+  border: 3px solid #e8ff9d;
+  /* Add other styles for checked state, like a custom icon */
+}
+
+/* Style the label */
+.checkbox-label {
+  cursor: pointer;
+}
+
+/* Scrollbar styling for Webkit browsers (Chrome, Safari) */
+#infoDiv::-webkit-scrollbar, #infoDiv2::-webkit-scrollbar, .popup-content::-webkit-scrollbar, #popupContainer::-webkit-scrollbar {
+  width: 12px; /* Width of the vertical scrollbar */
+}
+
+#infoDiv::-webkit-scrollbar-track, #infoDiv2::-webkit-scrollbar-track, .popup-content::-webkit-scrollbar-track, #popupContainer::-webkit-scrollbar-track {
+  background: #f1f1f1; /* Track color */
+}
+
+#infoDiv::-webkit-scrollbar-thumb, #infoDiv2::-webkit-scrollbar-thumb, .popup-content::-webkit-scrollbar-thumb, #popupContainer::-webkit-scrollbar-thumb {
+  background: #888; /* Handle color */
+  border-radius: 6px; /* Rounded corners for the handle */
+}
+
+#infoDiv::-webkit-scrollbar-thumb:hover, #infoDiv2::-webkit-scrollbar-thumb:hover, .popup-content::-webkit-scrollbar-thumb:hover, #popupContainer::-webkit-scrollbar-thumb:hover {
+  background: #555; /* Handle color on hover */
+}
+
+/* Scrollbar styling for Firefox */
+#infoDiv, #infoDiv2, .popup-content, #popupContainer {
+  scrollbar-width: thin;
+  scrollbar-color: #888 #f1f1f1; /* Handle color and track color */
+}
+
+/* Other styles for your elements (e.g., map, popups) can be added here */
+
+/* The rest of your CSS for map and popup styling */
+#mapContainer {
+  position: relative;
+}
+
+#toggleButtonsContainer {
+  position: absolute;
+  top: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 2;
+}
+
+#viewDiv {
+  box-sizing: border-box; /* This ensures padding and borders are included within the width */
+  width: 100%;
+  height: calc(100vh - 90px);
+  overflow-x: hidden; /* Hide horizontal scrollbar */
+  transition: margin-left 0.5s, margin-right 0.5s;
+  z-index: 1;
+}
+
+#infoDiv, #infoDiv2 {
+  height: calc(100vh - 90px);
+  position: fixed;
+  top: 90px;
+  overflow-y: auto;
+  background-color: #207380;
+  z-index: 1000;
+ 
+
+}
+#infoDiv {
+  left: -250px;
+  transition: left 0.5s;
+  width: 250px;
+  z-index: 2;
+}
+
+#infoDiv2 {
+  right: -250px;
+  transition: right 0.5s;
+  width: 250px;
+  z-index: 2;
+}
+
+.open-infoDiv #infoDiv {
+  left: 0;
+}
+
+.open-infoDiv2 #infoDiv2 {
+  right: 0;
+}
+
+/* Adjust margins when left menu is open */
+.open-infoDiv #viewDiv {
+  margin-left: 250px;
+  margin-right: -250px; /* Negative margin to compensate on the right */
+}
+
+/* Adjust margins when right menu is open */
+.open-infoDiv2 #viewDiv {
+  margin-left: -250px; /* Negative margin to compensate on the left */
+  margin-right: 250px;
+}
+
+/* Handle case when both menus are open */
+.open-infoDiv.open-infoDiv2 #viewDiv {
+  margin-left: 250px;
+  margin-right: 250px;
+}
+
+#info, #popupContainer {
+  display: none;
+  /* Other styles... */
+}

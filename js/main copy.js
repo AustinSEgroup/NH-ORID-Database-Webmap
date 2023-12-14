@@ -1,293 +1,3 @@
-
-require(["esri/chunks/panel"], (panel) => {
-  Object.defineProperty(panel.Panel, "style", {
-    get: function () {
-      return `
-@keyframes in {
-  0% { opacity: 0 }
-  100% { opacity: 1 }
-}
-
-@keyframes in-down {
-  0% { opacity: 0; transform: translate3D(0, -5px, 0) }
-  100% { opacity: 1; transform: translate3D(0, 0, 0) }
-}
-
-@keyframes in-up {
-  0% { opacity: 0; transform: translate3D(0, 5px, 0) }
-  100% { opacity: 1; transform: translate3D(0, 0, 0) }
-}
-
-@keyframes in-right {
-  0% { opacity: 0; transform: translate3D(-5px, 0, 0) }
-  100% { opacity: 1; transform: translate3D(0, 0, 0) }
-}
-
-@keyframes in-left {
-  0% { opacity: 0; transform: translate3D(5px, 0, 0) }
-  100% { opacity: 1; transform: translate3D(0, 0, 0) }
-}
-
-@keyframes in-scale {
-  0% { opacity: 0; transform: scale3D(0.95, 0.95, 1) }
-  100% { opacity: 1; transform: scale3D(1, 1, 1) }
-}
-
-:root {
-  --calcite-animation-timing: calc(150ms * var(--calcite-internal-duration-factor));
-  --calcite-internal-duration-factor: var(--calcite-duration-factor, 1);
-  --calcite-internal-animation-timing-fast: calc(100ms * var(--calcite-internal-duration-factor));
-  --calcite-internal-animation-timing-medium: calc(200ms * var(--calcite-internal-duration-factor));
-  --calcite-internal-animation-timing-slow: calc(300ms * var(--calcite-internal-duration-factor));
-  --calcite-ui-foreground-1: #13444b;
-}
-
-.calcite-animate {
-  opacity: 0;
-  animation-fill-mode: both;
-  animation-duration: var(--calcite-animation-timing);
-}
-
-.calcite-animate__in {
-  animation-name: in;
-}
-
-.calcite-animate__in-down {
-  animation-name: in-down;
-}
-
-.calcite-animate__in-up {
-  animation-name: in-up;
-}
-
-.calcite-animate__in-right {
-  animation-name: in-right;
-}
-
-.calcite-animate__in-left {
-  animation-name: in-left;
-}
-
-.calcite-animate__in-scale {
-  animation-name: in-scale;
-}
-
-@media (prefers-reduced-motion: reduce) {
-  :root {
-    --calcite-internal-duration-factor: 0.01;
-  }
-}
-
-:host {
-  box-sizing: border-box;
-  background-color: #13444b;
-  color: var(--calcite-ui-text-2);
-  font-size: var(--calcite-font-size--1);
-}
-
-:host * {
-  box-sizing: border-box;
-}
-
-:root {
-  --calcite-floating-ui-transition: var(--calcite-animation-timing);
-  --calcite-floating-ui-z-index: var(--calcite-app-z-index-dropdown);
-}
-
-:host([hidden]) {
-  display: none;
-}
-
-:host([disabled]) {
-  cursor: default;
-  -webkit-user-select: none;
-  user-select: none;
-  opacity: var(--calcite-ui-opacity-disabled);
-}
-
-:host([disabled]) *,
-:host([disabled]) ::slotted(*) {
-  pointer-events: none;
-}
-
-:host {
-  position: relative;
-  display: flex;
-  block-size: 100%;
-  inline-size: 100%;
-  flex: 1 1 auto;
-  overflow: hidden;
-  --calcite-min-header-height: calc(var(--calcite-icon-size) * 3);
-  --calcite-panel-footer-padding: 0.5rem;
-}
-
-:host([disabled]) ::slotted([calcite-hydrated][disabled]),
-:host([disabled]) [calcite-hydrated][disabled] {
-  opacity: 1;
-}
-
-.header {
-  margin: 0px;
-  display: flex;
-  align-content: space-between;
-  align-items: center;
-  fill: var(--calcite-ui-text-2);
-  color: var(--calcite-ui-text-2);
-}
-
-.heading {
-  margin: 0px;
-  padding: 0px;
-  font-weight: var(--calcite-font-weight-medium);
-}
-
-.header .heading {
-  flex: 1 1 auto;
-  padding: 0.5rem;
-}
-
-.container {
-  margin: 0px;
-  display: flex;
-  inline-size: 100%;
-  flex: 1 1 auto;
-  flex-direction: column;
-  align-items: stretch;
-  background-color: #13444b;
-  padding: 0px;
-  transition: max-block-size var(--calcite-animation-timing), inline-size var(--calcite-animation-timing);
-}
-
-.container[hidden] {
-  display: none;
-}
-
-.header {
-  border-block-end: 1px solid;
-  z-index: var(--calcite-app-z-index-header);
-  inline-size: 100%;
-  align-items: stretch;
-  justify-content: flex-start;
-  background-color: var(--calcite-ui-foreground-1);
-  border-block-end-color: var(--calcite-ui-border-3);
-  flex: 0 0 auto;
-}
-
-.action-bar-container {
-  border-block-end: 1px solid;
-  z-index: var(--calcite-app-z-index-header);
-  inline-size: 100%;
-  border-block-end-color: var(--calcite-ui-border-3);
-}
-
-.action-bar-container ::slotted(calcite-action-bar) {
-  inline-size: 100%;
-}
-
-.header-content {
-  display: flex;
-  flex-direction: column;
-  overflow: hidden;
-  padding-inline: 0.75rem;
-  padding-block: 0.875rem;
-  margin-inline-end: auto;
-}
-
-.header-content .heading,
-.header-content .description {
-  display: block;
-  overflow-wrap: break-word;
-  padding: 0px;
-}
-
-.header-content .heading {
-  margin-inline: 0px;
-  margin-block: 0px 0.25rem;
-  font-size: var(--calcite-font-size-0);
-  line-height: 1.25rem;
-  font-weight: var(--calcite-font-weight-medium);
-}
-
-.header-content .heading:only-child {
-  margin-block-end: 0px;
-}
-
-.header-content .description {
-  font-size: var(--calcite-font-size--1);
-  line-height: 1rem;
-  color: var(--calcite-ui-text-2);
-}
-
-.back-button {
-  border-width: 0px;
-  border-style: solid;
-  border-color: var(--calcite-ui-border-3);
-  border-inline-end-width: 1px;
-}
-
-.header-actions {
-  display: flex;
-  flex-direction: row;
-  flex-wrap: nowrap;
-  align-items: stretch;
-}
-
-.header-actions--end {
-  margin-inline-start: auto;
-}
-
-.content-wrapper {
-  overflow: auto;
-  padding-bottom: 3px;
-}
-
-.content-height {
-  block-size: 100%;
-}
-
-.content-container {
-  display: flex;
-  flex: 1 1 auto;
-  flex-direction: column;
-  flex-wrap: nowrap;
-  align-items: stretch;
-  background-color: #13444b;
-}
-
-.footer {
-  border-block-start: 1px solid;
-  display: flex;
-  inline-size: 100%;
-  justify-content: space-evenly;
-  background-color: var(--calcite-ui-foreground-1);
-  border-block-start-color: var(--calcite-ui-border-3);
-  flex: 0 0 auto;
-  padding: var(--calcite-panel-footer-padding);
-}
-
-.fab-container {
-  position: sticky;
-  inset-block-end: 0px;
-  z-index: var(--calcite-app-z-index-sticky);
-  margin-block: 0px;
-  margin-inline: auto;
-  display: block;
-  padding: 0.5rem;
-  inset-inline: 0;
-  inline-size: -moz-fit-content;
-  inline-size: fit-content;
-}
-
-[hidden] {
-  display: none;
-}
-      `;
-    },
-  });
-});
-
-
-
 require([
     "esri/Map",
     "esri/layers/FeatureLayer",
@@ -356,9 +66,6 @@ require([
     let controller = new AbortController();
     let signal = controller.signal;
 
-
-
-
   /************************ DEBOUNCE FUNCTION ***********************/
 
 
@@ -412,10 +119,6 @@ require([
             checkbox.type = 'checkbox';
             checkbox.id = item.id;
             checkbox.className = 'checkbox-style'; // Assign class to the checkbox
-            checkbox.addEventListener('change', function() {
-              applyFilter();
-           
-          });
             div.appendChild(checkbox);
             
             // Create label
@@ -465,14 +168,9 @@ function handleExclusiveCheckboxes(selectedCheckboxId) {
 }
 
 function toggleFilterMode() {
-  filterMode = filterMode === 'AND' ? 'OR' : 'AND';
-  this.textContent = `Filter Mode: ${filterMode}`;
-
-  // Check if any checkbox is active before applying filters
-  const isAnyCheckboxActive = filterFieldsMap.some(item => document.getElementById(item.id) && document.getElementById(item.id).checked);
-  if (isAnyCheckboxActive) {
-      applyFilter(); // Apply filters only if at least one checkbox is active
-  }
+    filterMode = filterMode === 'AND' ? 'OR' : 'AND';
+    this.textContent = `Filter Mode: ${filterMode}`;
+    applyFilter();
 }
 
 function updateFields(datasetName) {
@@ -509,14 +207,13 @@ function updateFields(datasetName) {
           return; // Exit the function for unknown dataset
   }
 
-  layer.url = currentLayerLink;
-  map.layers.remove(layer);
+  // Update the layer URL and reload it
   layer.load().then(() => {
-      map.layers.add(layer);
-  }).catch(error => {
-      console.error("[updateFields] Error loading the layer:", error);
-  });
-
+    map.layers.add(layer);
+    layer.visible = true; // Make sure the layer is visible
+}).catch(error => {
+    console.error("[updateFields] Error loading the layer:", error);
+});
   // Populate the filter div with checkboxes, toggle button, and category title
   populateFilterDiv(filterFieldsMap);
 
@@ -1239,37 +936,18 @@ const NHwaterAccess = new FeatureLayer({
     const isChecked = this.checked;
     NHconsvLand.visible = isChecked;
     document.getElementById('NHconsvLandAccessOptions').style.display = isChecked ? 'block' : 'none';
-  });
-  
-  const checkboxFilters = document.querySelectorAll('.NHrecAreasFilter');
-  
-  const updateNHconsvLandFilter = () => {
-    // Collect all selected checkbox values
-    const selectedValues = [];
-    checkboxFilters.forEach(function(checkbox) {
-      if (checkbox.checked) {
-        selectedValues.push(checkbox.value);
-      }
+});
+
+
+const clearButton = document.getElementById("clearRadio");
+const radioButtons = document.querySelectorAll('[name="NHconsvLandAccess"]');
+
+radioButtons.forEach(function(radio) {
+    radio.addEventListener('change', function() {
+        const selectedValue = this.value;
+        NHconsvLand.definitionExpression = `OWNERTYPE = ${selectedValue}`;
     });
-  
-    // Construct the definition expression using the selected values
-    let definitionExpression = "";
-    if (selectedValues.length > 0) {
-      const expressionParts = selectedValues.map(value => `OWNERTYPE = ${value}`);
-      definitionExpression = expressionParts.join(' OR ');
-    }
-  
-    // Apply the definition expression to your layer
-    NHconsvLand.definitionExpression = definitionExpression;
-  };
-  
-  // Add change event listener to each checkbox
-  checkboxFilters.forEach(function(checkbox) {
-    checkbox.addEventListener('change', updateNHconsvLandFilter);
-  });
-  
-  // Initialize the filter on page load
-  updateNHconsvLandFilter();
+});
 
 // Clear Filters Function
 function clearSelectedLayers() {
@@ -1333,55 +1011,13 @@ function reevaluateClusteringAndVisibility() {
   }
 }
 // ADD CLEAR BUTTON FOR REC LAYERS
-
-document.getElementById('clearAllButton').addEventListener('click', function() {
-  // Reset checkboxes within #infoDiv2
-  document.querySelectorAll('#infoDiv2 input[type="checkbox"]').forEach(checkbox => {
-      checkbox.checked = false;
-  });
-
-
-  // Reset the display of filter containers within #infoDiv2
-  document.querySelectorAll('#infoDiv2 #NHrecPointsFilterContainer, #infoDiv2 #NHrecAreasFilterContainer, #infoDiv2 #NHconsvLandAccessOptions').forEach(container => {
-      container.style.display = 'none';
-  });
-
-  // Hide and reset NH layers
-  if (NHconsvLand) {
-      NHconsvLand.definitionExpression = '';
-      NHconsvLand.visible = false; // Hide the layer
-  }
-  if (NHrecAreas) {
-      NHrecAreas.definitionExpression = '';
-      NHrecAreas.visible = false; // Hide the layer
-  }
-  if (NHrecPoints) {
-      NHrecPoints.definitionExpression = '';
-      NHrecPoints.visible = false; // Hide the layer
-  }
-  if (NHstateLands) {
-    NHstateLands.definitionExpression = '';
-    NHstateLands.visible = false; // Hide the layer
-}
-if (NHwaterAccess) {
-  NHwaterAccess.definitionExpression = '';
-  NHwaterAccess.visible = false; // Hide the layer
-}
-if (NHwaterAccess2) {
-  NHwaterAccess2.definitionExpression = '';
-  NHwaterAccess.visible = false; // Hide the layer
-}
-  // Repeat similar steps for other layers as necessary
-});
-
-//***  CLEAR FOR PROTECTED LANDS 
-/* clearButton.addEventListener("click", function() {
+clearButton.addEventListener("click", function() {
     radioButtons.forEach(radio => {
         radio.checked = false;
     });
     NHconsvLand.definitionExpression = ""; // Reset the definition expression
 });
-*/
+  
   document.getElementById('NHrecPointsToggle').addEventListener('change', function() {
     const filterContainer = document.getElementById('NHrecPointsFilterContainer');
     if (this.checked) {
@@ -1598,7 +1234,7 @@ boundaryBtns.forEach(btnId => {
       { id: 'filterRegionalChain', field: 'Regional_Chain', displayName: 'Regional Chain' },
       { id: 'filterLocalBusiness', field: 'Local_Business', displayName: 'Local Business' },
       { label: "<br>Filter by Activity Type"},
-      { label: "<p4>Select one or multiple to change displayed points/clusters<p4>"},
+      { label: "<p4>Select one or multiple to <br change displayed points/clusters<p4>"},
      //{ id: 'filterGuidingTraining', field: 'Guiding_Training', displayName: 'Guiding Training' },
      // { id: 'filterSocialEvents', field: 'Social_Events', displayName: 'Social Events' },
      // { id: 'filterUsedGear', field: 'Used_Gear', displayName: 'Used Gear' },
@@ -2111,55 +1747,45 @@ function setLayerDefinitionExpression(layer, filters) {
 }
   
 window.applyFilter = function() {
-    console.log('Applying filter...');
-    const filters = {};
+  console.log('Applying filter...');
+  const filters = {};
 
-    // Build the filter based on selected checkboxes
-    const selectedFields = filterFieldsMap
-        .filter(item => item.id && document.getElementById(item.id).checked)
-        .map(item => item.field);
+  const selectedFields = filterFieldsMap
+      .filter(item => item.id && document.getElementById(item.id).checked)
+      .map(item => item.field);
 
-    if (selectedFields.length) {
-        selectedFields.forEach(field => {
-            filters[field] = "1";
-        });
-        setLayerDefinitionExpression(layer, filters);
-    } else {
-        layer.definitionExpression = null; // Clear the definition expression
-    }
-    if (boundaryLayerVisible && isClusteringEnabled) {
-      applyPolygonClustering(selectedBoundaryLayer, layer, selectedField);
-      layer.visible = false;
-      return; 
-    }
-    
-    // Check if advanced clustering should be applied
-    if (applyClusterIfNecessary(boundaryLayerVisible, layer, selectedField)) {
-        if (selectedBoundaryLayer && selectedBoundaryLayer.visible) {
-            applyPolygonClustering(selectedBoundaryLayer, layer, selectedField);
-            layer.visible = false;
-        } else {
-            drawCluster();
-            layer.visible = true;
-        }
-        return; // Exit the function after applying advanced clustering
-    }
+  if (selectedFields.length) {
+      selectedFields.forEach(field => {
+          filters[field] = "1";
+      });
 
-    // The following condition checks are for when advanced clustering is not applied
-    if (isClusteringEnabled) {
-        if (!selectedFields.length) {
-            // If no fields are selected, apply simple clustering
-            drawSimpleCluster();
-        } else {
-            // If fields are selected, apply standard clustering
-            drawCluster();
-        }
-    } else {
-        layer.visible = true; // Ensure layer visibility when clustering is disabled
-    }
+      setLayerDefinitionExpression(layer, filters);
 
-    console.log('Selected fields for filtering:', selectedFields);
-    console.log('Final layer visibility after applyFilter:', layer.visible);
+      if (applyClusterIfNecessary(boundaryLayerVisible, layer, selectedField)) return;
+
+      if (isClusteringEnabled) {
+          if (selectedBoundaryLayer && selectedBoundaryLayer.visible) {
+              applyPolygonClustering(selectedBoundaryLayer, layer, selectedField);
+              layer.visible = false; // Hide the raw points layer when using advanced clustering
+          } else {
+              drawCluster();
+              layer.visible = true; // Show the raw points layer when not using advanced clustering
+          }
+      }
+  } else {
+      layer.definitionExpression = null; // Ensure all points are displayed when no fields are checked
+
+      if (applyClusterIfNecessary(boundaryLayerVisible, layer, selectedField)) return;
+
+      if (isClusteringEnabled) {
+          drawSimpleCluster();
+          layer.visible = true; // Show the raw points layer when not using advanced clustering
+      } else {
+          layer.visible = true; // Show the raw points layer when clustering is disabled
+      }
+  }
+  console.log('Selected fields for filtering:', selectedFields);
+  console.log('Final layer visibility after applyFilter:', layer.visible);
 }
 
   // DEBOUNCE VERSION
@@ -2283,19 +1909,12 @@ const selectedFieldIds = filterFieldsMap.filter(item => document.getElementById(
   }
   
   /************************ VIEW FUNCTIONS ******************************/
-  view.ui.remove("zoom");
 
-const infoDiv = document.getElementById("infoDiv");
-view.ui.add(new Expand({
-    view: view,
-    content: infoDiv,
-    expandIcon: "select-category",
-    expanded: true
-}), "top-left");
+
 
 const infoText = document.getElementById("infoText");
 const info = document.getElementById("info");
-const closeBtn = document.getElementById("xBtn");
+
 
 const expandWidget = new Expand({
   view: view,
@@ -2334,10 +1953,6 @@ view.ui.add(new Home({
     view: view
 }), "top-left");
 
-var zoom = new Zoom({
-  view: view
-});
-view.ui.add(zoom, "top-left");
 
 document.querySelectorAll('.esri-widget--button svg').forEach(svg => {
   svg.style.width = '35px';
@@ -2379,13 +1994,7 @@ Object.keys(layerMap).forEach((toggleId) => {
     });
 });
 
-const infoDiv2 = document.getElementById("infoDiv2");
-view.ui.add(new Expand({
-    view: view,
-    content: infoDiv2,
-    expandIcon: "collection",
-    expanded: true
-}), "top-right");
+
 
 document.getElementById("retailLink").addEventListener('click', function() {
   console.log("Button clicked!");
@@ -2446,89 +2055,69 @@ linkIds.forEach(id => {
   
     });
 
-    /************************************** SPLASH LOGO CALCS  ********************************************/
+    /************************************** TERMS AND CONDITIONS  ********************************************/
 
-
-
-
+    const overlay = document.getElementById('overlay');
+    const popupContainer = document.getElementById('popupContainer');
+    const closePopupButton = document.getElementById('closePopup');
+    const infoPopup = document.getElementById('info'); // Ensure this ID matches your HTML
+    const closeInfoButton = document.getElementById('closeBtn'); // Ensure this ID matches your HTML
     
-//
-/**************************************** CHANGE BORDER COLOR  ********************************/
-function setNewHampshireRenderer() {
-  const symbology = {
-      [retailBusinessesLink]: '#E5A359',
-      [recreationProvidersLink]: '#59A2E5',
-      [b2bManufacturersLink]: '#59E594',
-      [nonProfitsLink]: '#ECFB6C',
-  };
+    // Function to show the overlay
+    function showOverlay() {
+        overlay.style.display = 'block';
+        overlay.style.opacity = '1';
+    }
+    
+    // Function to hide the overlay
+    function hideOverlay() {
+        overlay.style.opacity = '0';
+        setTimeout(() => {
+            overlay.style.display = 'none';
+        }, 300); // Match this delay with your CSS transition
+    }
+    
+    // Initial setup on window load
+    window.addEventListener('load', () => {
+        popupContainer.style.display = 'block'; // Show disclaimer popup
+        showOverlay();
+        infoPopup.style.display = 'none'; // Initially hide the info popup
+    });
+    
+    // Event listener for closing the disclaimer and showing the info popup
+    closePopupButton.addEventListener('click', () => {
+        popupContainer.style.display = 'none'; // Hide disclaimer popup
+        infoPopup.style.display = 'block'; // Show info popup
+        // Optionally, adjust overlay here if needed
+        // showOverlay(); // If you want to keep the overlay visible
+    });
+    
+    // Event listener for closing the info popup and hiding the overlay
+    closeInfoButton.addEventListener('click', () => {
+        infoPopup.style.display = 'none'; // Hide info popup
+        hideOverlay(); // Hide overlay
+    });
+    
+    // Menu button event listeners
 
-  const currentColor = symbology[currentLayerLink];
+    document.addEventListener("DOMContentLoaded", function() {
+      document.getElementById('infoDiv').classList.add('open-infoDiv');
+      document.getElementById('infoDiv2').classList.add('open-infoDiv2');
+      // Adjust the mapContainer if necessary
+      document.getElementById('mapContainer').classList.add('open-infoDiv');
+      document.getElementById('mapContainer').classList.add('open-infoDiv2');
+  });
   
-  if (currentColor) {
-      const newHampshireRenderer = {
-          type: 'simple',
-          symbol: {
-              type: 'simple-line',
-              color: currentColor,
-              width: '2px'
-          }
-      };
-      newHampshire.renderer = newHampshireRenderer;
-  }
-}
-/**************************************** PAGE MASK ********************************************/
-
-
-
-// Elements for the second popup
-const popupContent = document.getElementById('popup-content');
-const popup = document.getElementById('popup');
-const overlay = document.getElementById('overlay');
-const popupContainer = document.getElementById('popupContainer');
-const closePopupButton = document.getElementById('closePopupButton');
-const infoPopup = document.getElementById('info'); // Ensure this ID matches your HTML
-const closeInfoButton = document.getElementById('xBtn'); // Ensure this ID matches your HTML
-
-// Function to show the overlay
-function showOverlay() {
-    overlay.style.display = 'block';
-    overlay.style.opacity = '1';
-}
-
-// Function to hide the overlay
-function hideOverlay() {
-    overlay.style.opacity = '0';
-    setTimeout(() => {
-        overlay.style.display = 'none';
-    }, 300); // Match this delay with your CSS transition
-}
-
-// Initial setup on window load
-window.addEventListener('load', () => {
-    popupContainer.style.display = 'block'; // Show disclaimer popup
-    showOverlay();
-    infoPopup.style.display = 'none'; // Initially hide the info popup
-});
-
-// Event listener for closing the disclaimer and showing the info popup
-closePopupButton.addEventListener('click', () => {
-    popupContent.style.display = 'none';
-    popup.style.display = 'none';
-    popupContainer.style.display = 'none'; // Hide disclaimer popup
-    infoPopup.style.display = 'block';
-
-    // Optionally, adjust overlay here if needed
-    // showOverlay(); // If you want to keep the overlay visible
-});
-
-// Event listener for closing the info popup and hiding the overlay
-closeInfoButton.addEventListener('click', () => {
-    infoPopup.style.display = 'none'; // Hide info popup
-    hideOverlay(); // Hide overlay
-});
-
-
-
+    document.getElementById('toggleFilterMenu').addEventListener('click', function() {
+      document.getElementById('infoDiv').classList.toggle('open-infoDiv');
+      document.getElementById('mapContainer').classList.toggle('open-infoDiv');
+  });
+  
+  document.getElementById('toggleLayerMenu').addEventListener('click', function() {
+      document.getElementById('infoDiv2').classList.toggle('open-infoDiv2');
+      document.getElementById('mapContainer').classList.toggle('open-infoDiv2');
+  });
+  
 
 
     });
