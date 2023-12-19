@@ -321,8 +321,8 @@ require([
     console.log('Script loaded!');
     /******************** LAYER LINKS  *********************/
     
-    let baseLayerLink = "https://api.mapbox.com/styles/v1/anovak/cll62p6ct00ai01q05m0l1atw/tiles/256/{level}/{col}/{row}@2x?access_token=pk.eyJ1IjoiYW5vdmFrIiwiYSI6ImNsa2Zyd2ZvdjFjbHAzaW8zNnd4ODkwaHcifQ.V-0D14XZBY5lfMfw8Qg7vg";
-    let baseLayerLabelsLink = "https://api.mapbox.com/styles/v1/anovak/clkvo8z6e001j01q0b8ln9s7j/tiles/256/{level}/{col}/{row}@2x?access_token=pk.eyJ1IjoiYW5vdmFrIiwiYSI6ImNsa2Zyd2ZvdjFjbHAzaW8zNnd4ODkwaHcifQ.V-0D14XZBY5lfMfw8Qg7vg";
+    let baseLayerLink = "https://api.mapbox.com/styles/v1/anovak/clqcwopdh008r01p5d00t3tc4/tiles/256/{level}/{col}/{row}@2x?access_token=pk.eyJ1IjoiYW5vdmFrIiwiYSI6ImNsa2Zyd2ZvdjFjbHAzaW8zNnd4ODkwaHcifQ.V-0D14XZBY5lfMfw8Qg7vg";
+    let baseLayerLabelsLink = "https://api.mapbox.com/styles/v1/anovak/clqcwx7mw008m01qr8l1m2chx/tiles/256/{level}/{col}/{row}@2x?access_token=pk.eyJ1IjoiYW5vdmFrIiwiYSI6ImNsa2Zyd2ZvdjFjbHAzaW8zNnd4ODkwaHcifQ.V-0D14XZBY5lfMfw8Qg7vg";
 
     // boundaries
 
@@ -695,9 +695,9 @@ window.onload = function() {
         symbol: {
           type: "simple-marker",
           size: 4,
-          color: "rgba(158, 243, 171, 0.4)",
+          color: "rgba(158, 243, 171, 0.7)",
           outline: {
-            color: "rgba(158, 243, 171, 0.07)",
+            color: "rgba(158, 243, 171, 0.1)",
             width: 8
           }
         }
