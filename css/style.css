@@ -127,17 +127,24 @@ body {
   background-color: #13444b;
   color: white; /* Assuming you want white text */
   margin: 0;
+  border: 0;
 }
 
+.btn.dropdown-toggle.show {
+  background-color:#5c9d86;
+  border: 0;
+}
 .btn.dropdown-toggle.active {
-  background-color: #6ea572; /* Darker or different color for active state */
+  background-color:#5c9d86; /* Darker or different color for active state */
   color: white; /* Adjust text color if needed */
+  border: 0;
 
 }
 
 .btn.dropdown-toggle:hover {
-  background-color:#6ea572; /* Lighter shade for hover, adjust as needed */
+  background-color: #5c9d8675; 
   color: white; /* Adjust text color if needed */
+  border: 0;
   /* Add any other hover styles as required */
 }
 .dropdown {
@@ -449,6 +456,12 @@ body {
   animation-duration:2s;
   animation-timing-function:ease-in;
   animation-iteration-count:Infinite;
+  width: 205px;
+  white-space: nowrap;
+  
+  margin-right: 0;
+  text-align: left;
+  
 
 }
 
@@ -822,8 +835,8 @@ p6 {
 }
 
 #clearAllButton {
-  margin-top: 0px;
- 
+  margin-top: -1px;
+  padding-bottom: -10px;
   font-size: 14px;
   border: 0;
   font-weight: 400;
@@ -847,7 +860,7 @@ p6 {
     overflow: hidden; /* Hide overflow */
     text-overflow: ellipsis; /* Add an ellipsis to signify clipped text */
   
-  font-weight: 400;
+    font-weight: 500;
   font-size: 16px;
   border: 0;
   padding:4px;
@@ -982,16 +995,22 @@ h3 {
 #toggleFilterMode {
   font-size: 16px;
   transform: translate(-6px, 0px);
-  font-weight: 400;
+  font-weight: 500;
+  overflow: hidden;
+  width: 148px;
+  white-space: nowrap;
+  padding-left: 10px; 
+  margin-right: 0;
+  text-align: left;
+  
 }
 
-/* Specific style for the clear filters button */
+
 #clearFilters {
   font-size: 16px;
-  font-weight: 400;
-
+  font-weight: 500;
   margin-left: 7px;
-  /* Add specific styles for the clear filters button here if needed */
+ 
 
 }
 

@@ -321,7 +321,7 @@ require([
     console.log('Script loaded!');
     /******************** LAYER LINKS  *********************/
     
-    let baseLayerLink = "https://api.mapbox.com/styles/v1/anovak/cll6duwmo00at01pw0c28g05a/tiles/256/{level}/{col}/{row}@2x?access_token=pk.eyJ1IjoiYW5vdmFrIiwiYSI6ImNsa2Zyd2ZvdjFjbHAzaW8zNnd4ODkwaHcifQ.V-0D14XZBY5lfMfw8Qg7vg";
+    let baseLayerLink = "https://api.mapbox.com/styles/v1/anovak/cll62p6ct00ai01q05m0l1atw/tiles/256/{level}/{col}/{row}@2x?access_token=pk.eyJ1IjoiYW5vdmFrIiwiYSI6ImNsa2Zyd2ZvdjFjbHAzaW8zNnd4ODkwaHcifQ.V-0D14XZBY5lfMfw8Qg7vg";
     let baseLayerLabelsLink = "https://api.mapbox.com/styles/v1/anovak/clkvo8z6e001j01q0b8ln9s7j/tiles/256/{level}/{col}/{row}@2x?access_token=pk.eyJ1IjoiYW5vdmFrIiwiYSI6ImNsa2Zyd2ZvdjFjbHAzaW8zNnd4ODkwaHcifQ.V-0D14XZBY5lfMfw8Qg7vg";
 
     // boundaries
@@ -850,8 +850,8 @@ window.onload = function() {
               symbol: {
                   type: "picture-marker",  // symbol type
                   url:  "https://raw.githubusercontent.com/AustinSEgroup/NHOE-RetailBusinesses/main/img/trailhead.png",
-                  width: 7,
-                  height: 7
+                  width: 9,
+                  height: 9
               }
           },
           {
@@ -877,8 +877,8 @@ window.onload = function() {
               symbol: {
                   type: "picture-marker",  // symbol type
                   url:  "https://raw.githubusercontent.com/AustinSEgroup/NHOE-RetailBusinesses/main/img/natural.png",
-                  width: 8,
-                  height: 8
+                  width: 10,
+                  height: 10
               }
           },
           {
